@@ -1,0 +1,160 @@
+---
+vagrantfile-local:
+    vm:
+        box: puphpet/ubuntu1404-x32
+        box_url: puphpet/ubuntu1404-x32
+        hostname: ''
+        memory: '1024'
+        cpus: '1'
+        chosen_provider: virtualbox
+        network:
+            private_network: 192.168.56.105
+            forwarded_port:
+                1F77XCpC1mez:
+                    host: '6589'
+                    guest: '22'
+        post_up_message: ''
+        provider:
+            virtualbox:
+                modifyvm:
+                    natdnshostresolver1: on
+            vmware:
+                numvcpus: 1
+            parallels:
+                cpus: 1
+        provision:
+            puppet:
+                manifests_path: puphpet/puppet
+                manifest_file: site.pp
+                module_path: puphpet/puppet/modules
+                options:
+                    - '--verbose'
+                    - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
+                    - '--parser future'
+        synced_folder:
+            eoQjRjdxRG0a:
+                owner: www-data
+                group: www-data
+                source: ./
+                target: /var/www
+                sync_type: default
+                rsync:
+                    args:
+                        - '--verbose'
+                        - '--archive'
+                        - '-z'
+                    exclude:
+                        - .vagrant/
+                    auto: 'false'
+        usable_port_range:
+            start: 10200
+            stop: 10500
+    ssh:
+        host: null
+        port: null
+        private_key_path: null
+        username: vagrant
+        guest_port: null
+        keep_alive: true
+        forward_agent: false
+        forward_x11: false
+        shell: 'bash -l'
+    vagrant:
+        host: detect
+server:
+    install: '1'
+    packages: {  }
+users_groups:
+    install: '1'
+    groups: {  }
+    users: {  }
+cron:
+    install: '1'
+    jobs: {  }
+firewall:
+    install: '1'
+    rules: {  }
+nginx:
+    install: '1'
+    settings:
+        default_vhost: 1
+        proxy_buffer_size: 128k
+        proxy_buffers: '4 256k'
+    upstreams: {  }
+    vhosts:
+        8lg73pyn1o9y:
+            proxy: ''
+            server_name: moodcat.me
+            server_aliases:
+                - www.moodcat.me
+            www_root: /var/www/dist
+            listen_port: '80'
+            location: \.php$
+            index_files:
+                - index.html
+                - index.htm
+                - index.php
+            envvars:
+                - 'APP_ENV dev'
+            engine: php
+            client_max_body_size: 1m
+            ssl_cert: ''
+            ssl_key: ''
+php:
+    install: '1'
+    version: '56'
+    composer: '1'
+    composer_home: ''
+    modules:
+        php:
+            - cli
+            - intl
+            - mcrypt
+        pear: {  }
+        pecl:
+            - pecl_http
+    ini:
+        display_errors: On
+        error_reporting: 'E_ALL'
+        session.save_path: /var/lib/php/session
+        extension: mongo.so
+    timezone: Europe/Amsterdam
+    mod_php: 0
+xdebug:
+    install: '1'
+    settings:
+        xdebug.default_enable: '1'
+        xdebug.remote_autostart: '0'
+        xdebug.remote_connect_back: '1'
+        xdebug.remote_enable: '1'
+        xdebug.remote_handler: dbgp
+        xdebug.remote_port: '9000'
+ruby:
+    install: '1'
+    versions: {  }
+nodejs:
+    install: '1'
+    npm_packages: {  }
+python:
+    install: '1'
+    packages: {  }
+    versions: {  }
+mongodb:
+    install: '1'
+    settings:
+        auth: 1
+        port: '27017'
+    databases: {  }
+redis:
+    install: '0'
+    settings:
+        conf_port: '6379'
+mailcatcher:
+    install: '0'
+    settings:
+        smtp_ip: 0.0.0.0
+        smtp_port: 1025
+        http_ip: 0.0.0.0
+        http_port: '1080'
+        mailcatcher_path: /usr/local/rvm/wrappers/default
+        from_email_method: inline
