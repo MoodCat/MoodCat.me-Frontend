@@ -1,6 +1,6 @@
 $icon-font-path: '../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/';
 // bower:scss
-@import 'bootstrap-sass-official/assets/stylesheets/bootstrap';
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 @import 'variables';
 
@@ -12,11 +12,30 @@ p {
   font-size: 10pt;
 }
 
+.player-controls {
+  @extend .navbar-nav;
+  float: right;
+  margin-right: 10px;
+}
+
+.navbar-default,
+.navbar-default .player-controls > li > a,
+.navbar-default .player-controls > li > a:focus,
+.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-nav > li > a:focus {
+  background: $dark-grey;
+  color: $light-grey;
+  font-size: $font-medium;
+}
+
+.navbar-default .player-controls > li > a:hover,
+.navbar-default .navbar-nav > li > a:hover {
+  background: lighten($dark-grey, 10%);
+  color: $light-grey;
+}
 
 
-/**
- * Stock yeoman stuff
- */
+// Stock yeoman stuff
 .browsehappy {
   background: #ccc;
   color: #000;
