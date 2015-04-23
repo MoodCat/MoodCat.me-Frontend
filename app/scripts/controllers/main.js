@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name vagrantApp.controller:MainCtrl
+ * @name moodCatApp.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the vagrantApp
+ * Controller of the moodCatApp
  */
-angular.module('vagrantApp')
+angular.module('moodCatApp')
   .controller('MainCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
