@@ -6,3 +6,4 @@ app/bower_components
 bower_components
 .editorconfig
 .vagrant/
+npm-debug.log

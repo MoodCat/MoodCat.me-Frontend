@@ -1,6 +1,6 @@
 {
-  "name": "vagrant",
-  "version": "0.0.0",
+  "name": "MoodCat",
+  "version": "0.1.0",
   "dependencies": {},
   "repository": {},
   "devDependencies": {

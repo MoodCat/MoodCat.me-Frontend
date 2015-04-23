@@ -100,6 +100,24 @@ nginx:
             client_max_body_size: 1m
             ssl_cert: ''
             ssl_key: ''
+        8lg73pyn1o91:
+            proxy: ''
+            server_name: dev.moodcat.me
+            server_aliases:
+                - dev.moodcat.me
+            www_root: /var/www/
+            listen_port: '80'
+            location: \.php$
+            index_files:
+                - index.html
+                - index.htm
+                - index.php
+            envvars:
+                - 'APP_ENV dev'
+            engine: php
+            client_max_body_size: 1m
+            ssl_cert: ''
+            ssl_key: ''
 php:
     install: '1'
     version: '56'
