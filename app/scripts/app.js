@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name vagrantApp
+ * @name moodCatApp
  * @description
- * # vagrantApp
+ * # moodCatApp
  *
  * Main module of the application.
  */
 angular
-  .module('vagrantApp', [
+  .module('moodCatApp', [
     'ngAnimate',
     'ngAria',
     'ngCookies',
