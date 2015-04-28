@@ -49,9 +49,10 @@
                 <li><a href="#/"><span class="glyphicon glyphicon-thumbs-up"></span></a></li>
                 <li><a ng-href="#/about"><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
                 <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
-                <li><a ng-click='sound.paused ? sound.play() : sound.pause()'>Pause</a></li>
-                <li><a ng-click='sound.restart()'>Stop</a></li>
+                <li><a ng-click='sound.paused ? sound.play() : sound.pause()' ng-class="sound.paused ? 'glyphicon glyphicon-play' : 'glyphicon glyphicon-pause'"></a></li>
+                <li><a ng-click='sound.restart()' class="glyphicon glyphicon-stop"></a></li>
                 <li><a ng-click='sound.currentTime = 10'>DEBUG: Set to 10s</a></li>
+                <li><a ng-click='loadSong(202846566)' class="glyphicon glyphicon-next"></a></li>
               </ul>
             </div>
           </div>
