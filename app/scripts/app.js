@@ -36,6 +36,6 @@ angular
   });
   angular.module('moodCatAudio', ['ngAudio'])
     .controller('AudioCtrl', function($scope, ngAudio) {
-      $scope.sound = ngAudio.load("song.mp3");
+      $scope.sound = ngAudio.load("https://api.soundcloud.com/tracks/13158665/stream?client_id=68d16250d1ef387ae1000e9102a23ddb");
       $scope.sound.title = "Fall Out Boy - Centuries";
     });
