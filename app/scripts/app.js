@@ -18,7 +18,7 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ngAudio'
+    'moodCatAudio'
   ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -34,3 +34,8 @@ angular
         redirectTo: '/'
       });
   });
+  angular.module('moodCatAudio', ['ngAudio'])
+    .controller('AudioCtrl', function($scope, ngAudio) {
+      $scope.sound = ngAudio.load("song.mp3");
+      $scope.sound.title = "Fall Out Boy - Centuries";
+    });

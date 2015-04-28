@@ -43,15 +43,29 @@
               <li><a ng-href="#/about">About</a></li>
               <li><a ng-href="#/">Contact</a></li>
             </ul>
-            <ul class="nav player-controls">
-              <li><a href="#/"><span class="glyphicon glyphicon-music">  Centuries - Fall Out Boy</span></a></li>
-              <li><a href="#/"><span class="glyphicon glyphicon-thumbs-up"></span></a></li>
-              <li><a ng-href="#/about"><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
-              <li><a ng-href="#/"><span class="glyphicon glyphicon-volume-up"></span></a></li>
-            </ul>
+            <div ng-controller='AudioCtrl'>
+              <ul class="nav player-controls">
+                <li><a href="#/"><span class="glyphicon glyphicon-music"> {{sound.title}}</span></a></li>
+                <li><a href="#/"><span class="glyphicon glyphicon-thumbs-up"></span></a></li>
+                <li><a ng-href="#/about"><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
+                <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
+                <li><a ng-click='sound.paused ? sound.play() : sound.pause()'>Pause</a></li>
+                <li><a ng-click='sound.restart()'>Stop</a></li>
+                <li><a ng-click='sound.currentTime = 10'>DEBUG: Set to 10s</a></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div ng-controller='AudioCtrl'>
+
+
+    <label>Current Time</label>
+    <input class='form-control' type=text ng-model='sound.currentTime'>
+    <label>Volume</label>
+    <input class='form-control' type=range min=0 max=1 step=0.01 ng-model='sound.volume'>
     </div>
 
     <div class="container">
