@@ -2,7 +2,6 @@
 
 angular.module('moodCatAudio', ['ngAudio']);
 
-
 /**
  * @ngdoc overview
  * @name moodCatApp
