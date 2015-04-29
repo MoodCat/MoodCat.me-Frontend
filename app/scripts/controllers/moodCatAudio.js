@@ -11,14 +11,9 @@
    .value('soundCloudKey', '68d16250d1ef387ae1000e9102a23ddb')
    .value('track', '202330997')
    .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', function($scope, ngAudio, soundCloudKey, track, $http) {
-      $scope.awesomeThings = [
-        'HTML5 Boilerplate',
-        'AngularJS',
-        'Karma'
-      ];
       $scope.unloadSong = function() {
          //console.log(typeof($scope.sound));
-        if (typeof($scope.sound) !== 'undefined') {
+        if ($scope.sound) {
           $scope.sound.stop();
           $scope.sound.unbind();
         }
@@ -29,24 +24,26 @@
 
          // Works Async, so the title will be set when it'll be set.
          // No waiting for slow JSON responses
-         promise.then(
+         return promise.then(
             function(payload) {
                $scope.sound.title = payload.data.title;
+               console.log(payload.data.title);
             }
          );
       };
 
       $scope.loadSong = function(trackID) {
-         var sound = Object();
+         var sound = null;
 
          // Unloads old song, saving some clientside RAM
          // and preventing old songs from playing
          $scope.unloadSong();
 
-         // Loa
-         sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
-         $scope.metaData(trackID);
+         // Load NgAudioObject with specified path
          $scope.sound = sound;
+         sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
+         return $scope.metaData(trackID);
+
       };
 
      $scope.loadSong(track);
