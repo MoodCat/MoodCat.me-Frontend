@@ -18,7 +18,7 @@ describe('Controller: AudioCtrl', function () {
 
   it('After loading a song, the song object should be defined', function () {
     scope.loadSong('202330997');
-  //  console.log(scope);
-  //  expect(scope.sound).toBeDefined();
+    //console.log(scope);
+    expect(scope.sound).toBeDefined();
   });
 });
