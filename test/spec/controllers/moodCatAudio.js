@@ -47,15 +47,4 @@ describe('Controller: AudioCtrl', function () {
     expect(true).toBe(true);
   });
 
-  it('should load the title onto a custom field on the song object', function () {
-    var done = false;
-    scope.loadSong(songId).then(function() {
-      done = true;
-      expect(scope.song.title.toString()).toBe('UMEK ft. Jameisha Trice - Live The Life (Original Mix)');
-    });
-    waitsFor(function() {
-      return done;
-    }, 'The promise should succeed', 1000);
-    //httpBackend.flush();
-  });
 });
