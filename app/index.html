@@ -8,21 +8,21 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/foundation/css/foundation.css" />
+    <!--<link rel="stylesheet" href="bower_components/foundation/css/foundation.css" />-->
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="moodCatApp">
+  <body ng-app="moodCatApp" ng-controller='AudioCtrl as audioCtrl'>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <!-- Add your site or application content here -->
     <div class="header">
-      <div class="navbar navbar-default" role="navigation">
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
           <div class="navbar-header">
 
@@ -37,25 +37,37 @@
           </div>
 
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
-
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav navbar-left">
               <li><a href="#/">Home</a></li> <!-- .active for current page TODO -->
               <li><a ng-href="#/about">About</a></li>
-              <li><a ng-href="#/">Contact</a></li>
             </ul>
-            <div ng-controller='AudioCtrl'>
-              <ul class="nav player-controls">
-                <li><a href="#/"><span class="glyphicon glyphicon-music"> {{sound.title}}</span></a></li>
-                <li><a href="#/"><span class="glyphicon glyphicon-thumbs-up"></span></a></li>
-                <li><a ng-href="#/about"><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
-                <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
-                <li><a ng-click='sound.paused ? sound.play() : sound.pause()' ng-class="sound.paused ? 'glyphicon glyphicon-play' : 'glyphicon glyphicon-pause'"></a></li>
-                <li><a ng-click='sound.restart()' class="glyphicon glyphicon-stop"></a></li>
-                <li><a ng-click='sound.currentTime = 10'>DEBUG: Set to 10s</a></li>
-                <li><a ng-click='loadSong(202846566)' class="glyphicon glyphicon-next">Load track #2</a></li>
-                <li><input class='form-control' type=text ng-model='sound.currentTime'></li>
-              </ul>
-            </div>
+            <ul class="nav navbar-nav hide-collapsed">
+              <li>
+                <div class="song-container">
+                  <div class="song-title">
+                    <i class="glyphicon glyphicon-music"></i>
+                    <div ng-bind="song.title" class="song-marquee"></div>
+                  </div>
+                  <div class="current-time" ng-bind="timestamp"></div>
+                </div>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right player-controls">
+              <li><a><i class="glyphicon glyphicon-thumbs-up"></i></a></li>
+              <li><a><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
+              <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
+              <li><a ng-click='sound.paused ? sound.play() : sound.pause()' ng-class="sound.paused ? 'glyphicon glyphicon-play' : 'glyphicon glyphicon-pause'"></a></li>
+              <li><a ng-click='sound.restart()' class="glyphicon glyphicon-stop"></a></li>
+              <!--<li><a ng-click='sound.currentTime = 10'>DEBUG: Set to 10s</a></li>-->
+              <!--<li><a ng-click='audioCtrl.loadSong(202846566)' class="glyphicon glyphicon-next">Load track #2</a></li>-->
+              <li ng-controller="SoundCloudController as scCtrl">
+                <a ng-click="scCtrl.loginUsingSoundcloud()" ng-if="!scCtrl.loggedIn">Login</a>
+                <div ng-if="scCtrl.loggedIn" class="navbar-user-details">
+                  <img ng-src="{{scCtrl.me.avatar_url}}"/>
+                  <span  ng-if="scCtrl.loggedIn" ng-bind="scCtrl.me.first_name"></span>
+                </div>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
@@ -71,18 +83,7 @@
       </div>
     </div>
 
-
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-     <script>
-       !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-       (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-       r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-       }(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-       ga('create', 'UA-XXXXX-X');
-       ga('send', 'pageview');
-    </script>
-
+    <script src="//connect.soundcloud.com/sdk.js"></script>
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/modernizr/modernizr.js"></script>

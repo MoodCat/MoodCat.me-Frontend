@@ -1,8 +1,37 @@
 $icon-font-path: '../../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/';
+
+@import 'variables';
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
-@import 'variables';
+
+body {
+  top: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+  position: absolute;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-image: url("../images/bg3.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+body::before {
+  content: " ";
+  position: fixed;
+  display: block;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: -1;
+  background: rgba(6, 6, 6, 0.82);
+}
 
 .container {
   width: calc(100vw - 10px);
@@ -43,21 +72,8 @@ p {
   padding: .2em 0;
 }
 
-body {
-  padding: 0;
-}
-
-// Everything but the jumbotron gets side spacing for mobile first views
-.header,
-.marketing,
-.footer {
-  padding-left: 15px;
-  padding-right: 15px;
-}
-
 // Custom page header
 .header {
-  border-bottom: 1px solid #e5e5e5;
   margin-bottom: 10px;
 
   // Make the masthead heading the same height as the navigation
@@ -73,7 +89,8 @@ body {
 .footer {
   padding-top: 19px;
   color: #777;
-  border-top: 1px solid #e5e5e5;
+  position: absolute;
+  bottom: 0;
 }
 
 .container-narrow > hr {
@@ -121,4 +138,228 @@ body {
   .jumbotron {
     border-bottom: 0;
   }
+}
+
+.song-container {
+  margin: 7px 0;
+  font-size: 0.8em;
+}
+
+.navbar-collapse.in .hide-collapsed {
+  display: none !important;
+}
+
+.song-container .song-marquee {
+  display: inline-block;
+  width: 200px;
+  margin: 0 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  animation: marquee 20s linear infinite;
+  -webkit-animation: marquee 20s linear infinite;
+  line-height: 1em;
+}
+
+.song-container .current-time {
+  text-align: center;
+}
+
+@keyframes marquee {
+  0%   { text-indent: 20em }
+  100% { text-indent: -20em }
+}
+@-webkit-keyframes marquee {
+  0%   { text-indent: 20em }
+  100% { text-indent: -20em }
+}
+
+.navbar a {
+  outline: none;
+}
+
+.navbar li {
+  display: inline-block;
+}
+
+.navbar-left {
+  float: left;
+}
+
+.navbar .navbar-nav {
+  display: inline-block;
+  float: none;
+  vertical-align: top;
+}
+
+.navbar .navbar-collapse {
+  text-align: center;
+}
+
+.navbar-user-details:not(.ng-scope) {
+  /* okay this is ugly but the ng-if appeared on refresh :S */
+  display:none;
+}
+
+.navbar-user-details img {
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  margin: 5px;
+}
+
+btn-mood input {
+  display: none;
+}
+
+btn-mood {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  outline: none;
+}
+
+btn-mood label {
+  display:inline-block;
+  position: relative;
+  margin:0;
+}
+
+btn-mood input + span {
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 0 10px 10px 0;
+  background: rgba(0, 0, 0, 0.49);
+  cursor: pointer;
+  line-height: 100px;
+  text-align: center;
+}
+
+btn-mood input:checked + span {
+  background: rgba(94, 94, 94, 0.49);
+}
+
+btn-mood label::before {
+  content: "\e201";
+  font-family: 'Glyphicons Halflings';
+  position: absolute;
+  top: 4px;
+  left: 2px;
+  font-size: 90px;
+  width: 100px;
+  color: rgb(89, 89, 89);
+  vertical-align: middle;
+  line-height: 90px;
+  z-index: -1;
+}
+
+.list-rooms, .messages-container {
+  display: block;
+  height: 500px;
+}
+
+.list-rooms, .list-messages {
+  display: block;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.list-rooms::-webkit-scrollbar-track,
+.list-messages::-webkit-scrollbar-track {
+  border-radius: 4px;
+  background-color: rgb(16, 17, 16);
+}
+
+.list-rooms::-webkit-scrollbar,
+.list-messages::-webkit-scrollbar {
+  width: 7px;
+  background-color: transparent;
+}
+
+.list-rooms::-webkit-scrollbar-thumb,
+.list-messages::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #555;
+}
+
+.list-rooms::-webkit-scrollbar-corner,
+.list-messages::-webkit-scrollbar-corner {
+  background-color: rgb(16, 17, 16);
+}
+
+.list-rooms li > a {
+  display: block;
+  margin: 0 5px 10px 0;
+  padding: 5px 5px 5px 0;
+  color: #fff;
+  font-size: 0.9em;
+  background: rgba(0, 0, 0, 0.40);
+  cursor: pointer;
+  outline: none;
+}
+
+.list-rooms li > a.roomActive {
+  background: rgba(160, 158, 158, 0.4);
+}
+
+.list-rooms li > a:hover {
+  text-decoration: none;
+}
+
+.list-rooms li > a > i {
+  color: #fff;
+  float: left;
+  font-size: 40px;
+  padding: 8px 8px 8px 5px;
+  margin-right: 10px;
+}
+
+.list-rooms li > a > img {
+  float: left;
+  width: 70px;
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.list-rooms li > a > h4 {
+  font-size: 1em;
+}
+
+.messages-container {
+  background: rgba(0, 0, 0, 0.40);
+}
+
+.list-messages {
+  position: absolute;
+  font-size: .9em;
+  padding: 4px 10px 0px 10px;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 40px;
+  margin: 0;
+}
+
+.messages-container {
+  position: relative;
+}
+
+.messages-container .form-holder {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.messages-container .form-holder input {
+  width: 100%;
+  color: #FFF;
+  background: rgba(255, 255, 255, 0.09);
+  border: none;
+  padding: 10px;
+  height: 35px;
+  outline: none;
 }
