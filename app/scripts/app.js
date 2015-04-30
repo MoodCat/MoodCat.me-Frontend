@@ -1,5 +1,7 @@
 'use strict';
 
+angular.module('moodCatAudio', ['ngAudio']);
+
 /**
  * @ngdoc overview
  * @name moodCatApp
@@ -17,7 +19,8 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'moodCatAudio'
   ])
   .config(function ($routeProvider) {
     $routeProvider

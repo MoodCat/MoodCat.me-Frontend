@@ -43,12 +43,19 @@
               <li><a ng-href="#/about">About</a></li>
               <li><a ng-href="#/">Contact</a></li>
             </ul>
-            <ul class="nav player-controls">
-              <li><a href="#/"><span class="glyphicon glyphicon-music">  Centuries - Fall Out Boy</span></a></li>
-              <li><a href="#/"><span class="glyphicon glyphicon-thumbs-up"></span></a></li>
-              <li><a ng-href="#/about"><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
-              <li><a ng-href="#/"><span class="glyphicon glyphicon-volume-up"></span></a></li>
-            </ul>
+            <div ng-controller='AudioCtrl'>
+              <ul class="nav player-controls">
+                <li><a href="#/"><span class="glyphicon glyphicon-music"> {{sound.title}}</span></a></li>
+                <li><a href="#/"><span class="glyphicon glyphicon-thumbs-up"></span></a></li>
+                <li><a ng-href="#/about"><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
+                <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
+                <li><a ng-click='sound.paused ? sound.play() : sound.pause()' ng-class="sound.paused ? 'glyphicon glyphicon-play' : 'glyphicon glyphicon-pause'"></a></li>
+                <li><a ng-click='sound.restart()' class="glyphicon glyphicon-stop"></a></li>
+                <li><a ng-click='sound.currentTime = 10'>DEBUG: Set to 10s</a></li>
+                <li><a ng-click='loadSong(202846566)' class="glyphicon glyphicon-next">Load track #2</a></li>
+                <li><input class='form-control' type=text ng-model='sound.currentTime'></li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -94,6 +101,7 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-audio/app/angular.audio.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -101,6 +109,7 @@
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/moodCatAudio.js"></script>
         <!-- endbuild -->
 </body>
 </html>
