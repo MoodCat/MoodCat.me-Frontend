@@ -13,7 +13,7 @@
    .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', function($scope, ngAudio, soundCloudKey, track, $http) {
       $scope.unloadSong = function() {
          //console.log(typeof($scope.sound));
-        if ($scope.sound) {
+        if (typeof $scope.sound !== 'undefined' && $scope.sound !== null) {
           $scope.sound.stop();
           $scope.sound.unbind();
         }
@@ -38,11 +38,11 @@
          // Unloads old song, saving some clientside RAM
          // and preventing old songs from playing
          $scope.unloadSong();
-
+         $scope.metaData(trackID);
          // Load NgAudioObject with specified path
-         $scope.sound = sound;
          sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
-         return $scope.metaData(trackID);
+
+         $scope.sound = sound;
 
       };
 
