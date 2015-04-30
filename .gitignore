@@ -7,3 +7,5 @@ bower_components
 .editorconfig
 .vagrant/
 npm-debug.log
+.idea/
+*.iml

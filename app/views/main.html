@@ -1,71 +1,41 @@
-<div class="jumbotron">
-  <h1>'Allo, 'Allo!</h1>
-  <p class="lead">
-    <img src="images/yeoman.png" alt="I'm Yeoman"><br>
-    Always a pleasure scaffolding your apps.
-  </p>
-  <p><a class="btn btn-lg btn-success" ng-href="#/">Splendid!<span class="glyphicon glyphicon-ok"></span></a></p>
-</div>
-
 <div class="row marketing">
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
-  <h4>HTML5 Boilerplate</h4>
-  <p>
-    HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.
-  </p>
-
-  <h4>Angular</h4>
-  <p>
-    AngularJS is a toolset for building the framework most suited to your application development.
-  </p>
-
-  <h4>Karma</h4>
-  <p>Spectacular Test Runner for JavaScript.</p>
+  <div style="height:20px;"/>
+  <h4>Get a room</h4>
+  <!--<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>-->
+  <div class="row">
+    <div class="col-md-4">
+      <btn-mood ng-model="blabla" ng-repeat="mood in moods">{{mood}}</btn-mood>
+    </div>
+    <div class="col-md-4">
+      <ul class="list-unstyled list-rooms">
+        <li ng-repeat="room in rooms">
+          <a ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
+            <img ng-src="{{room.song.artwork_url}}"/>
+            <!--<i class="glyphicon glyphicon-cd"></i>-->
+            <h4 ng-bind="room.name"></h4>
+            <div>
+              <strong>Now playing: </strong>
+              <span ng-bind="room.song.title"></span>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <div class="messages-container">
+        <ul class="list-unstyled list-messages" id="chat-messages-list">
+          <li ng-repeat="message in messages">
+              <strong ng-bind="message.time | date:'HH:mm'"></strong>
+              <strong ng-bind="message.author"></strong>
+              <span ng-bind="message.message"></span>
+          </li>
+        </ul>
+        <div class="form-holder">
+          <form ng-submit="addMessage()">
+            <input type="text" ng-model="chatMessage.message" placeholder="Type a message"/>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
