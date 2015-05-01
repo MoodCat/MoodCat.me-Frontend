@@ -307,7 +307,8 @@ btn-mood label::before {
   background: rgba(160, 158, 158, 0.4);
 }
 
-.list-rooms li > a:hover {
+.list-rooms li > a:hover,
+.list-rooms li > a:active {
   text-decoration: none;
 }
 
