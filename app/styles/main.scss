@@ -41,6 +41,10 @@ p {
   font-size: 10pt;
 }
 
+.logo {
+  height: 100%;
+}
+
 .player-controls {
   @extend .navbar-nav;
   float: right;
@@ -364,4 +368,8 @@ btn-mood label::before {
   padding: 10px;
   height: 35px;
   outline: none;
+}
+
+.no-padding {
+  padding: 0;
 }
