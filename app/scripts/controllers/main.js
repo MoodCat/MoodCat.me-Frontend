@@ -16,22 +16,22 @@ angular.module('moodCatApp')
   .service('chatService', function($http) {
     this.sendChatMessage = function(mess) {
 
-      //var request = $http.get('/api/rooms/1/chat');
-      var request = $http.post('/api/rooms/1/chat/post', angular.toJson({message: "hello world"}));
+      var request = $http.post('/api/rooms/1/chat/post', angular.toJson(mess));
       //
       // // Store the data-dump of the FORM scope.
       request.success(
         function(response) {
-          alert(angular.toJson(response));
+          console.log(angular.toJson(response));
+
         }
       );
 
-      // request.error(
-      //   function() {
-      //     alert("failure!");
-      //     //$scope.cfdump = html;
-      //   }
-      // );
+      request.error(
+        function() {
+          alert("failure!");
+          //$scope.cfdump = html;
+        }
+      );
     }
   })
   .controller('MainCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
@@ -77,14 +77,14 @@ angular.module('moodCatApp')
 
     $scope.chatMessage = {
       message: "",
-      author: "Eva"
+      author: "System"
     };
 
     $scope.addMessage = function() {
       var message = {
         message: $scope.chatMessage.message,
         author: $scope.chatMessage.author,
-        time: (new Date()).valueOf()
+        roomId: $scope.activeRoom.roomId
       };
 
       //Add the message to the local queue
