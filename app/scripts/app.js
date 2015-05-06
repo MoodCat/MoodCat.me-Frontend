@@ -20,6 +20,7 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
+    'timer',
     'moodCatAudio'
   ])
   .config(function ($routeProvider) {

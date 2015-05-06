@@ -14,6 +14,7 @@
             <img ng-src="{{room.song.artwork_url}}"/>
             <!--<i class="glyphicon glyphicon-cd"></i>-->
             <h4 ng-bind="room.name"></h4>
+            <span class="remainingTime">next song in: <timer countdown="room.remaining" interval="1000">{{mminutes}}:{{sseconds}}</timer></span>
             <div>
               <strong>Now playing: </strong>
               <span ng-bind="room.song.title"></span>
