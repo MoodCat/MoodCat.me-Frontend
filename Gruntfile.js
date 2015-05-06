@@ -69,24 +69,69 @@ module.exports = function (grunt) {
         port: 9000,
         // Change this to '0.0.0.0' to access the server from outside.
         hostname: '0.0.0.0',
-        livereload: 35729
+        livereload: 35729,
       },
       livereload: {
+        proxies: [
+          {
+            context: '/api',
+            host: 'localhost',
+            port: 8080,
+            https: false,
+            xforward: false
+            // ,
+            // headers: {
+            //     "x-custom-added-header": value
+            // },
+            // hideHeaders: ['x-removed-header']
+          }
+        ],
         options: {
           open: true,
-          middleware: function (connect) {
-            return [
-              connect.static('.tmp'),
-              connect().use(
-                '/bower_components',
-                connect.static('./bower_components')
-              ),
-              connect().use(
-                '/app/styles',
-                connect.static('./app/styles')
-              ),
-              connect.static(appConfig.app)
-            ];
+          // middleware: function (connect) {
+          //   return [
+          //     connect.static('.tmp'),
+          //     connect().use(
+          //       '/bower_components',
+          //       connect.static('./bower_components')
+          //     ),
+          //     connect().use(
+          //       '/app/styles',
+          //       connect.static('./app/styles')
+          //     ),
+          //     connect.static(appConfig.app)
+          //   ];
+          // },
+          middleware: function (connect, options) {
+              if (!Array.isArray(options.base)) {
+                  options.base = [options.base];
+              }
+
+              // Setup the proxy
+              var middlewares = [
+                require('grunt-connect-proxy/lib/utils').proxyRequest,
+                connect.static('.tmp'),
+                connect().use(
+                  '/bower_components',
+                  connect.static('./bower_components')
+                ),
+                connect().use(
+                  '/app/styles',
+                  connect.static('./app/styles')
+                ),
+                connect.static(appConfig.app)
+              ];
+
+              // Serve static files.
+              options.base.forEach(function(base) {
+                  middlewares.push(connect.static(base));
+              });
+
+              // Make directory browse-able.
+              var directory = options.directory || options.base[options.base.length - 1];
+              middlewares.push(connect.directory(directory));
+
+              return middlewares;
           }
         }
       },
@@ -433,6 +478,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'autoprefixer:server',
+      'configureProxies:livereload',
       'connect:livereload',
       'karma',
       'watch'
