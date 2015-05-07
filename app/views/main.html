@@ -1,12 +1,13 @@
 <div class="row marketing">
   <div style="height:20px;"/>
-  <h4>Get a room</h4>
   <!--<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>-->
   <div class="row">
     <div class="col-md-4">
+      <h4>In the mood?</h4>
       <btn-mood ng-model="blabla" ng-repeat="mood in moods">{{mood}}</btn-mood>
     </div>
     <div class="col-md-4">
+      <h4>Get a room</h4>
       <ul class="list-unstyled list-rooms">
         <li ng-repeat="room in rooms">
           <a ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
@@ -22,6 +23,7 @@
       </ul>
     </div>
     <div class="col-md-4">
+      <h4>{{ activeRoom.name }}</h4>
       <div class="messages-container">
         <ul class="list-unstyled list-messages" id="chat-messages-list">
           <li ng-repeat="message in messages">

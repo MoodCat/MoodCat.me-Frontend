@@ -8,24 +8,31 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
-  .controller('MainCtrl', function ($scope, $timeout, soundCloudService) {
+  .service('roomService', function($http) {
+    this.fetchRooms = function() {
+      return $http.get('/mocks/rooms.json');
+    }
+  })
+  .controller('MainCtrl', function ($q, $scope, $timeout, soundCloudService, roomService) {
     $scope.moods = ['Angry', 'Nervous', 'Exiting', 'Happy', 'Pleasing', 'Relaxing',
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
     $scope.rooms = [];
 
-    soundCloudService.fetchMetadata("202846566").success(function(data) {
-      $scope.rooms = ['Copperhead Toads', 'Macho Junkers', 'Long Cat Force', 'Damaged Bush Supernovas',
-        'Spinning Rag Razors', 'Sweeping Blank Cicadas', 'Silver Ass Wankers', 'The Swamp Epidemic',
-        'The Dope Samaritans', 'Silver Milk Dribblers', 'Great Surf Flux', 'Los Caviar Roosters',
-        'Seaview Purple Patsies'].map(function (name) {
-          return {
-            name: name,
-            song: data
-          }
-        });
-      $scope.activeRoom = $scope.rooms[0];
-    })
+
+    roomService.fetchRooms().success(function(rooms) {
+      return  $q.all(rooms.map(function(room) {
+        return soundCloudService
+          .fetchMetadata(room.songId)
+          .success(function(data) {
+            room.song = data;
+            return room;
+          })
+      })).then(function() {
+        $scope.rooms = rooms;
+        $scope.activeRoom = $scope.rooms[0];
+      });
+    });
 
     $scope.messages = ['Hoihoi!'].map(function(message) {
       return {

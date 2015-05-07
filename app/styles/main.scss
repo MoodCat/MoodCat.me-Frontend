@@ -41,6 +41,10 @@ p {
   font-size: 10pt;
 }
 
+.logo {
+  height: 100%;
+}
+
 .player-controls {
   @extend .navbar-nav;
   float: right;
@@ -297,6 +301,7 @@ btn-mood label::before {
   padding: 5px 5px 5px 0;
   color: #fff;
   font-size: 0.9em;
+  height: 80px;
   background: rgba(0, 0, 0, 0.40);
   cursor: pointer;
   outline: none;
@@ -306,7 +311,8 @@ btn-mood label::before {
   background: rgba(160, 158, 158, 0.4);
 }
 
-.list-rooms li > a:hover {
+.list-rooms li > a:hover,
+.list-rooms li > a:active {
   text-decoration: none;
 }
 
@@ -362,4 +368,8 @@ btn-mood label::before {
   padding: 10px;
   height: 35px;
   outline: none;
+}
+
+.no-padding {
+  padding: 0;
 }
