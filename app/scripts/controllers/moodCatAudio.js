@@ -40,14 +40,15 @@
       * @param trackID
       * @returns {*} Promise
       */
-     this.loadSong = function loadSong(trackID) {
+     $scope.loadSong = function loadSong(trackID) {
        if(angular.isObject($scope.sound)) {
          $scope.sound.stop();
          $scope.sound.unbind();
          $scope.sound = null;
        }
-
+       console.log("wed dont have metadata");
        return soundCloudService.fetchMetadata(trackID).success(function(data) {
+          console.log("we have metadata");
          $scope.song = data;
          $log.info("Playing song %s", data.title);
          $scope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
@@ -72,7 +73,7 @@
        }
      });
 
-     this.loadSong(track);
+     $scope.loadSong(track);
    }])
    .controller("SoundCloudController", ['soundCloudKey', '$scope', function(soundCloudKey, $scope) {
      SC.initialize({

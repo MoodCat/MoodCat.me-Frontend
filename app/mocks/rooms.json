@@ -1,80 +1,36 @@
 [
-	{
-		"name": "Copperhead Toads",
-		"songId": 163242589,
-		"remaining": 1,
-		"roomId": 1
-	},
-	{
-		"name": "Macho Junkers",
-		"songId": 202330997,
-		"remaining": 60,
-		"roomId": 1
-	},
-	{
-		"name": "Long Cat Force",
-		"songId": 163684297,
-		"remaining": 61,
-		"roomId": 1
-	},
-	{
-		"name": "Silver Ass Wankers",
-		"songId": 202846566,
-		"remaining": 62,
-		"roomId": 1
-	},
-	{
-		"name": "Silver Milk Dribblers",
-		"songId": 202017410,
-		"remaining": 54,
-		"roomId": 1
-	},
-	{
-		"name": "Great Surf Flux",
-		"songId": 160675363,
-		"remaining": 84,
-		"roomId": 1
-	},
-	{
-		"name": "Spinning Rag Razors",
-		"songId": 163242589,
-		"remaining": 23,
-		"roomId": 1
-	},
-	{
-		"name": "Damaged Bush Supernovas",
-		"songId": 163684297,
-		"remaining": 85,
-		"roomId": 1
-	},
-	{
-		"name": "The Dope Samaritans",
-		"songId": 202017410,
-		"remaining": 91,
-		"roomId": 1
-	},
-	{
-		"name": "The Swamp Epidemic",
-		"songId": 202330997,
-		"remaining": 145,
-		"roomId": 1
-	},
-	{
-		"name": "Sweeping Blank Cicadas",
-		"songId": 163242589,
-		"remaining": 321,
-		"roomId": 1
-	},
-	{
-		"name": "Los Caviar Roosters",
-		"songId": 163242589,
-		"remaining": 123,
-		"roomId": 1
-	},
-	{
-		"name": "Seaview Purple Patsies Toads",
-		"songId": 163242589,
-		"remaining": 90,
-		"roomId": 1
-	}
+  {
+    "id": 2,
+    "roomName": "LESS IMPORTANT ROOM",
+    "currentSong": {
+      "id": 1,
+      "soundcloudID": 99517116,
+      "artist": {
+        "id": 1,
+        "name": "Fall Out Boy"
+      },
+      "name": "Thanks for the Memories",
+      "duration": 208,
+      "artworkurl": "https://i1.sndcdn.com/artworks-000052078494-1b00cs-t500x500.jpg"
+    },
+    "currentTime": 60,
+    "position": 10
+  },
+  {
+    "id": 1,
+    "roomName": "Copperhead Toads",
+    "currentSong": {
+      "id": 1,
+      "soundcloudID": 99517116,
+      "artist": {
+        "id": 1,
+        "name": "Fall Out Boy"
+      },
+      "name": "Thanks for the Memories",
+      "duration": 208,
+      "artworkurl": "https://i1.sndcdn.com/artworks-000052078494-1b00cs-t500x500.jpg"
+    },
+    "currentTime": 60,
+    "position": 1
+  }
 ]

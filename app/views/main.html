@@ -9,22 +9,22 @@
     <div class="col-md-4">
       <h4>Get a room</h4>
       <ul class="list-unstyled list-rooms">
-        <li ng-repeat="room in rooms">
+        <li ng-repeat="room in rooms | orderByProperty:'position'">
           <a ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
-            <img ng-src="{{room.song.artwork_url}}"/>
+            <img ng-src="{{room.currentSong.artworkUrl}}"/>
             <!--<i class="glyphicon glyphicon-cd"></i>-->
-            <h4 ng-bind="room.name"></h4>
-            <span class="remainingTime">next song in: <timer countdown="room.remaining" interval="1000">{{mminutes}}:{{sseconds}}</timer></span>
+            <h4 ng-bind="room.roomName"></h4>
+            <span class="remainingTime">next song in: <timer countdown="room.timeLeft" interval="1000">{{mminutes}}:{{sseconds}}</timer></span>
             <div>
               <strong>Now playing: </strong>
-              <span ng-bind="room.song.title"></span>
+              <span ng-bind="room.currentSong.artist.name"></span> - <span ng-bind="room.currentSong.name"></span>
             </div>
           </a>
         </li>
       </ul>
     </div>
     <div class="col-md-4">
-      <h4>{{ activeRoom.name }}</h4>
+      <h4>{{ activeRoom.roomName }}</h4>
       <div class="messages-container">
         <ul class="list-unstyled list-messages" id="chat-messages-list">
           <li ng-repeat="message in messages">

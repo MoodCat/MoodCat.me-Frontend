@@ -10,7 +10,8 @@
 angular.module('moodCatApp')
   .service('roomService', function($http) {
     this.fetchRooms = function() {
-      return $http.get('/mocks/rooms.json');
+      return $http.get('/api/rooms/');
+      //return $http.get('/mocks/rooms.json');
     }
   })
   .service('chatService', function($http) {
@@ -25,11 +26,9 @@ angular.module('moodCatApp')
 
         }
       );
-
       request.error(
         function() {
-          alert("failure!");
-          //$scope.cfdump = html;
+          alert("Failed to send message!");
         }
       );
     }
@@ -43,8 +42,9 @@ angular.module('moodCatApp')
 
     roomService.fetchRooms().success(function(rooms) {
       return  $q.all(rooms.map(function(room) {
+        room.timeLeft = room.currentSong.duration - room.currentTime;
         return soundCloudService
-          .fetchMetadata(room.songId)
+          .fetchMetadata(room.currentSong.soundCloudId)
           .success(function(data) {
             room.song = data;
             return room;
@@ -62,7 +62,7 @@ angular.module('moodCatApp')
      */
     $scope.selectRoom = function selectRoom(room) {
       $scope.activeRoom = room;
-      $scope.audioCtrl.loadSong(room.song.id);
+      $scope.loadSong(room.currentSong.soundCloudId);
     }
 
     /** CHAT **/
@@ -84,7 +84,7 @@ angular.module('moodCatApp')
       var message = {
         message: $scope.chatMessage.message,
         author: $scope.chatMessage.author,
-        roomId: $scope.activeRoom.roomId
+        roomId: 1
       };
 
       //Add the message to the local queue
