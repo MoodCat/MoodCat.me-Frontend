@@ -14,23 +14,17 @@ angular.module('moodCatApp')
       //return $http.get('/mocks/rooms.json');
     }
   })
-  .service('chatService', function($http) {
+  .service('chatService', function($http, $log) {
     this.sendChatMessage = function(mess) {
 
       var request = $http.post('/api/rooms/1/chat', angular.toJson(mess));
-      //
       // // Store the data-dump of the FORM scope.
       request.success(
         function(response) {
-          console.log(angular.toJson(response));
-
+          $log.info("Received response %o", response);
         }
       );
-      request.error(
-        function() {
-          alert("Failed to send message!");
-        }
-      );
+      request.error($log.warn.bind($log, "Failed to fetch response"));
     }
   })
   .controller('MainCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
