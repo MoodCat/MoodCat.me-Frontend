@@ -17,7 +17,7 @@ angular.module('moodCatApp')
   .service('chatService', function($http) {
     this.sendChatMessage = function(mess) {
 
-      var request = $http.post('/api/rooms/1/chat/post', angular.toJson(mess));
+      var request = $http.post('/api/rooms/1/chat', angular.toJson(mess));
       //
       // // Store the data-dump of the FORM scope.
       request.success(
