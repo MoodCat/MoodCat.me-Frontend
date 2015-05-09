@@ -10,7 +10,7 @@
  angular.module('moodCatAudio')
    .value('soundCloudKey', 'cef809be114bdf9f856c735139f2aeba')
    .value('track', '202330997')
-   .service('soundCloudService', ['soundCloudKey', '$http', function(soundCloudKey, $http) {
+   .service('soundCloudService', ['soundCloudKey', '$http', '$log', function(soundCloudKey, $http, $log) {
 
      /**
       * Fetch the metadata for a song
@@ -18,6 +18,7 @@
       * @returns {*} Promise
       */
      this.fetchMetadata = function fetchMetadata(trackID) {
+       $log.info("Fetch meta data for trackID %d", trackID);
        return $http.get('https://api.soundcloud.com/tracks/'+trackID+'?client_id='+soundCloudKey);
      }
 
@@ -40,7 +41,8 @@
       * @param trackID
       * @returns {*} Promise
       */
-     this.loadSong = function loadSong(trackID) {
+     $scope.loadSong = function loadSong(trackID) {
+       $log.info("Loading track id %s", trackID);
        if(angular.isObject($scope.sound)) {
          $scope.sound.stop();
          $scope.sound.unbind();
@@ -48,6 +50,7 @@
        }
 
        return soundCloudService.fetchMetadata(trackID).success(function(data) {
+
          $scope.song = data;
          $log.info("Playing song %s", data.title);
          $scope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
@@ -72,7 +75,7 @@
        }
      });
 
-     this.loadSong(track);
+     //$scope.loadSong(track);
    }])
    .controller("SoundCloudController", ['soundCloudKey', '$scope', function(soundCloudKey, $scope) {
      SC.initialize({

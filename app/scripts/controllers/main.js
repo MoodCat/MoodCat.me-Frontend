@@ -8,24 +8,58 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
-  .controller('MainCtrl', function ($scope, $timeout, soundCloudService) {
+  .service('roomService', function($http) {
+    this.fetchRooms = function() {
+      return $http.get('/api/rooms/');
+      //return $http.get('/mocks/rooms.json');
+    }
+  })
+  .service('chatService', function($http, $log) {
+    this.sendChatMessage = function(mess) {
+
+      var request = $http.post('/api/rooms/1/chat', angular.toJson(mess));
+      // // Store the data-dump of the FORM scope.
+      request.success(
+        function(response) {
+          $log.info("Received response %o", response);
+        }
+      );
+      request.error($log.warn.bind($log, "Failed to fetch response"));
+    }
+  })
+  .controller('MainCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
     $scope.moods = ['Angry', 'Nervous', 'Exiting', 'Happy', 'Pleasing', 'Relaxing',
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
     $scope.rooms = [];
 
-    soundCloudService.fetchMetadata("202846566").success(function(data) {
-      $scope.rooms = ['Copperhead Toads', 'Macho Junkers', 'Long Cat Force', 'Damaged Bush Supernovas',
-        'Spinning Rag Razors', 'Sweeping Blank Cicadas', 'Silver Ass Wankers', 'The Swamp Epidemic',
-        'The Dope Samaritans', 'Silver Milk Dribblers', 'Great Surf Flux', 'Los Caviar Roosters',
-        'Seaview Purple Patsies'].map(function (name) {
-          return {
-            name: name,
-            song: data
-          }
-        });
-      $scope.activeRoom = $scope.rooms[0];
-    })
+
+    roomService.fetchRooms().success(function(rooms) {
+      return  $q.all(rooms.map(function(room) {
+        room.timeLeft = room.currentSong.duration - room.currentTime;
+        return soundCloudService
+          .fetchMetadata(room.currentSong.soundCloudId)
+          .success(function(data) {
+            room.song = data;
+            return room;
+          })
+      })).then(function() {
+        $scope.rooms = rooms;
+        $scope.activeRoom = $scope.rooms[0];
+      });
+    });
+
+    /**
+     * Sets the activeRoom of the user to the given room.
+     * Also loads the song of that room and syncs the time.
+     * @param {[type]} room [The ID of the room]
+     */
+    $scope.selectRoom = function selectRoom(room) {
+      $scope.activeRoom = room;
+      $scope.loadSong(room.currentSong.soundCloudId);
+    }
+
+    /** CHAT **/
 
     $scope.messages = ['Hoihoi!'].map(function(message) {
       return {
@@ -37,26 +71,29 @@ angular.module('moodCatApp')
 
     $scope.chatMessage = {
       message: "",
-      author: "Eva"
+      author: "System"
     };
 
     $scope.addMessage = function() {
-      $scope.messages.push({
+      var message = {
         message: $scope.chatMessage.message,
         author: $scope.chatMessage.author,
-        time: (new Date()).valueOf()
-      });
+        roomId: 1
+      };
+
+      //Add the message to the local queue
+      $scope.messages.push(message);
+
+      //Send the mesage to the server
+      chatService.sendChatMessage(message);
+
+      //Clear the chat input field
       $scope.chatMessage.message = "";
 
       $timeout(function() {
         var list = angular.element("#chat-messages-list")[0];
         list.scrollTop = list.scrollHeight;
       })
-    }
-
-    $scope.selectRoom = function selectRoom(room) {
-      $scope.activeRoom = room;
-      $scope.audioCtrl.loadSong(room.song.id);
     }
 
   });
