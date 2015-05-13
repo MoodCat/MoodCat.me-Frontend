@@ -1,0 +1,19 @@
+<div class="container">
+    <button ui-sref="selectRoom" class="glyphicon glyphicon-menu-left btn-default back-button">Back</button>
+    <h4>{{ activeRoom.roomName }}</h4>
+    <div class="messages-container col-md-4">
+        <ul class="list-unstyled list-messages" id="chat-messages-list">
+          <li ng-repeat="message in messages">
+              <strong ng-bind="message.time | date:'HH:mm'"></strong>
+              <strong ng-bind="message.author"></strong>
+              <span ng-bind="message.message"></span>
+          </li>
+        </ul>
+        <div class="form-holder">
+          <form ng-submit="addMessage()">
+            <input type="text" ng-model="chatMessage.message" placeholder="Type a message"/>
+            <input type="submit" value="Send" class="highlight" />
+          </form>
+        </div>
+    </div>
+</div>

@@ -51,6 +51,29 @@ p {
   margin-right: 10px;
 }
 
+.ng-enter,
+.ng-leave {
+  position: absolute;
+  left: 30px;
+  right: 30px;
+  transition: 0.5s all ease;
+}
+
+.ng-enter {
+  animation: slideInRight .5s both ease;
+}
+.ng-leave {
+  animation: slideInLeft .5s both ease;
+}
+@keyframes slideOutLeft {
+    to { opacity: 0; transform: translateX(-200%);}
+}
+@keyframes slideInRight {
+    from { opacity: 0; transform:translateX(200%); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+
 .navbar-default,
 .navbar-default .player-controls > li > a,
 .navbar-default .player-controls > li > a:focus,
@@ -259,6 +282,14 @@ btn-mood label::before {
   vertical-align: middle;
   line-height: 90px;
   z-index: -1;
+}
+
+.back-button {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(60, 60, 60, 0.49);
+  color: #EEE;
 }
 
 .list-rooms, .messages-container {

@@ -21,13 +21,14 @@ angular
     'ngSanitize',
     'ngTouch',
     'timer',
-    'moodCatAudio'
+    'moodCatAudio',
+    'ui.router'
   ])
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        templateUrl: 'views/moodSelection.html',
+        controller: 'moodCtrl'
       })
       .when('/about', {
         templateUrl: 'views/about.html',

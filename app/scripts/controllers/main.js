@@ -8,6 +8,25 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
+  .config(function($stateProvider, $urlRouterProvider) {
+    $stateProvider
+
+        .state('room', {
+          url : '/room',
+          templateUrl : 'views/room.html',
+          controller : 'roomController'
+        })
+        .state('selectRoom', {
+          url : '/selectRoom',
+          templateUrl : 'views/selectRoom.html',
+          controller : 'selectRoomController'
+        })
+        .state('moodSelection', {
+          url : '/selectMood',
+          templateUrl : 'views/moodSelection.html',
+          controller : 'moodCtrl'
+        })
+  })
   .service('roomService', function($http) {
     this.fetchRooms = function() {
       return $http.get('/api/rooms/');
@@ -33,12 +52,11 @@ angular.module('moodCatApp')
       );
     }
   })
-  .controller('MainCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
+  .controller('moodCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
     $scope.moods = ['Angry', 'Nervous', 'Exiting', 'Happy', 'Pleasing', 'Relaxing',
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
     $scope.rooms = [];
-
 
     roomService.fetchRooms().success(function(rooms) {
       return  $q.all(rooms.map(function(room) {
@@ -101,5 +119,11 @@ angular.module('moodCatApp')
         list.scrollTop = list.scrollHeight;
       })
     }
+
+  })
+  .controller('selectRoomController', function() {
+
+  })
+  .controller('roomController', function() {
 
   });

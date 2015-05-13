@@ -1,0 +1,18 @@
+<div class="col-md-4">
+  <button ui-sref="moodSelection" class="glyphicon glyphicon-menu-left btn-default back-button">Back</button>
+  <h4>Get a room</h4>
+  <ul class="list-unstyled list-rooms">
+    <li ng-repeat="room in rooms | orderByProperty:'position'">
+      <a ui-sref="room" ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
+        <img ng-src="{{room.currentSong.artworkUrl}}"/>
+        <!--<i class="glyphicon glyphicon-cd"></i>-->
+        <h4 ng-bind="room.roomName"></h4>
+        <span class="remainingTime">next song in: <timer countdown="room.timeLeft" interval="1000">{{mminutes}}:{{sseconds}}</timer></span>
+        <div>
+          <strong>Now playing: </strong>
+          <span ng-bind="room.currentSong.artist.name"></span> - <span ng-bind="room.currentSong.name"></span>
+        </div>
+      </a>
+    </li>
+  </ul>
+</div>
