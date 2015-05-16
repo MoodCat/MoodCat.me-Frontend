@@ -41,13 +41,13 @@ angular.module('moodCatApp')
       // // Store the data-dump of the FORM scope.
       request.success(
         function(response) {
-          console.log(angular.toJson(response));
+          $log.log(angular.toJson(response));
 
         }
       );
       request.error(
         function() {
-          alert("Failed to send message!");
+          $log.error("Failed to send message!");
         }
       );
     }
