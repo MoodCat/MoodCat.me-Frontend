@@ -404,3 +404,58 @@ btn-mood label::before {
 .no-padding {
   padding: 0;
 }
+
+.feedbackSAM {
+    display: inline;
+    width: 300px;
+    height: 300px;
+    margin-top: 50px;
+    float: right;
+    border: 1px solid white;
+    background-color: gray;
+
+    .hideButton {
+        float: right;
+        margin-top: 2px;
+        margin-right: 5px;
+    }
+
+    .title {
+        display: block;
+        margin-top: 25px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .elements {
+        display: flex;
+        width: 100%;
+
+        .element {
+            display: inline-block;
+            margin: auto;
+            flex: 1;
+
+            label {
+                display: block;
+                margin: auto;
+                width: 40px;
+            }
+
+            input {
+                display: block;
+                margin: auto;
+                margin-top: 5px;
+            }
+        }
+    }
+
+    button {
+        width: 100px;
+        height: 25px;
+        margin: auto;
+        margin-top: 10px;
+        display: block;
+        color: black;
+    }
+}
