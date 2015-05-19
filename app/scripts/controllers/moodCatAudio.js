@@ -77,6 +77,32 @@
        }
      });
 
+     $scope.sendClassification = function sendClassification() {
+         if(!angular.isObject($scope.sound)) {
+             return;
+         }
+
+         var arousal = $("[name='arousalFeedback']:checked");
+         var valence = $("[name='valenceFeedback']:checked");
+
+         if(!angular.isObject(arousal) || !angular.isObject(valence)) {
+             return;
+         }
+
+         var data = {
+             'arousal' : arousal.val(),
+             'valence' : valence.val()
+         };
+
+         // TODO: convert to own ID instead of SoundCloud track ID.
+         var request = $http.post('/api/songs/' + $scope.song.id + "/classify", angular.toJson(data));
+         request.success(
+           function(response) {
+               $log.info("Thank you for your feedback!");
+           }
+         );
+     }
+
      //$scope.loadSong(track);
    }])
    .controller("SoundCloudController", ['soundCloudKey', '$scope', function(soundCloudKey, $scope) {
