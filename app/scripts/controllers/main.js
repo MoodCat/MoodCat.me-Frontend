@@ -17,8 +17,8 @@ angular.module('moodCatApp')
   .service('chatService', function($http, $log) {
     this.sendChatMessage = function(mess) {
 
-      var request = $http.post('/api/rooms/1/chat', angular.toJson(mess));
-      // // Store the data-dump of the FORM scope.
+      var request = $http.post('/api/rooms/1/messages', angular.toJson(mess));
+      // Store the data-dump of the FORM scope.
       request.success(
         function(response) {
           $log.info("Received response %o", response);
@@ -36,11 +36,11 @@ angular.module('moodCatApp')
 
     roomService.fetchRooms().success(function(rooms) {
       return  $q.all(rooms.map(function(room) {
-        room.timeLeft = room.currentSong.duration - room.currentTime;
+        room.timeLeft = room.song.duration - room.time;
         return soundCloudService
-          .fetchMetadata(room.currentSong.soundCloudId)
+          .fetchMetadata(room.song.soundCloudId)
           .success(function(data) {
-            room.song = data;
+            room.data = data;
             return room;
           })
       })).then(function() {
@@ -56,7 +56,7 @@ angular.module('moodCatApp')
      */
     $scope.selectRoom = function selectRoom(room) {
       $scope.activeRoom = room;
-      $scope.loadSong(room.currentSong.soundCloudId);
+      $scope.loadSong(room.song.soundCloudId);
     }
 
     /** CHAT **/
