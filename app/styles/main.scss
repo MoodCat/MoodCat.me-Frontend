@@ -112,6 +112,11 @@ p {
   }
 }
 
+.mainView {
+    // To make sure the content is correctly aligned with the header
+    margin-bottom: 50px;
+}
+
 // Custom page footer
 .footer {
   padding-top: 19px;

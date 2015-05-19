@@ -8,25 +8,6 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
-  .config(function($stateProvider, $urlRouterProvider) {
-    $stateProvider
-
-        .state('room', {
-          url : '/room',
-          templateUrl : 'views/room.html',
-          controller : 'roomController'
-        })
-        .state('selectRoom', {
-          url : '/selectRoom',
-          templateUrl : 'views/selectRoom.html',
-          controller : 'selectRoomController'
-        })
-        .state('moodSelection', {
-          url : '/selectMood',
-          templateUrl : 'views/moodSelection.html',
-          controller : 'moodCtrl'
-        })
-  })
   .service('roomService', function($http) {
     this.fetchRooms = function() {
       return $http.get('/api/rooms/');
