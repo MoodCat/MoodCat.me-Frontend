@@ -77,21 +77,53 @@
        }
      });
 
+     $scope.arousalOptions = [
+         {
+             'value' : -1
+         },
+         {
+             'value' : -0.5
+         },
+         {
+             'value' : 0
+         },
+         {
+             'value' : 0.5
+         },
+         {
+             'value' : 1
+         }
+     ];
+     $scope.valenceOptions = [
+         {
+             'value' : -1
+         },
+         {
+             'value' : -0.5
+         },
+         {
+             'value' : 0
+         },
+         {
+             'value' : 0.5
+         },
+         {
+             'value' : 1
+         }
+     ];
+
+     $scope.arousal = $scope.arousalOptions[2];
+     $scope.valence = $scope.valenceOptions[2];
+
      $scope.sendClassification = function sendClassification() {
+         // You can only classify if there is currently a song playing
          if(!angular.isObject($scope.sound)) {
              return;
          }
 
-         var arousal = $("[name='arousalFeedback']:checked");
-         var valence = $("[name='valenceFeedback']:checked");
-
-         if(!angular.isObject(arousal) || !angular.isObject(valence)) {
-             return;
-         }
-
          var data = {
-             'arousal' : arousal.val(),
-             'valence' : valence.val()
+             'arousal' : $scope.arousal,
+             'valence' : $scope.valence
          };
 
          // TODO: convert to own ID instead of SoundCloud track ID.
@@ -131,4 +163,11 @@
        },
        template: '<label noselect><input type="checkbox" ng-model="ngModel"/><span ng-transclude class="mood-label"></span></label>'
      }
+   })
+   .directive('feedbackSam', function() {
+       return {
+           restrict : 'E',
+           scope : false,
+           templateUrl : 'views/feedbackSAM.html'
+       }
    });

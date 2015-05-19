@@ -54,7 +54,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right player-controls">
               <li><a><i class="glyphicon glyphicon-thumbs-up"></i></a></li>
-              <li><a><span class="glyphicon glyphicon-thumbs-down" ng-click="feedbackSAM = true"></span></a></li>
+              <li><a><span class="glyphicon glyphicon-thumbs-down" ng-click="feedbackSAM = !feedbackSAM"></span></a></li>
               <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
               <li><a ng-click='sound.paused ? sound.play() : sound.pause()' ng-class="sound.paused ? 'glyphicon glyphicon-play' : 'glyphicon glyphicon-pause'"></a></li>
               <li><a ng-click='sound.restart()' class="glyphicon glyphicon-stop"></a></li>
@@ -74,37 +74,7 @@
     </div>
 
     <div class="container">
-        <div class="feedbackSAM" ng-show="feedbackSAM">
-            <span class="hideButton glyphicon glyphicon-remove" ng-click="feedbackSAM = false"></span>
-
-            <div id="valenceFeedback" class="feedback">
-                <span class="title">How positive is this song?</span>
-                <div class="elements">
-                    <div class="element" ng-repeat="n in [1,2,3,4,5]">
-                        <label for="valenceFeedback{{n}}">
-                            <img width="40px" height="60px" src="/images/valence/valence{{n}}.png" alt="valence{{n}}" />
-                        </label>
-                        <input id="valenceFeedback{{n}}" name="valenceFeedback" type="radio" value="{{n}}"/>
-                    </div>
-                </div>
-            </div>
-
-            <div id="arousalFeedback" class="feedback">
-                <span class="title">How excited is this song?</span>
-                <div class="elements">
-                    <div class="element" ng-repeat="n in [1,2,3,4,5]">
-                        <label for="arousalFeedback{{n}}">
-                            <img width="40px" height="60px" src="/images/arousal/arousal{{n}}.png" alt="arousal{{n}}" />
-                        </label>
-                        <input id="arousalFeedback{{n}}" name="arousalFeedback" type="radio" value="{{n}}"/>
-                    </div>
-                </div>
-            </div>
-
-            <button type="submit" value="Submit feedback" ng-click="sendClassification()">
-                Submit feedback
-            </button>
-        </div>
+        <feedback-sam></feedback-sam>
 
         <!-- The actual content -->
         <div ui-view class="mainView"></div>
