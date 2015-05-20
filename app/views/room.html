@@ -1,6 +1,6 @@
 <div class="col-md-6">
     <button ui-sref="selectRoom" class="glyphicon glyphicon-menu-left btn-default back-button">Back</button>
-    <h4>{{ this.roomName }}</h4>
+    <h4 ng-bind="room.name"></h4>
     <div class="messages-container">
         <ul class="list-unstyled list-messages" id="chat-messages-list">
           <li ng-repeat="message in messages">
@@ -16,7 +16,4 @@
           </form>
         </div>
     </div>
-</div>
-<div class="col-md-6">
-    <img src="{{ activeRoom.song.artworkUrl }}" class="room__coverArt" alt="Cover Art"/>{{ activeRoom.song.artworkUrl }}
 </div>

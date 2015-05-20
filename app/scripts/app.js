@@ -28,8 +28,16 @@ angular
 
       $stateProvider
         .state('room', {
-          url : '/room',
+          url : '/room/:roomId',
           templateUrl : 'views/room.html',
+          resolve : {
+	    room : ['$stateParams', 'roomService', function($stateParams, roomService) {
+              return roomService.fetchRoom($stateParams.roomId);
+            }],
+            messages : ['$stateParams', 'chatService', function($stateParams, chatService) {
+              return chatService.fetchMessages($stateParams.roomId);
+            }]
+          }, 
           controller : 'roomController'
         })
         .state('selectRoom', {

@@ -3,7 +3,7 @@
   <h4>Get a room</h4>
   <ul class="list-unstyled list-rooms">
     <li ng-repeat="room in rooms | orderByProperty:'position'">
-      <a ui-sref="room" ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
+      <a ui-sref="room({roomId : room.id})" ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
         <img ng-src="{{room.song.artworkUrl}}"/>
         <!--<i class="glyphicon glyphicon-cd"></i>-->
         <h4 ng-bind="room.name"></h4>
