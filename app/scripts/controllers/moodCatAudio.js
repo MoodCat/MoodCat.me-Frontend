@@ -83,21 +83,15 @@
      });
 
      /**
-      * Function to handel votes.
+      * Function to handle votes.
       * @param  oriantation, if a song is liked or disliked.
       * @return nothing
       */
       this.vote = function vote(oriantation){
-        if($scope.voted){
-          alert("You have already voted on this song.")
-        }
-        else if(angular.isObject($scope.sound)){
+        if(angular.isObject($scope.sound) && !$scope.voted){
           $scope.voted = true;
           $http.post('/api/songs/'+$scope.song.id+'/vote/'+oriantation);
           $log.info(oriantation + " send to song " + $scope.song.id);
-        }
-        else{
-          alert("You aren't playing a song, right now.")
         }
      }
 
