@@ -16,19 +16,14 @@ angular.module('moodCatApp')
   })
   .service('chatService', function($http, $log) {
     this.sendChatMessage = function(mess) {
-
-      var request = $http.post('/api/rooms/1/chat', angular.toJson(mess));
-      // // Store the data-dump of the FORM scope.
+      var request = $http.post('/api/rooms/1/messages', angular.toJson(mess));
+      // Store the data-dump of the FORM scope.
       request.success(
         function(response) {
-            $log.info("Received response %o", response);
+          $log.info("Received response %o", response);
         }
       );
-      request.error(
-        function() {
-          $log.error("Failed to send message!");
-        }
-      );
+
       request.error($log.warn.bind($log, "Failed to fetch response"));
     }
   })
@@ -36,74 +31,67 @@ angular.module('moodCatApp')
     $scope.moods = ['Angry', 'Nervous', 'Exiting', 'Happy', 'Pleasing', 'Relaxing',
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
-    $scope.rooms = [];
+  })
+  .controller('selectRoomController', function($q, $scope, $timeout, soundCloudService, roomService) {
+      $scope.rooms = [];
 
-    roomService.fetchRooms().success(function(rooms) {
-      return  $q.all(rooms.map(function(room) {
-        room.timeLeft = room.currentSong.duration - room.currentTime;
-        return soundCloudService
-          .fetchMetadata(room.currentSong.soundCloudId)
-          .success(function(data) {
-            room.song = data;
-            return room;
-          })
-      })).then(function() {
-        $scope.rooms = rooms;
-        $scope.activeRoom = $scope.rooms[0];
+      roomService.fetchRooms().success(function(rooms) {
+        return  $q.all(rooms.map(function(room) {
+          room.timeLeft = room.song.duration - room.time;
+          return soundCloudService
+            .fetchMetadata(room.song.soundCloudId)
+            .success(function(data) {
+              room.data = data;
+              return room;
+            })
+        })).then(function() {
+          $scope.rooms = rooms;
+          $scope.activeRoom = $scope.rooms[0];
+        });
       });
-    });
 
-    /**
-     * Sets the activeRoom of the user to the given room.
-     * Also loads the song of that room and syncs the time.
-     * @param {[type]} room [The ID of the room]
-     */
-    $scope.selectRoom = function selectRoom(room) {
-      $scope.activeRoom = room;
-      $scope.loadSong(room.currentSong.soundCloudId);
-    }
-
-    /** CHAT **/
-
-    $scope.messages = ['Hoihoi!'].map(function(message) {
-      return {
-        author: "Jan-Willem",
-        message: message,
-        time: (new Date()).valueOf()
+      /**
+       * Sets the activeRoom of the user to the given room.
+       * Also loads the song of that room and syncs the time.
+       * @param {[type]} room [The ID of the room]
+       */
+      $scope.selectRoom = function selectRoom(room) {
+        $scope.activeRoom = room;
+        $scope.loadSong(room.song.soundCloudId);
       }
-    });
+  })
+  .controller('roomController', function($scope, $timeout, chatService) {
+      $scope.messages = ['Hoihoi!'].map(function(message) {
+        return {
+          author: "Jan-Willem",
+          message: message,
+          time: (new Date()).valueOf()
+        }
+      });
 
-    $scope.chatMessage = {
-      message: "",
-      author: "System"
-    };
-
-    $scope.addMessage = function() {
-      var message = {
-        message: $scope.chatMessage.message,
-        author: $scope.chatMessage.author,
-        roomId: 1
+      $scope.chatMessage = {
+        message: "",
+        author: "System"
       };
 
-      //Add the message to the local queue
-      $scope.messages.push(message);
+      $scope.addMessage = function() {
+        var message = {
+          message: $scope.chatMessage.message,
+          author: $scope.chatMessage.author
+        };
 
-      //Send the mesage to the server
-      chatService.sendChatMessage(message);
+        //Add the message to the local queue
+        $scope.messages.push(message);
 
-      //Clear the chat input field
-      $scope.chatMessage.message = "";
+        //Send the mesage to the server
+        chatService.sendChatMessage(message);
 
-      $timeout(function() {
-        var list = angular.element("#chat-messages-list")[0];
-        list.scrollTop = list.scrollHeight;
-      })
-    }
+        //Clear the chat input field
+        $scope.chatMessage.message = "";
 
-  })
-  .controller('selectRoomController', function() {
-
-  })
-  .controller('roomController', function() {
-
+        $timeout(function() {
+          var list = angular.element("#chat-messages-list")[0];
+          list.scrollTop = list.scrollHeight;
+        })
+      }
   });

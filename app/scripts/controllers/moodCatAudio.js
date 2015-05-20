@@ -50,9 +50,8 @@
          $scope.sound = null;
        }
 
-       $log.log("we dont have metadata");
-       return soundCloudService.fetchMetadata(trackID).success(function(data) {
-         $log.log("we have metadata");
+       return soundCloudService.fetchMetadata(trackID)
+            .success(function(data) {
          $scope.song = data;
          $log.info("Playing song %s", data.title);
          $scope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);

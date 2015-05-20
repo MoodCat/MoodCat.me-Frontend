@@ -23,7 +23,9 @@ angular
     'timer',
     'moodCatAudio'
   ])
-  .config(function($stateProvider) {
+  .config(function($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.otherwise('/');
+
       $stateProvider
         .state('room', {
           url : '/room',

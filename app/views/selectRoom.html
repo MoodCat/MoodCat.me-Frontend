@@ -4,13 +4,13 @@
   <ul class="list-unstyled list-rooms">
     <li ng-repeat="room in rooms | orderByProperty:'position'">
       <a ui-sref="room" ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
-        <img ng-src="{{room.currentSong.artworkUrl}}"/>
+        <img ng-src="{{room.song.artworkUrl}}"/>
         <!--<i class="glyphicon glyphicon-cd"></i>-->
-        <h4 ng-bind="room.roomName"></h4>
+        <h4 ng-bind="room.name"></h4>
         <span class="remainingTime">next song in: <timer countdown="room.timeLeft" interval="1000">{{mminutes}}:{{sseconds}}</timer></span>
         <div>
           <strong>Now playing: </strong>
-          <span ng-bind="room.currentSong.artist.name"></span> - <span ng-bind="room.currentSong.name"></span>
+          <span ng-bind="room.song.artist.name"></span> - <span ng-bind="room.song.name"></span>
         </div>
       </a>
     </li>
