@@ -1,7 +1,7 @@
-<div class="container">
+<div class="col-md-6">
     <button ui-sref="selectRoom" class="glyphicon glyphicon-menu-left btn-default back-button">Back</button>
     <h4>{{ activeRoom.roomName }}</h4>
-    <div class="messages-container col-md-4">
+    <div class="messages-container">
         <ul class="list-unstyled list-messages" id="chat-messages-list">
           <li ng-repeat="message in messages">
               <strong ng-bind="message.time | date:'HH:mm'"></strong>

@@ -75,6 +75,10 @@ angular.module('moodCatApp')
       };
 
       $scope.addMessage = function() {
+          if ($scope.chatMessage.message === "") {
+              return;
+          }
+
         var message = {
           message: $scope.chatMessage.message,
           author: $scope.chatMessage.author

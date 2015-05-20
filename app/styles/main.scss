@@ -19,6 +19,9 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 body::before {
@@ -32,9 +35,17 @@ body::before {
   z-index: -1;
   background: rgba(6, 6, 6, 0.82);
 }
+.header, .footer, .mainView {
+  flex: 1;
+}
+
+.header {
+  max-height: 51px;
+  height: 51px;
+}
 
 .container {
-  width: calc(100vw - 10px);
+  width: calc(100vw - 50px);
 }
 
 p {
@@ -51,26 +62,26 @@ p {
   margin-right: 10px;
 }
 
-.ng-enter,
-.ng-leave {
-  position: absolute;
-  left: 30px;
-  right: 30px;
-  transition: 0.5s all ease;
-}
-
+// .ng-enter,
+// .ng-leave {
+//   position: absolute;
+//   left: 30px;
+//   right: 30px;
+//   transition: 0.5s all ease;
+// }
+//
 .ng-enter {
-  animation: slideInRight .5s both ease;
+  animation: slideInRight .8s both ease;
 }
-.ng-leave {
-  animation: slideInLeft .5s both ease;
-}
+// .ng-leave {
+//   animation: slideInLeft .5s both ease;
+// }
 @keyframes slideOutLeft {
     to { opacity: 0; transform: translateX(-200%);}
 }
 @keyframes slideInRight {
-    from { opacity: 0; transform:translateX(200%); }
-    to { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 
@@ -112,17 +123,13 @@ p {
   }
 }
 
-.mainView {
-    // To make sure the content is correctly aligned with the header
-    margin-bottom: 50px;
-}
-
 // Custom page footer
 .footer {
   padding-top: 19px;
   color: #777;
   position: absolute;
   bottom: 0;
+  z-index:0;
 }
 
 .container-narrow > hr {
@@ -376,14 +383,11 @@ btn-mood label::before {
 }
 
 .list-messages {
-  position: absolute;
   font-size: .9em;
   padding: 4px 10px 0px 10px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 40px;
   margin: 0;
+  min-height: 500px;
+  height: 500px;
 }
 
 .messages-container {
@@ -391,8 +395,6 @@ btn-mood label::before {
 }
 
 .messages-container .form-holder {
-  position: absolute;
-  bottom: 0;
   width: 100%;
 }
 
