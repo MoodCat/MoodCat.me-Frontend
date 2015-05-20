@@ -53,8 +53,8 @@
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right player-controls">
-              <li><a><i class="glyphicon glyphicon-thumbs-up"></i></a></li>
-              <li><a><span class="glyphicon glyphicon-thumbs-down"></span></a></li>
+              <li><a ng-if="!audioCtrl.voted" ng-click='audioCtrl.vote("like")'><i class="glyphicon glyphicon-thumbs-up"></i></a></li>
+              <li><a ng-if="!audioCtrl.voted" ng-click='audioCtrl.vote("dislike")'><i class="glyphicon glyphicon-thumbs-down"></i></a></li>
               <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
               <li><a ng-click='sound.paused ? sound.play() : sound.pause()' ng-class="sound.paused ? 'glyphicon glyphicon-play' : 'glyphicon glyphicon-pause'"></a></li>
               <li><a ng-click='sound.restart()' class="glyphicon glyphicon-stop"></a></li>
