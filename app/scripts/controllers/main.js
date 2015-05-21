@@ -61,9 +61,9 @@ angular.module('moodCatApp')
 
     /** CHAT **/
 
-    $scope.messages = ['Welcome in the chat.'].map(function(message) {
+    $scope.messages = ['Hoihoi!'].map(function(message) {
       return {
-        author: "System",
+        author: "Jan-Willem",
         message: message,
         time: (new Date()).valueOf()
       }
@@ -71,14 +71,13 @@ angular.module('moodCatApp')
 
     $scope.chatMessage = {
       message: "",
-      author: "You"
+      author: "System"
     };
 
     $scope.addMessage = function() {
       var message = {
         message: $scope.chatMessage.message,
         author: $scope.chatMessage.author,
-        time: (new Date()).valueOf(),
         roomId: 1
       };
 
