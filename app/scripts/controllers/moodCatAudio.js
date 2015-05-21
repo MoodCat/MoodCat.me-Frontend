@@ -78,41 +78,41 @@
 
      $scope.arousalOptions = [
          {
-             'value' : -1
+             'value' : -1.0
          },
          {
              'value' : -0.5
          },
          {
-             'value' : 0
+             'value' : 0.0
          },
          {
              'value' : 0.5
          },
          {
-             'value' : 1
+             'value' : 1.0
          }
      ];
      $scope.valenceOptions = [
          {
-             'value' : -1
+             'value' : -1.0
          },
          {
              'value' : -0.5
          },
          {
-             'value' : 0
+             'value' : 0.0
          },
          {
              'value' : 0.5
          },
          {
-             'value' : 1
+             'value' : 1.0
          }
      ];
 
-     $scope.arousal = $scope.arousalOptions[2];
-     $scope.valence = $scope.valenceOptions[2];
+     $scope.arousal = 2;
+     $scope.valence = 2;
 
      $scope.sendClassification = function sendClassification() {
          // You can only classify if there is currently a song playing
@@ -121,8 +121,8 @@
          }
 
          var data = {
-             'arousal' : $scope.arousal,
-             'valence' : $scope.valence
+             'valence' : $scope.valenceOptions[$scope.valence].value,
+             'arousal' : $scope.arousalOptions[$scope.arousal].value
          };
 
          // TODO: convert to own ID instead of SoundCloud track ID.
@@ -132,6 +132,10 @@
                $log.info("Thank you for your feedback!");
            }
          );
+     }
+
+     $scope.log = function log() {
+         console.log($scope.valenceOptions[$scope.valence].value);
      }
 
      //$scope.loadSong(track);
