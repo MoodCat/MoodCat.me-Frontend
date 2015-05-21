@@ -60,7 +60,7 @@ angular.module('moodCatApp')
         $scope.loadSong(room.song.soundCloudId);
       }
   })
-  .controller('roomController', function($scope, $rootScope, $timeout, chatService) {
+  .controller('roomController', function($scope, $timeout, chatService) {
 
       $scope.messages = ['Hoihoi!'].map(function(message) {
         return {
