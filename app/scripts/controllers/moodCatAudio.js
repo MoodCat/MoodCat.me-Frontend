@@ -23,7 +23,8 @@
      }
 
    }])
-   .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', function($scope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService) {
+   .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService',
+        function($scope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService) {
 
      /**
       * Pad a string with zeroes
@@ -49,8 +50,8 @@
          $scope.sound = null;
        }
 
-       return soundCloudService.fetchMetadata(trackID).success(function(data) {
-
+       return soundCloudService.fetchMetadata(trackID)
+            .success(function(data) {
          $scope.song = data;
          $log.info("Playing song %s", data.title);
          $scope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
@@ -74,6 +75,68 @@
          return pad(hours, 2) + ":" + pad(minutes, 2) + ":" + pad(seconds, 2);// + "." + pad(millis, 3);
        }
      });
+
+     $scope.arousalOptions = [
+         {
+             'value' : -1.0
+         },
+         {
+             'value' : -0.5
+         },
+         {
+             'value' : 0.0
+         },
+         {
+             'value' : 0.5
+         },
+         {
+             'value' : 1.0
+         }
+     ];
+     $scope.valenceOptions = [
+         {
+             'value' : -1.0
+         },
+         {
+             'value' : -0.5
+         },
+         {
+             'value' : 0.0
+         },
+         {
+             'value' : 0.5
+         },
+         {
+             'value' : 1.0
+         }
+     ];
+
+     $scope.arousal = 2;
+     $scope.valence = 2;
+
+     $scope.sendClassification = function sendClassification() {
+         // You can only classify if there is currently a song playing
+         if(!angular.isObject($scope.sound)) {
+             return;
+         }
+
+         var data = {
+             'valence' : $scope.valenceOptions[$scope.valence].value,
+             'arousal' : $scope.arousalOptions[$scope.arousal].value
+         };
+
+         // TODO: convert to own ID instead of SoundCloud track ID.
+         var request = $http.post('/api/songs/' + $scope.song.id + "/classify", angular.toJson(data));
+         request.success(
+           function(response) {
+               $log.info("Thank you for your feedback!");
+           }
+         );
+     }
+
+     $scope.log = function log() {
+         console.log($scope.valenceOptions[$scope.valence].value);
+     }
 
      //$scope.loadSong(track);
    }])
@@ -103,4 +166,11 @@
        },
        template: '<label noselect><input type="checkbox" ng-model="ngModel"/><span ng-transclude class="mood-label"></span></label>'
      }
+   })
+   .directive('feedbackSam', function() {
+       return {
+           restrict : 'E',
+           scope : false,
+           templateUrl : 'views/feedbackSAM.html'
+       }
    });

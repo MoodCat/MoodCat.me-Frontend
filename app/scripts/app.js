@@ -12,30 +12,46 @@ angular.module('moodCatAudio', ['ngAudio']);
  */
 angular
   .module('moodCatApp', [
+      'ui.router',
     'ngAnimate',
     'ngAria',
     'ngCookies',
     'ngMessages',
     'ngResource',
-    'ngRoute',
     'ngSanitize',
     'ngTouch',
     'timer',
     'moodCatAudio'
   ])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
-      })
-      .when('/about', {
-        templateUrl: 'views/about.html',
-        controller: 'AboutCtrl'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
+  .config(function($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.otherwise('/');
+
+      $stateProvider
+        .state('room', {
+          url : '/room',
+          templateUrl : 'views/room.html',
+          controller : 'roomController'
+        })
+        .state('selectRoom', {
+          url : '/selectRoom',
+          templateUrl : 'views/selectRoom.html',
+          controller : 'selectRoomController'
+        })
+        .state('moodSelection', {
+          url : '/selectMood',
+          templateUrl : 'views/moodSelection.html',
+          controller : 'moodCtrl'
+        })
+        .state('home', {
+          url : '/',
+          templateUrl : 'views/moodSelection.html',
+          controller : 'moodCtrl'
+        })
+        .state('about', {
+          url : '/about',
+          templateUrl : 'views/about.html',
+          controller : 'AboutCtrl'
+        })
   })
   .filter('orderByProperty', function(){
     return function(input, attribute) {

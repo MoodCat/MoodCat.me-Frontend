@@ -1,0 +1,31 @@
+<div class="feedbackSAM" ng-show="feedbackSAM" ng-init="feedbackSAM = false">
+    <span class="hideButton glyphicon glyphicon-remove" ng-click="feedbackSAM = false"></span>
+
+    <div id="valenceFeedback" class="feedback">
+        <span class="title">How positive is this song?</span>
+        <div class="elements">
+            <div class="element" ng-repeat="n in valenceOptions track by $index">
+                <label for="valenceFeedback{{$index + 1}}">
+                    <img width="40px" height="60px" ng-src="/images/valence/valence{{$index + 1}}.png" alt="valence{{$index + 1}}" />
+                </label>
+                <input id="valenceFeedback{{$index + 1}}" name="valenceFeedback" type="radio" ng-model="$parent.valence" ng-value="{{$index}}"/>
+            </div>
+        </div>
+    </div>
+
+    <div id="arousalFeedback" class="feedback">
+        <span class="title">How excited is this song?</span>
+        <div class="elements">
+            <div class="element" ng-repeat="n in arousalOptions track by $index">
+                <label for="arousalFeedback{{$index + 1}}">
+                    <img width="40px" height="60px" ng-src="/images/arousal/arousal{{$index + 1}}.png" alt="arousal{{$index + 1}}" />
+                </label>
+                <input id="arousalFeedback{{$index + 1}}}" name="arousalFeedback" type="radio" ng-model="$parent.arousal" ng-value="{{$index}}"/>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" value="Submit feedback" ng-click="sendClassification()">
+        Submit feedback
+    </button>
+</div>

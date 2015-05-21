@@ -19,6 +19,9 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 body::before {
@@ -32,9 +35,17 @@ body::before {
   z-index: -1;
   background: rgba(6, 6, 6, 0.82);
 }
+.header, .footer, .mainView {
+  flex: 1;
+}
+
+.header {
+  max-height: 51px;
+  height: 51px;
+}
 
 .container {
-  width: calc(100vw - 10px);
+  width: calc(100vw - 50px);
 }
 
 p {
@@ -50,6 +61,29 @@ p {
   float: right;
   margin-right: 10px;
 }
+
+// .ng-enter,
+// .ng-leave {
+//   position: absolute;
+//   left: 30px;
+//   right: 30px;
+//   transition: 0.5s all ease;
+// }
+//
+.ng-enter {
+  animation: slideInRight .8s both ease;
+}
+// .ng-leave {
+//   animation: slideInLeft .5s both ease;
+// }
+@keyframes slideOutLeft {
+    to { opacity: 0; transform: translateX(-200%);}
+}
+@keyframes slideInRight {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 
 .navbar-default,
 .navbar-default .player-controls > li > a,
@@ -95,6 +129,7 @@ p {
   color: #777;
   position: absolute;
   bottom: 0;
+  z-index:0;
 }
 
 .container-narrow > hr {
@@ -261,6 +296,14 @@ btn-mood label::before {
   z-index: -1;
 }
 
+.back-button {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: none;
+  background: rgba(60, 60, 60, 0.49);
+  color: #EEE;
+}
+
 .list-rooms, .messages-container {
   display: block;
   height: 500px;
@@ -340,14 +383,11 @@ btn-mood label::before {
 }
 
 .list-messages {
-  position: absolute;
   font-size: .9em;
   padding: 4px 10px 0px 10px;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 40px;
   margin: 0;
+  min-height: 500px;
+  height: 500px;
 }
 
 .messages-container {
@@ -355,8 +395,6 @@ btn-mood label::before {
 }
 
 .messages-container .form-holder {
-  position: absolute;
-  bottom: 0;
   width: 100%;
 }
 
@@ -372,4 +410,59 @@ btn-mood label::before {
 
 .no-padding {
   padding: 0;
+}
+
+.feedbackSAM {
+    display: inline;
+    width: 300px;
+    height: 300px;
+    margin-top: 50px;
+    float: right;
+    border: 1px solid white;
+    background-color: gray;
+
+    .hideButton {
+        float: right;
+        margin-top: 2px;
+        margin-right: 5px;
+    }
+
+    .title {
+        display: block;
+        margin-top: 25px;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    .elements {
+        display: flex;
+        width: 100%;
+
+        .element {
+            display: inline-block;
+            margin: auto;
+            flex: 1;
+
+            label {
+                display: block;
+                margin: auto;
+                width: 40px;
+            }
+
+            input {
+                display: block;
+                margin: auto;
+                margin-top: 5px;
+            }
+        }
+    }
+
+    button {
+        width: 100px;
+        height: 25px;
+        margin: auto;
+        margin-top: 10px;
+        display: block;
+        color: black;
+    }
 }
