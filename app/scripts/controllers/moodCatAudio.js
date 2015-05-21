@@ -26,6 +26,12 @@
    .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService',
         function($scope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService) {
 
+    /**
+     *  A boolean that checks if the user has already voted on this song.
+     * @type {Boolean}
+     */
+      $scope.voted = false;
+
      /**
       * Pad a string with zeroes
       * @param str string to pad
@@ -55,6 +61,7 @@
          $scope.song = data;
          $log.info("Playing song %s", data.title);
          $scope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
+         $scope.voted = false;
          //$scope.sound.play();
        });
      }
@@ -132,6 +139,19 @@
                $log.info("Thank you for your feedback!");
            }
          );
+    }
+ 
+     /**
+      * Function to handle votes.
+      * @param  oriantation, if a song is liked or disliked.
+      * @return nothing
+      */
+      this.vote = function vote(oriantation){
+        if(angular.isObject($scope.sound) && !$scope.voted){
+          $scope.voted = true;
+          $http.post('/api/songs/'+$scope.song.id+'/vote/'+oriantation);
+          $log.info(oriantation + " send to song " + $scope.song.id);
+        }
      }
 
      //$scope.loadSong(track);
