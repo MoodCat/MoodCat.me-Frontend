@@ -134,10 +134,6 @@
          );
      }
 
-     $scope.log = function log() {
-         console.log($scope.valenceOptions[$scope.valence].value);
-     }
-
      //$scope.loadSong(track);
    }])
    .controller("SoundCloudController", ['soundCloudKey', '$scope', function(soundCloudKey, $scope) {
