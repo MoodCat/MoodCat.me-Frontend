@@ -31,7 +31,7 @@ angular.module('moodCatApp')
       return $http.get('/api/rooms/'+roomid+'/messages')
     }
   })
-  .controller('MainCtrl', function ($q, $scope, $timeout, $http, soundCloudService, roomService, chatService) {
+  .controller('MainCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
     $scope.moods = ['Angry', 'Nervous', 'Exiting', 'Happy', 'Pleasing', 'Relaxing',
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
@@ -93,7 +93,7 @@ angular.module('moodCatApp')
       $scope.messages.push(message);
 
       //Send the mesage to the server
-      chatService.sendChatMessage(message,$scope.activeRoom.id);
+      chatService.sendChatMessage(message, $scope.activeRoom.id);
 
       //Clear the chat input field
       $scope.chatMessage.message = "";
