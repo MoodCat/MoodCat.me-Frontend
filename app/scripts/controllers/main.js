@@ -42,7 +42,7 @@ angular.module('moodCatApp')
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
   })
-  .controller('selectRoomController', function($q, $scope, $timeout, soundCloudService, roomService) {
+  .controller('selectRoomController', function($rootScope, $q, $scope, $timeout, soundCloudService, roomService) {
       $scope.rooms = [];
 
       roomService.fetchRooms().success(function(rooms) {
@@ -56,21 +56,11 @@ angular.module('moodCatApp')
             })
         })).then(function() {
           $scope.rooms = rooms;
-          $scope.activeRoom = $scope.rooms[0];
+          $rootScope.activeRoom = rooms[0];
         });
       });
-
-      /**
-       * Sets the activeRoom of the user to the given room.
-       * Also loads the song of that room and syncs the time.
-       * @param {[type]} room [The ID of the room]
-       */
-      $scope.selectRoom = function selectRoom(room) {
-        $scope.activeRoom = room;
-        $scope.loadSong(room.song.soundCloudId);
-      }
   })
-  .controller('roomController', function($scope, $timeout, chatService, room, messages) {
+  .controller('roomController', function($rootScope, $scope, $timeout, chatService, room, messages) {
       $scope.room = room.data;
       $scope.messages = messages.data;
 
@@ -78,6 +68,9 @@ angular.module('moodCatApp')
         message: "",
         author: "System"
       };
+
+      $rootScope.activeRoom = $scope.room;
+      $scope.loadSong($scope.room.song.soundCloudId);
 
       $scope.addMessage = function() {
           if ($scope.chatMessage.message === "") {
