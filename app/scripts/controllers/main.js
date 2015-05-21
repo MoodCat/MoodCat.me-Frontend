@@ -15,9 +15,9 @@ angular.module('moodCatApp')
     }
   })
   .service('chatService', function($http, $log) {
-    this.sendChatMessage = function(mess) {
+    this.sendChatMessage = function(mess,roomid) {
 
-      var request = $http.post('/api/rooms/1/messages', angular.toJson(mess));
+      var request = $http.post('/api/rooms/'+roomid+'/messages', angular.toJson(mess));
       // Store the data-dump of the FORM scope.
       request.success(
         function(response) {
@@ -25,6 +25,10 @@ angular.module('moodCatApp')
         }
       );
       request.error($log.warn.bind($log, "Failed to fetch response"));
+    }
+    this.fetchMessages = function(roomid){
+      $log.info("Fetched messages for chat " + roomid);
+      return $http.get('/api/rooms/'+roomid+'/messages')
     }
   })
   .controller('MainCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
@@ -57,18 +61,23 @@ angular.module('moodCatApp')
     $scope.selectRoom = function selectRoom(room) {
       $scope.activeRoom = room;
       $scope.loadSong(room.song.soundCloudId);
+
+      //Fetch chat
+
+      if(angular.isObject($scope.activeRoom)){
+        chatService.fetchMessages($scope.activeRoom.id).success(function(data){
+          $scope.messages = data.map(function(message) {
+            return {
+              author: message.author,
+              message: message.message,
+              time: message.time
+            }
+          })
+        });
+      }
     }
 
     /** CHAT **/
-
-    $scope.messages = ['Hoihoi!'].map(function(message) {
-      return {
-        author: "Jan-Willem",
-        message: message,
-        time: (new Date()).valueOf()
-      }
-    });
-
     $scope.chatMessage = {
       message: "",
       author: "System"
@@ -78,14 +87,13 @@ angular.module('moodCatApp')
       var message = {
         message: $scope.chatMessage.message,
         author: $scope.chatMessage.author,
-        roomId: 1
       };
 
       //Add the message to the local queue
       $scope.messages.push(message);
 
       //Send the mesage to the server
-      chatService.sendChatMessage(message);
+      chatService.sendChatMessage(message, $scope.activeRoom.id);
 
       //Clear the chat input field
       $scope.chatMessage.message = "";
