@@ -38,7 +38,7 @@ angular.module('moodCatApp')
 
   })
   .controller('moodCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
-    $scope.moods = ['Angry', 'Nervous', 'Exiting', 'Happy', 'Pleasing', 'Relaxing',
+    $scope.moods = ['Angry', 'Nervous', 'Exciting', 'Happy', 'Pleasing', 'Relaxing',
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
   })
