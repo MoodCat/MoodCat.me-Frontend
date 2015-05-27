@@ -31,18 +31,23 @@ angular
           url : '/room/:roomId',
           templateUrl : 'views/room.html',
           resolve : {
-	    room : ['$stateParams', 'roomService', function($stateParams, roomService) {
+    	    room : ['$stateParams', 'roomService', function($stateParams, roomService) {
               return roomService.fetchRoom($stateParams.roomId);
             }],
             messages : ['$stateParams', 'chatService', function($stateParams, chatService) {
               return chatService.fetchMessages($stateParams.roomId);
             }]
-          }, 
+          },
           controller : 'roomController'
         })
         .state('selectRoom', {
-          url : '/selectRoom',
+          url : '/selectRoom/{moods:.*}',
           templateUrl : 'views/selectRoom.html',
+          resolve : {
+            room : ['$stateParams', 'roomService', function($stateParams, roomService) {
+              return roomService.fetchRooms($stateParams.moods.split("-"));
+            }]
+          },
           controller : 'selectRoomController'
         })
         .state('moodSelection', {

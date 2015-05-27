@@ -3,7 +3,8 @@
   <div ui-view class="row">
     <div>
       <h4>In the mood?</h4>
-      <btn-mood ui-sref="selectRoom" ng-model="blabla" ng-repeat="mood in moods">{{mood}}</btn-mood>
+      <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods">{{mood.value}}</btn-mood>
     </div>
+    <a ng-click="submitMoods()" class="button">next</a>
   </div>
 </div>

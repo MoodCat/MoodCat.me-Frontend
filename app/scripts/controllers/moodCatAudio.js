@@ -140,7 +140,7 @@
            }
          );
     }
- 
+
      /**
       * Function to handle votes.
       * @param  oriantation, if a song is liked or disliked.
@@ -180,7 +180,7 @@
        scope: {
          ngModel : '='
        },
-       template: '<label noselect><input type="checkbox" ng-model="ngModel"/><span ng-transclude class="mood-label"></span></label>'
+       template: '<label noselect><input type="checkbox" ng-model="ngModel" /><span ng-transclude class="mood-label"></span></label>'
      }
    })
    .directive('feedbackSam', function() {

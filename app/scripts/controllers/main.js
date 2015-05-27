@@ -9,8 +9,12 @@
  */
 angular.module('moodCatApp')
   .service('roomService', function($http) {
-    this.fetchRooms = function() {
-      return $http.get('/api/rooms/');
+    this.fetchRooms = function(moods) {
+        var url = '/api/rooms/?';
+        angular.forEach(moods, function(mood) {
+          url += 'mood=' + mood + '&';
+        }, url);
+      return $http.get(url);
     }
 
    this.fetchRoom = function(roomId) {
@@ -37,27 +41,45 @@ angular.module('moodCatApp')
     }
 
   })
-  .controller('moodCtrl', function ($q, $scope, $timeout, soundCloudService, roomService, chatService) {
-    $scope.moods = ['Angry', 'Nervous', 'Exciting', 'Happy', 'Pleasing', 'Relaxing',
-      'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
+  .service('moodService', function($http, $log) {
+    this.getMoods = function() {
+      $log.info("Fetching moods from API");
+      return $http.get('/mocks/moods.json');
+    }
+  })
+  .controller('moodCtrl', function ($q, $scope, $timeout, $state, soundCloudService, moodService, roomService, chatService) {
+    $scope.selectedMoods = [];
+
+    moodService.getMoods().success(function(data) {
+      $scope.moods = data;
+    });
+
+    $scope.submitMoods = function() {
+        var encodedmoods = '';
+        angular.forEach($scope.moods, function(mood) {
+            if(mood.enabled) {
+                encodedmoods += mood.value + '-';
+            }
+        }, encodedmoods);
+        encodedmoods = encodedmoods.toLowerCase().slice(0, -1);
+        $state.go('selectRoom', {moods: encodedmoods});
+    };
 
   })
-  .controller('selectRoomController', function($rootScope, $q, $scope, $timeout, soundCloudService, roomService) {
+  .controller('selectRoomController', function($rootScope, $q, $scope, $timeout, soundCloudService, room) {
       $scope.rooms = [];
 
-      roomService.fetchRooms().success(function(rooms) {
-        return  $q.all(rooms.map(function(room) {
-          room.timeLeft = room.song.duration - room.time;
-          return soundCloudService
-            .fetchMetadata(room.song.soundCloudId)
-            .success(function(data) {
-              room.data = data;
-              return room;
-            })
-        })).then(function() {
-          $scope.rooms = rooms;
-          $rootScope.activeRoom = rooms[0];
-        });
+      $q.all(room.data.map(function(room) {
+        room.timeLeft = room.song.duration - room.time;
+        return soundCloudService
+          .fetchMetadata(room.song.soundCloudId)
+          .success(function(data) {
+            room.data = data;
+            return room;
+          })
+      })).then(function() {
+        $scope.rooms = room.data;
+        //$rootScope.activeRoom = $scope.rooms[0];
       });
   })
   .controller('roomController', function($rootScope, $scope, $timeout, chatService, room, messages) {

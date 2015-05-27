@@ -1,0 +1,57 @@
+[
+    {
+      "id": 0,
+      "value": "Angry",
+      "enabled": false
+    },
+    {
+      "id": 1,
+      "value": "Nervous",
+      "enabled": false
+    },
+    {
+      "id": 2,
+      "value": "Exciting",
+      "enabled": false
+    },
+    {
+      "id": 3,
+      "value": "Happy",
+      "enabled": false
+    },
+    {
+      "id": 4,
+      "value": "Pleasing",
+      "enabled": false
+    },
+    {
+      "id": 5,
+      "value": "Relaxing",
+      "enabled": false
+    },
+    {
+      "id": 6,
+      "value": "Peaceful",
+      "enabled": false
+    },
+    {
+      "id": 7,
+      "value": "Calm",
+      "enabled": false
+    },
+    {
+      "id": 8,
+      "value": "Sleepy",
+      "enabled": false
+    },
+    {
+      "id": 9,
+      "value": "Bored",
+      "enabled": false
+    },
+    {
+      "id": 10,
+      "value": "Sad",
+      "enabled": false
+    }
+]
