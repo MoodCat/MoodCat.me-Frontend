@@ -41,10 +41,10 @@ angular.module('moodCatApp')
     $scope.moods = ['Angry', 'Nervous', 'Exciting', 'Happy', 'Pleasing', 'Relaxing',
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
-	$scope.chooseMood = function(mood) {
-		console.log("Choosemood called: " + mood);
-		angular.element("body").css("background-image", "url(http://moodcat.me/mood-bg/" + mood.toLowerCase() + ")");
-	}
+    $scope.chooseMood = function(mood) {
+      console.log("Choosemood called: " + mood);
+      angular.element("body").css("background-image", "url(http://moodcat.me/mood-bg/" + mood.toLowerCase() + ")");
+    }
 
   })
   .controller('selectRoomController', function($rootScope, $q, $scope, $timeout, soundCloudService, roomService) {
