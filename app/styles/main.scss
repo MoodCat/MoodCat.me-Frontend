@@ -22,6 +22,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  -webkit-transition: background-image 4s linear;
+  transition: background-image 4s linear;
 }
 
 body::before {
