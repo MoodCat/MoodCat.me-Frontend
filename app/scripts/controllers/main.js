@@ -42,7 +42,6 @@ angular.module('moodCatApp')
       'Peaceful', 'Calm', 'Sleepy', 'Bored', 'Sad'];
 
     $scope.chooseMood = function(mood) {
-      console.log("Choosemood called: " + mood);
       angular.element("body").css("background-image", "url(http://moodcat.me/mood-bg/" + mood.toLowerCase() + ")");
     }
 
