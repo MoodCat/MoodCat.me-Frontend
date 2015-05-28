@@ -58,6 +58,18 @@ p {
   height: 100%;
 }
 
+.backdrop {
+  background-color: rgba(70,70,70,0.6);
+  padding: 5px 10px;
+}
+
+.about {
+    @extend .backdrop;
+    p {
+        font-size: 14pt;
+    }
+}
+
 .player-controls {
   @extend .navbar-nav;
   float: right;
