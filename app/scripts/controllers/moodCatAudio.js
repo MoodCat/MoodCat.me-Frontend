@@ -180,7 +180,7 @@
        scope: {
          ngModel : '='
        },
-       template: '<label noselect><input type="checkbox" ng-model="ngModel" /><span ng-transclude class="mood-label"></span></label>'
+       template: '<label noselect class="flexbtn"><input type="checkbox" ng-model="ngModel" /><span ng-transclude class="mood-label"></span></label>'
      }
    })
    .directive('feedbackSam', function() {

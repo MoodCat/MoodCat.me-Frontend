@@ -1,10 +1,14 @@
 <div class="row marketing">
   <!--<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>-->
   <div ui-view class="row">
+    <div class="block">
+    </div>
     <div>
       <h4>In the mood?</h4>
-      <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods">{{mood.value}}</btn-mood>
+      <div class="spaceBetween">
+          <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods">{{mood.value}}</btn-mood>
+          <button ng-click="submitMoods()" class="btn-default next-button artworkThumb">Next <span class="glyphicon glyphicon-menu-right"></span></button>
+      </div>
     </div>
-    <a ng-click="submitMoods()" class="button">next</a>
   </div>
 </div>

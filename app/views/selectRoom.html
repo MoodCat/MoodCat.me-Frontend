@@ -4,8 +4,7 @@
   <ul class="list-unstyled list-rooms">
     <li ng-repeat="room in rooms | orderByProperty:'position'">
       <a ui-sref="room({roomId : room.id})" ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
-        <img ng-src="{{room.song.artworkUrl}}"/>
-        <!--<i class="glyphicon glyphicon-cd"></i>-->
+        <img ng-src="{{room.song.artworkUrl}}" src="/images/default.png"/>
         <h4 ng-bind="room.name"></h4>
         <span class="remainingTime">next song in: <timer countdown="room.timeLeft" interval="1000">{{mminutes}}:{{sseconds}}</timer></span>
         <div>
