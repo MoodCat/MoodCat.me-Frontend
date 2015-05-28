@@ -65,6 +65,10 @@ angular.module('moodCatApp')
         $state.go('selectRoom', {moods: encodedmoods});
     };
 
+    $scope.chooseMood = function(mood) {
+      angular.element("body").css("background-image", "url(http://moodcat.me/mood-bg/" + mood.toLowerCase() + ")");
+    }
+
   })
   .controller('selectRoomController', function($rootScope, $q, $scope, $timeout, soundCloudService, room) {
       $scope.rooms = [];
