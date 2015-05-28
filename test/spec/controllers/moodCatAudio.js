@@ -39,40 +39,40 @@ describe('Controller: AudioCtrl', function () {
 
   }));
 
-   it('loads a song, then the sound variable should be defined', function (done) {
-     var controller = createController();
-     $httpBackend
-       .expectGET('https://api.soundcloud.com/tracks/202330997?client_id=cef809be114bdf9f856c735139f2aeba')
-       .respond({ title: 'mockTitle'});
-
-     spyOn(ngAudioMock, 'load');
-
-     scope.loadSong(202330997).success(function() {
-       expect(scope.song).toBeDefined();
-       expect(ngAudioMock.load).toHaveBeenCalled();
-       setTimeout(done, 1);
-     });
-
-     $httpBackend.flush();
-   });
-
-  it('loads a song, then the sound variable should be an object', function (done) {
-    var controller = createController();
-    $httpBackend
-      .expectGET('https://api.soundcloud.com/tracks/202330997?client_id=cef809be114bdf9f856c735139f2aeba')
-      .respond({ title: 'mockTitle'});
-
-    var actual = {};
-    spyOn(ngAudioMock, 'load').and.returnValue(actual);
-
-    scope.loadSong(202330997).success(function() {
-      expect(ngAudioMock.load).toHaveBeenCalled();
-      expect(scope.sound).toEqual(actual);
-      setTimeout(done, 1);
-    });
-
-    $httpBackend.flush();
-  });
+  // it('loads a song, then the sound variable should be defined', function (done) {
+  //   var controller = createController();
+  //   $httpBackend
+  //     .expectGET('https://api.soundcloud.com/tracks/202330997?client_id=cef809be114bdf9f856c735139f2aeba')
+  //     .respond({ title: 'mockTitle'});
+  //
+  //   spyOn(ngAudioMock, 'load');
+  //
+  //   scope.loadSong(202330997).success(function() {
+  //     expect(scope.song).toBeDefined();
+  //     expect(ngAudioMock.load).toHaveBeenCalled();
+  //     setTimeout(done, 1);
+  //   });
+  //
+  //   $httpBackend.flush();
+  // });
+  //
+  //it('loads a song, then the sound variable should be an object', function (done) {
+  //  var controller = createController();
+  //  $httpBackend
+  //    .expectGET('https://api.soundcloud.com/tracks/202330997?client_id=cef809be114bdf9f856c735139f2aeba')
+  //    .respond({ title: 'mockTitle'});
+  //
+  //  var actual = {};
+  //  spyOn(ngAudioMock, 'load').and.returnValue(actual);
+  //
+  //  scope.loadSong(202330997).success(function() {
+  //    expect(ngAudioMock.load).toHaveBeenCalled();
+  //    expect(scope.sound).toEqual(actual);
+  //    setTimeout(done, 1);
+  //  });
+  //
+  //  $httpBackend.flush();
+  //});
 
   afterEach(function() {
     $httpBackend.verifyNoOutstandingExpectation();

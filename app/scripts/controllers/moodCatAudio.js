@@ -18,19 +18,21 @@
       * @returns {*} Promise
       */
      this.fetchMetadata = function fetchMetadata(trackID) {
-       $log.info("Fetch meta data for trackID %d", trackID);
-       return $http.get('https://api.soundcloud.com/tracks/'+trackID+'?client_id='+soundCloudKey);
+       $log.info('Fetch meta data for trackID %d', trackID);
+       return $http.get('https://api.soundcloud.com/tracks/'+trackID+
+                  '?client_id='+soundCloudKey).then(function(response) {
+         return response.data;
+       });
      }
 
    }])
-   .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService',
-        function($scope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService) {
-
-    /**
-     *  A boolean that checks if the user has already voted on this song.
-     * @type {Boolean}
-     */
-      $scope.voted = false;
+   .service('currentSongService', [
+     'soundCloudService',
+     'ngAudio',
+     '$rootScope',
+     'soundCloudKey',
+     '$log',
+     function(soundCloudService, ngAudio, $rootScope, soundCloudKey, $log) {
 
      /**
       * Pad a string with zeroes
@@ -40,7 +42,7 @@
       */
      function pad (str, max) {
        str = str.toString();
-       return str.length < max ? pad("0" + str, max) : str;
+       return str.length < max ? pad('0' + str, max) : str;
      }
 
      /**
@@ -48,97 +50,85 @@
       * @param trackID
       * @returns {*} Promise
       */
-     $scope.loadSong = function loadSong(trackID) {
-       $log.info("Loading track id %s", trackID);
-       if(angular.isObject($scope.sound)) {
-         $scope.sound.stop();
-         $scope.sound.unbind();
-         $scope.sound = null;
+     this.loadSong = function loadSong(trackID) {
+       $log.info('Loading track id %s', trackID);
+       if(angular.isObject($rootScope.sound)) {
+         $rootScope.sound.stop();
+         $rootScope.sound.unbind();
+         $rootScope.sound = null;
        }
 
        return soundCloudService.fetchMetadata(trackID)
-            .success(function(data) {
-         $scope.song = data;
-         $log.info("Playing song %s", data.title);
-         $scope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
-         $scope.voted = false;
-         //$scope.sound.play();
-       });
+         .then((function(song) {
+           $rootScope.song = song;
+           $log.info('Playing song %s', song.title);
+           $rootScope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
+           $rootScope.sound.play();
+         }).bind(this));
      }
 
-     Object.defineProperty($scope, 'timestamp', {
-       get: function() {
-         var val = 0.0, seconds, minutes, millis, hours;
-         if(angular.isObject($scope.sound)) {
-           val = $scope.sound.currentTime;
-         }
-         seconds = Math.floor(val);
-         minutes = Math.floor(seconds / 60);
-         hours = Math.floor(minutes / 60);
-         minutes -= hours * 60;
-         //millis = Math.round((val - seconds) * 1000);
-         seconds -= minutes * 60;
-
-         return pad(hours, 2) + ":" + pad(minutes, 2) + ":" + pad(seconds, 2);// + "." + pad(millis, 3);
+     /**
+      * Get the timestamp
+      * @returns {string} Timestamp string (hh:mm:ss)
+      */
+     this.getTimestamp = function getTimestamp() {
+       var val = 0.0, seconds, minutes, millis, hours;
+       if (angular.isObject($rootScope.sound)) {
+         val = $rootScope.sound.currentTime;
        }
+       seconds = Math.floor(val);
+       minutes = seconds == 0 ? 0 : Math.floor(seconds / 60);
+       hours = minutes == 0 ? 0 : Math.floor(minutes / 60);
+       minutes -= hours * 60;
+       //millis = Math.round((val - seconds) * 1000);
+       seconds -= minutes * 60;
+
+       return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);// + '.' + pad(millis, 3);
+     }
+
+   }])
+   .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
+        function($scope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService, currentSongService) {
+
+    /**
+     *  A boolean that checks if the user has already voted on this song.
+     * @type {Boolean}
+     */
+     $scope.voted = false;
+
+     Object.defineProperty($scope, 'timestamp', {
+       get: currentSongService.getTimestamp.bind(currentSongService)
      });
 
-     $scope.arousalOptions = [
-         {
-             'value' : -1.0
-         },
-         {
-             'value' : -0.5
-         },
-         {
-             'value' : 0.0
-         },
-         {
-             'value' : 0.5
-         },
-         {
-             'value' : 1.0
-         }
-     ];
-     $scope.valenceOptions = [
-         {
-             'value' : -1.0
-         },
-         {
-             'value' : -0.5
-         },
-         {
-             'value' : 0.0
-         },
-         {
-             'value' : 0.5
-         },
-         {
-             'value' : 1.0
-         }
-     ];
+     $scope.arousalOptions = [-1.0, -0.5, 0.0, 0.5, 1.0].map(function(i) {
+       return {
+         value: i
+       };
+     });
 
-     $scope.arousal = 2;
-     $scope.valence = 2;
+     $scope.valenceOptions = [-1.0, -0.5, 0.0, 0.5, 1.0].map(function(i) {
+       return {
+        value: i
+       };
+     });
+
+     $scope.classification = {
+       valence: $scope.valenceOptions[2].value,
+       arousal: $scope.arousalOptions[2].value
+     };
 
      $scope.sendClassification = function sendClassification() {
-         // You can only classify if there is currently a song playing
-         if(!angular.isObject($scope.sound)) {
-             return;
-         }
-
-         var data = {
-             'valence' : $scope.valenceOptions[$scope.valence].value,
-             'arousal' : $scope.arousalOptions[$scope.arousal].value
-         };
-
-         // TODO: convert to own ID instead of SoundCloud track ID.
-         var request = $http.post('/api/songs/' + $scope.song.id + "/classify", angular.toJson(data));
-         request.success(
-           function(response) {
-               $log.info("Thank you for your feedback!");
-           }
-         );
+      // You can only classify if there is currently a song playing
+      if(!angular.isObject($scope.sound)) {
+       return;
+      }
+      // TODO: convert to own ID instead of SoundCloud track ID.
+      var request = $http.post('/api/songs/' + $scope.song.id + '/classify', $scope.classification);
+      request.success(
+        function(response) {
+         $log.info('Thank you for your feedback!');
+       }
+      );
     }
 
      /**
@@ -150,27 +140,39 @@
         if(angular.isObject($scope.sound) && !$scope.voted){
           $scope.voted = true;
           $http.post('/api/songs/'+$scope.song.id+'/vote/'+oriantation);
-          $log.info(oriantation + " send to song " + $scope.song.id);
+          $log.info(oriantation + ' send to song ' + $scope.song.id);
         }
      }
-
-     //$scope.loadSong(track);
    }])
-   .controller("SoundCloudController", ['soundCloudKey', '$scope', function(soundCloudKey, $scope) {
+   .service('SoundCloudService', ['$q', 'soundCloudKey', function($q, soundCloudKey) {
      SC.initialize({
        client_id: soundCloudKey,
        redirect_uri: window.location.origin // Only works from localhost:8080 currently
      });
 
+     this.loginUsingSoundcloud = function loginUsingSoundcloud() {
+       var deferred = $q.defer();
+       SC.connect(function() {
+         SC.get('/me', function(me, error) {
+           if(error) {
+             deferred.reject(error);
+           }
+           else {
+             deferred.resolve(me);
+           }
+         });
+       });
+       return deferred.promise;
+     }
+   }])
+   .controller('SoundCloudController', ['SoundCloudService', function(SoundCloudService) {
      this.loggedIn = false;
 
-     this.loginUsingSoundcloud = function loginUsingSoundcloud() {
-       SC.connect((function() {
-         SC.get('/me', (function(me) {
-           this.loggedIn = true;
-           this.me = me;
-         }).bind(this));
-       }).bind(this));
+     this.loginUsingSoundcloud = function() {
+       SoundCloudService.loginUsingSoundcloud().then((function(me) {
+         this.me = me;
+         this.loggedIn = true;
+       }).bind(this))
      }
    }])
    .directive('btnMood', function() {
@@ -180,7 +182,7 @@
        scope: {
          ngModel : '='
        },
-       template: '<label noselect class="flexbtn"><input type="checkbox" ng-model="ngModel" /><span ng-transclude class="mood-label"></span></label>'
+       template: '<label noselect class="flexbtn"><input type="checkbox" ng-model="ngModel"/><span ng-transclude class="mood-label"></span></label>'
      }
    })
    .directive('feedbackSam', function() {
