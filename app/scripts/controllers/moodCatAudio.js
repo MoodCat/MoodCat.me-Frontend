@@ -10,7 +10,9 @@
  angular.module('moodCatAudio')
    .value('soundCloudKey', 'cef809be114bdf9f856c735139f2aeba')
    .value('track', '202330997')
-   .service('soundCloudService', ['soundCloudKey', '$http', '$log', function(soundCloudKey, $http, $log) {
+   .service('soundCloudService', ['soundCloudKey', '$http', '$log', 'ngAudioGlobals', function(soundCloudKey, $http, $log, ngAudioGlobals) {
+
+     ngAudioGlobals.unlock = false;
 
      /**
       * Fetch the metadata for a song
@@ -63,7 +65,7 @@
            $rootScope.song = song;
            $log.info('Playing song %s', song.title);
            $rootScope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
-           $rootScope.sound.play();
+          $rootScope.sound.play();
          }).bind(this));
      }
 
