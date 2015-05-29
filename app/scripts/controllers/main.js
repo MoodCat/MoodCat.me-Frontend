@@ -8,19 +8,41 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
-  .service('roomService', function($http) {
-    this.fetchRooms = function(moods) {
-        var url = '/api/rooms/?';
-        angular.forEach(moods, function(mood) {
-          url += 'mood=' + mood + '&';
-        }, url);
-      return $http.get(url);
-    }
+  .service('roomService', [
+    '$http',
+    '$rootScope',
+    'currentSongService',
+    '$log',
+    function($http, $rootScope, currentSongService, $log) {
 
-   this.fetchRoom = function(roomId) {
-      return $http.get('/api/rooms/' + roomId);
+      this.fetchRooms = function fetchRoom(moods) {
+        var url = '/api/rooms/';
+        return $http.get(url, {
+          params: {
+            mood : moods
+          }
+        }).then(function(response) {
+          return response.data;
+        });
+      }
+
+      this.fetchRoom = function fetchRoom(roomId) {
+        return $http.get('/api/rooms/' + roomId).then(function(response) {
+          return response.data;
+        });
+      }
+
+      this.switchRoom = function switchRoom(room) {
+        if(!room) return;
+        if(!$rootScope.room || $rootScope.room.id != room.id) {
+          $rootScope.room = room;
+          currentSongService.loadSong(room.song.soundCloudId);
+          $log.info("Joining room %s", room.name);
+        }
+        return room;
+      }
     }
-  })
+  ])
   .service('chatService', function($http, $log) {
 
     this.sendChatMessage = function(mess, roomId) {
@@ -28,78 +50,73 @@ angular.module('moodCatApp')
       // Store the data-dump of the FORM scope.
       request.success(
         function(response) {
-          $log.info("Received response %o", response);
+          $log.info('Received response %o', response);
         }
       );
 
-      request.error($log.warn.bind($log, "Failed to fetch response"));
+      request.error($log.warn.bind($log, 'Failed to fetch response'));
     }
 
     this.fetchMessages = function(roomId) {
-      $log.info("Fetched messages for chat %s", roomId);
-      return $http.get('/api/rooms/' + roomId + '/messages');
+      $log.info('Fetched messages for chat %s', roomId);
+      return $http.get('/api/rooms/' + roomId + '/messages').then(function(response) {
+        return response.data;
+      });
     }
 
   })
   .service('moodService', function($http, $log) {
     this.getMoods = function() {
-      $log.info("Fetching moods from API");
-      return $http.get('/mocks/moods.json');
+      $log.info('Fetching moods from API');
+      return $http.get('/mocks/moods.json').then(function(response) {
+        return response.data;
+      });
     }
   })
-  .controller('moodCtrl', function ($q, $scope, $timeout, $state, soundCloudService, moodService, roomService, chatService) {
-    $scope.selectedMoods = [];
+  .controller('moodCtrl', function ($q, $scope, $timeout, $state, soundCloudService, moodService, moods) {
+    $scope.moods = moods;
 
-    moodService.getMoods().success(function(data) {
-      $scope.moods = data;
-    });
+    $scope.getSelectedMoods = function getSelectedMoods() {
+      return $scope.moods.filter(function(mood) {
+        return mood.enabled;
+      }).map(function(mood) {
+        return mood.value;
+      });
+    }
 
     $scope.submitMoods = function() {
-        var encodedmoods = '';
-        angular.forEach($scope.moods, function(mood) {
-            if(mood.enabled) {
-                encodedmoods += mood.value + '-';
-            }
-        }, encodedmoods);
-        encodedmoods = encodedmoods.toLowerCase().slice(0, -1);
-        $state.go('selectRoom', {moods: encodedmoods});
+      var moods = $scope.getSelectedMoods();
+      if(moods.length) {
+        var mood = moods[0].toLowerCase();
+        angular.element('body').css('background-image', 'url(http://moodcat.me/mood-bg/' + mood + ')');
+        $state.go('moods.rooms', { mood: moods });
+      }
     };
 
-    $scope.chooseMood = function(mood) {
-      angular.element("body").css("background-image", "url(http://moodcat.me/mood-bg/" + mood.toLowerCase() + ")");
-    }
-
   })
-  .controller('selectRoomController', function($rootScope, $q, $scope, $timeout, soundCloudService, room) {
-      $scope.rooms = [];
+  .controller('selectRoomController', ['$scope', 'roomService', 'rooms', '$state', function($scope, roomService, rooms, $state) {
 
-      $q.all(room.data.map(function(room) {
-        room.timeLeft = room.song.duration - room.time;
-        return soundCloudService
-          .fetchMetadata(room.song.soundCloudId)
-          .success(function(data) {
-            room.data = data;
-            return room;
-          })
-      })).then(function() {
-        $scope.rooms = room.data;
-        //$rootScope.activeRoom = $scope.rooms[0];
+    $scope.rooms = rooms;
+
+    $scope.switchRoom = function switchRoom(room) {
+      roomService.switchRoom(room);
+      $state.go('room', {
+        roomId : room.id
       });
-  })
-  .controller('roomController', function($rootScope, $scope, $timeout, chatService, room, messages) {
-      $scope.room = room.data;
-      $scope.messages = messages.data;
+    };
+
+  }])
+  .controller('roomController', function($scope, $timeout, chatService, messages) {
+
+      $scope.messages = messages;
 
       $scope.chatMessage = {
-        message: "",
-        author: "System"
+        message: '',
+        author: 'System'
       };
 
-      $rootScope.activeRoom = $scope.room;
-      $scope.loadSong($scope.room.song.soundCloudId);
-
       $scope.addMessage = function() {
-          if ($scope.chatMessage.message === "") {
+          if ($scope.chatMessage.message === '') {
               return;
           }
 
@@ -115,10 +132,10 @@ angular.module('moodCatApp')
         chatService.sendChatMessage(message, $scope.room.id);
 
         //Clear the chat input field
-        $scope.chatMessage.message = "";
+        $scope.chatMessage.message = '';
 
         $timeout(function() {
-          var list = angular.element("#chat-messages-list")[0];
+          var list = angular.element('#chat-messages-list')[0];
           list.scrollTop = list.scrollHeight;
         })
       }
@@ -127,7 +144,7 @@ angular.module('moodCatApp')
     return{
       link: function postLink(scope, element, attrs) {
         element.bind('error', function () {
-          angular.element(this).attr("src", attrs.fallbackSrc);
+          angular.element(this).attr('src', attrs.fallbackSrc);
         });
       }
     }
