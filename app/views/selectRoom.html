@@ -2,7 +2,7 @@
   <button ui-sref="moodSelection" class="glyphicon glyphicon-menu-left btn-default back-button">Back</button>
   <h4>Get a room</h4>
   <ul class="list-unstyled list-rooms">
-    <li ng-repeat="room in rooms | orderByProperty:'position'">
+    <li ng-repeat="room in rooms">
       <a ui-sref="room({roomId : room.id})" ng-click="selectRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
         <img ng-src="{{room.song.artworkUrl}}" src="/images/default.png"/>
         <h4 ng-bind="room.name"></h4>
