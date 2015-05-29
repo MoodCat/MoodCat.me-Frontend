@@ -15,15 +15,11 @@ body {
   background-position: center center;
   background-attachment: fixed;
   background-image: url("../images/bg3.jpg");
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
   background-size: cover;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  -webkit-transition: background-image 4s linear;
-  transition: background-image 4s linear;
+  transition: background-image 2s linear;
 }
 
 body::before {
@@ -35,7 +31,7 @@ body::before {
   bottom: 0;
   right: 0;
   z-index: -1;
-  background: rgba(6, 6, 6, 0.82);
+  background: rgba(6, 6, 6, 0.60);
 }
 .header, .footer, .mainView {
   flex: 1;
@@ -60,6 +56,18 @@ p {
 
 .logo {
   height: 100%;
+}
+
+.backdrop {
+  background-color: rgba(70,70,70,0.6);
+  padding: 5px 10px;
+}
+
+.about {
+    @extend .backdrop;
+    p {
+        font-size: 14pt;
+    }
 }
 
 .player-controls {

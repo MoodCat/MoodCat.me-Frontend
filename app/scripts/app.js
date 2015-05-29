@@ -12,7 +12,7 @@ angular.module('moodCatAudio', ['ngAudio']);
  */
 angular
   .module('moodCatApp', [
-      'ui.router',
+    'ct.ui.router.extras.sticky',
     'ngAnimate',
     'ngAria',
     'ngCookies',
@@ -28,11 +28,13 @@ angular
 
       $stateProvider
         .state('room', {
-          url : '/room/:roomId',
+          url : '/room/{roomId:[0-9]{1,8}}',
           templateUrl : 'views/room.html',
           resolve : {
     	    room : ['$stateParams', 'roomService', function($stateParams, roomService) {
-              return roomService.fetchRoom($stateParams.roomId);
+              return roomService.fetchRoom($stateParams.roomId).then(function(room) {
+                return roomService.switchRoom(room);
+              });
             }],
             messages : ['$stateParams', 'chatService', function($stateParams, chatService) {
               return chatService.fetchMessages($stateParams.roomId);
@@ -40,24 +42,45 @@ angular
           },
           controller : 'roomController'
         })
-        .state('selectRoom', {
-          url : '/selectRoom/{moods:.*}',
+        .state('moods.rooms', {
+          url : '/room/select?mood',
           templateUrl : 'views/selectRoom.html',
           resolve : {
-            room : ['$stateParams', 'roomService', function($stateParams, roomService) {
-              return roomService.fetchRooms($stateParams.moods.split("-"));
+            rooms : ['$stateParams', 'roomService', 'soundCloudService', '$q', function($stateParams, roomService, soundCloudService, $q) {
+              return roomService.fetchRooms($stateParams.mood).then(function(rooms) {
+                return $q.all(rooms.map(function(room) {
+                  room.timeLeft = room.song.duration - room.time;
+                  return soundCloudService
+                    .fetchMetadata(room.song.soundCloudId)
+                    .then(function(data) {
+                      room.data = data;
+                      return room;
+                    });
+                }));
+              });
             }]
           },
           controller : 'selectRoomController'
         })
-        .state('moodSelection', {
-          url : '/selectMood',
+        .state('moods', {
+          url : '/moods',
+          sticky: true,
           templateUrl : 'views/moodSelection.html',
+          resolve: {
+            moods: ['moodService', function(moodService) {
+              return moodService.getMoods();
+            }]
+          },
           controller : 'moodCtrl'
         })
         .state('home', {
           url : '/',
           templateUrl : 'views/moodSelection.html',
+          resolve: {
+            moods: ['moodService', function(moodService) {
+              return moodService.getMoods();
+            }]
+          },
           controller : 'moodCtrl'
         })
         .state('about', {
