@@ -41,6 +41,10 @@ body::before {
   flex: 1;
 }
 
+.block {
+    display: block;
+}
+
 .header {
   max-height: 51px;
   height: 51px;
@@ -76,14 +80,6 @@ p {
   margin-right: 10px;
 }
 
-// .ng-enter,
-// .ng-leave {
-//   position: absolute;
-//   left: 30px;
-//   right: 30px;
-//   transition: 0.5s all ease;
-// }
-//
 .ng-enter {
   animation: slideInRight .8s both ease;
 }
@@ -317,6 +313,9 @@ btn-mood label::before {
   background: rgba(60, 60, 60, 0.49);
   color: #EEE;
 }
+.next-button {
+    @extend .back-button;
+}
 
 .list-rooms, .messages-container {
   display: block;
@@ -479,4 +478,21 @@ btn-mood label::before {
         display: block;
         color: black;
     }
+}
+
+.artworkThumb {
+    width: 100px;
+    height: 100px;
+    background: url('/images/default.png');
+    background-size: cover;
+    border: 0;
+    border-radius: 0;
+    font-weight: 800;
+}
+.artworkThumb:hover {
+    color: $light-grey;
+}
+.next-button.artworkThumb {
+    background: #333;
+    color: $light-grey;
 }
