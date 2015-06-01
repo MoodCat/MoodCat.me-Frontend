@@ -40,8 +40,22 @@ angular.module('moodCatApp')
           $log.info("Joining room %s", room.name);
           $rootScope.feedbackSAM = false;
         }
+          room.nextSong = room.song.soundCloudId;
+          this.callNextSong(room);
         return room;
-      }
+      }   
+
+      this.callNextSong = function callNextSong(room){
+
+        if((room.song.duration/1000 - currentSongService.getTime()) < 1){
+          $http.get('/api/rooms/' + room.id).then(function(response) {
+             room.nextSong = response.data.song.soundCloudId;
+             currentSongService.loadSong(room.nextSong);
+             room.song = room.nextSong;
+           });
+        }
+        setTimeout(callNextSong, 1000, room);
+     }
     }
   ])
   .service('chatService', function($http, $log) {

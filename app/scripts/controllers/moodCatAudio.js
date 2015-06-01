@@ -94,6 +94,16 @@
        return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);// + '.' + pad(millis, 3);
      }
 
+     /**
+      * Get the time
+      * @returns {integer} The time of the song.
+      */
+    this.getTime = function getTime() {
+      if (angular.isObject($rootScope.sound)) {
+        return $rootScope.sound.currentTime;
+      } 
+    }
+
    }])
    .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
         function($scope, $rootScope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService, currentSongService) {
