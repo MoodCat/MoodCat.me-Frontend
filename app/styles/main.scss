@@ -421,6 +421,10 @@ btn-mood label::before {
   padding: 0;
 }
 
+.center-span {
+    text-align: center;
+}
+
 .feedbackSAM {
     display: inline;
     width: 300px;
@@ -473,6 +477,32 @@ btn-mood label::before {
         margin-top: 10px;
         display: block;
         color: black;
+    }
+}
+
+.full .feedbackSAM {
+    display: block;
+    float: none;
+    height: inherit;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+
+    .element {
+
+        label {
+            width: 80px;
+            height: 120px;
+        }
+
+        img {
+            height: 120px;
+            width: 80px;
+        }
+    }
+
+    button {
+        margin-bottom: 10px;
     }
 }
 

@@ -47,6 +47,8 @@
        return str.length < max ? pad('0' + str, max) : str;
      }
 
+     $rootScope.feedbackSAM = false;
+
      /**
       * Load a song
       * @param trackID
