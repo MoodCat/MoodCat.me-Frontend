@@ -20,18 +20,32 @@ angular.module('moodCatApp')
     ])
   .controller('ClassifyCtrl', ['$scope', 'classifySongService', 'songs', 'currentSongService', '$timeout', '$rootScope',
         function ($scope, classifySongService, songs, currentSongService, $timeout, $rootScope) {
-      $scope.songs = songs;
+            $scope.songs = songs;
 
-      $scope.loadForClassify = function loadForClassify(song) {
-          currentSongService.loadSong(song.soundCloudId);
-          $scope.activeSong = song;
-          $rootScope.feedbackSAM = true;
+            var timeout;
 
-          $timeout(function() {
-              $rootScope.sound.stop();
-          },
-          // We will let the user listen to 25% of the song.
-          (song.duration * 1000) / 4);
+            // When the SAMs are hidden, we have to refresh our list.
+            $scope.$watch('feedbackSAM', function(newValue, oldValue) {
+                if (newValue !== oldValue && !newValue) {
+                    classifySongService.getSongs().then(function(response) {
+                        $scope.songs = response;
+                        $timeout.cancel(timeout);
+                        currentSongService.stop();
+                        $scope.activeSong = null;
+                    });
+                }
+            });
+
+          $scope.loadForClassify = function loadForClassify(song) {
+              currentSongService.loadSong(song.soundCloudId);
+              $scope.activeSong = song;
+              $rootScope.feedbackSAM = true;
+
+              timeout = $timeout(function() {
+                  $rootScope.sound.stop();
+              },
+              // We will let the user listen to 25% of the song, but maximally 30 seconds.
+              Math.min((song.duration * 1000) / 4, 30 * 1000));
+          }
       }
-  }
   ]);

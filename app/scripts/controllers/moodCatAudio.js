@@ -49,6 +49,12 @@
 
      $rootScope.feedbackSAM = false;
 
+     this.stop = function stop() {
+         $rootScope.sound.stop();
+         $rootScope.sound.unbind();
+         $rootScope.sound = null;
+     }
+
      /**
       * Load a song
       * @param trackID
@@ -57,9 +63,7 @@
      this.loadSong = function loadSong(trackID) {
        $log.info('Loading track id %s', trackID);
        if(angular.isObject($rootScope.sound)) {
-         $rootScope.sound.stop();
-         $rootScope.sound.unbind();
-         $rootScope.sound = null;
+           this.stop();
        }
 
        return soundCloudService.fetchMetadata(trackID)
