@@ -1,0 +1,20 @@
+<div class="col-md-offset-3 col-md-6">
+    <div ng-hide="feedbackSAM">
+      <h4>Listen to a song to classify.</h4>
+      <span>You can choose a song from the list below in order to listen and classify it. You will hear the first quarter of the song.
+          You can then give your feedback by classifying the song using the SAMs pictures.</span>
+      <ul class="list-unstyled list-rooms">
+        <li ng-repeat="song in songs">
+            <a ng-click="loadForClassify(song)" ng-class="{ 'roomActive' : activeSong == song }">
+              <img ng-src="{{song.artworkUrl}}" src="/images/default.png"/>
+              <h4 ng-bind="song.name"></h4>
+            </a>
+        </li>
+      </ul>
+  </div>
+
+    <div ng-show="feedbackSAM" class="full">
+        <h4 class="center-span">How would you classify this song?</h4>
+        <feedback-sam></feedback-sam>
+    </div>
+</div>

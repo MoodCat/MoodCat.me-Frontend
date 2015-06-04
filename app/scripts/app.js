@@ -88,6 +88,16 @@ angular
           templateUrl : 'views/about.html',
           controller : 'AboutCtrl'
         })
+        .state('classify', {
+          url : '/classify',
+          templateUrl : 'views/classify.html',
+          resolve : {
+              songs: ['classifySongService', function(classifySongService) {
+                  return classifySongService.getSongs();
+              }]
+          },
+          controller : 'ClassifyCtrl'
+        })
   })
   .filter('orderByProperty', function(){
     return function(input, attribute) {

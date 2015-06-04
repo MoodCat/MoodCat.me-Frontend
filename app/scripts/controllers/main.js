@@ -38,6 +38,7 @@ angular.module('moodCatApp')
           $rootScope.room = room;
           currentSongService.loadSong(room.song.soundCloudId);
           $log.info("Joining room %s", room.name);
+          $rootScope.feedbackSAM = false;
         }
         return room;
       }

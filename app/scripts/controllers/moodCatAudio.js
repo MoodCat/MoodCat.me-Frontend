@@ -47,6 +47,14 @@
        return str.length < max ? pad('0' + str, max) : str;
      }
 
+     $rootScope.feedbackSAM = false;
+
+     this.stop = function stop() {
+         $rootScope.sound.stop();
+         $rootScope.sound.unbind();
+         $rootScope.sound = null;
+     }
+
      /**
       * Load a song
       * @param trackID
@@ -55,9 +63,7 @@
      this.loadSong = function loadSong(trackID) {
        $log.info('Loading track id %s', trackID);
        if(angular.isObject($rootScope.sound)) {
-         $rootScope.sound.stop();
-         $rootScope.sound.unbind();
-         $rootScope.sound = null;
+           this.stop();
        }
 
        return soundCloudService.fetchMetadata(trackID)
@@ -89,8 +95,8 @@
      }
 
    }])
-   .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
-        function($scope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService, currentSongService) {
+   .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
+        function($scope, $rootScope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService, currentSongService) {
 
     /**
      *  A boolean that checks if the user has already voted on this song.
@@ -131,7 +137,12 @@
          $log.info('Thank you for your feedback!');
        }
       );
-    }
+      $scope.hideFeedback();
+    };
+
+    $scope.hideFeedback = function() {
+      $rootScope.feedbackSAM = false;
+    };
 
      /**
       * Function to handle votes.
