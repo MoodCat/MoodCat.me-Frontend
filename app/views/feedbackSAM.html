@@ -1,5 +1,5 @@
 <div class="feedbackSAM" ng-show="feedbackSAM">
-    <span class="hideButton glyphicon glyphicon-remove" ng-click="feedbackSAM = false"></span>
+    <span class="hideButton glyphicon glyphicon-remove" ng-click="hideFeedback()"></span>
 
     <div id="valenceFeedback" class="feedback">
         <span class="title">How positive is this song?</span>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <button type="button" value="Submit feedback" ng-click="sendClassification(); feedbackSAM = false;">
+    <button type="button" value="Submit feedback" ng-click="sendClassification();">
         Submit feedback
     </button>
 </div>

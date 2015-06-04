@@ -95,8 +95,8 @@
      }
 
    }])
-   .controller('AudioCtrl', ['$scope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
-        function($scope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService, currentSongService) {
+   .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
+        function($scope, $rootScope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService, currentSongService) {
 
     /**
      *  A boolean that checks if the user has already voted on this song.
@@ -137,7 +137,12 @@
          $log.info('Thank you for your feedback!');
        }
       );
-    }
+      $scope.hideFeedback();
+    };
+
+    $scope.hideFeedback = function() {
+      $rootScope.feedbackSAM = false;
+    };
 
      /**
       * Function to handle votes.

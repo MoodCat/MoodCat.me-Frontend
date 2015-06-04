@@ -15,7 +15,7 @@ angular.module('moodCatApp')
                 return $http.get('/api/songs/toclassify').then(function(response) {
                   return response.data;
                 });
-            }
+            };
         }
     ])
   .controller('ClassifyCtrl', ['$scope', 'classifySongService', 'songs', 'currentSongService', '$timeout', '$rootScope',
@@ -45,7 +45,7 @@ angular.module('moodCatApp')
                   $rootScope.sound.stop();
               },
               // We will let the user listen to 25% of the song, but maximally 30 seconds.
-              Math.min((song.duration * 1000) / 4, 30 * 1000));
-          }
+              Math.min(song.duration / 4.0, 30) * 1000);
+          };
       }
   ]);
