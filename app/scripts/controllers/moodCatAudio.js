@@ -60,7 +60,8 @@
       * @param trackID
       * @returns {*} Promise
       */
-     this.loadSong = function loadSong(trackID) {
+     this.loadSong = function loadSong(trackID, time) {
+       time = time || 0;
        $log.info('Loading track id %s', trackID);
        if(angular.isObject($rootScope.sound)) {
            this.stop();
@@ -70,8 +71,10 @@
          .then((function(song) {
            $rootScope.song = song;
            $log.info('Playing song %s', song.title);
-           $rootScope.sound = ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
-          $rootScope.sound.play();
+           var sound = window.cursound = $rootScope.sound =
+             ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
+           sound.setCurrentTime(time);
+           sound.play();
          }).bind(this));
      }
 
@@ -93,16 +96,6 @@
 
        return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);// + '.' + pad(millis, 3);
      }
-
-     /**
-      * Get the time
-      * @returns {integer} The time of the song.
-      */
-    this.getTime = function getTime() {
-      if (angular.isObject($rootScope.sound)) {
-        return $rootScope.sound.currentTime;
-      } 
-    }
 
    }])
    .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
