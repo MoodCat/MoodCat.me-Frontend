@@ -5,17 +5,28 @@
     <h4 ng-bind="room.name"></h4>
     <div class="messages-container">
         <ul class="list-unstyled list-messages" id="chat-messages-list">
-          <li ng-repeat="message in messages">
-              <strong ng-bind="message.time | date:'HH:mm'"></strong>
-              <strong ng-bind="message.author"></strong>
-              <span ng-bind="message.message"></span>
-          </li>
+            <li ng-repeat="message in messages">
+                <strong ng-bind="message.time | date:'HH:mm'"></strong>
+                <strong ng-bind="message.author"></strong>
+                <span ng-bind="message.message"></span>
+            </li>
         </ul>
         <div class="form-holder">
-          <form ng-submit="addMessage()">
-            <input type="text" ng-model="chatMessage.message" placeholder="Type a message"/>
-            <input type="submit" value="Send" class="highlight" />
-          </form>
+            <form ng-submit="addMessage()">
+                <input type="text" ng-model="chatMessage.message" placeholder="Type a message" />
+                <input type="submit" value="Send" class="highlight" />
+            </form>
         </div>
+    </div>
+</div>
+
+<div class="song-info col-md-3">
+    <img src="{{room.song.artworkUrl}}" class="full-width">
+    <h2 class="song-name" ng-bind="room.song.name">Song name</h3>
+    <h3 class="song-artist" ng-bind="room.song.artist.name">Song artist</h4>
+	<h4 class="song-timestamp" ng-bind="makeTimeStamp(progress * song.duration) + ' / ' + makeTimeStamp(song.duration)"></h5>
+    <div class="progress-bar">
+        <div class="progress-bar-background" />
+        <div ng-style="{width: progress * 100 + '%'}" class="progress-bar-progress" />
     </div>
 </div>

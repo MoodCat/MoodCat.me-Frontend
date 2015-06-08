@@ -123,13 +123,44 @@ angular.module('moodCatApp')
     };
 
   }])
-  .controller('roomController', function($scope, $timeout, chatService, messages) {
+  .controller('roomController', function($rootScope, $scope, $timeout, $interval, chatService, messages) {
 
       $scope.messages = messages;
 
       $scope.chatMessage = {
         message: ''
       };
+
+      var song = $scope.room.song;
+      song.artworkUrl = song.artworkUrl.replace('-large', '-t500x500');
+
+	  $interval(function() {
+	    var duration = song.duration;
+	    $scope.progress = $rootScope.sound.currentTime / duration * 1000;
+	    console.log($scope.progress);
+	  }, 1000);
+
+     /**
+      * Pad a string with zeroes
+      * @param str string to pad
+      * @param max wanted string length
+      * @returns {String} padded string
+      */
+     function pad (str, max) {
+       str = str.toString();
+       return str.length < max ? pad('0' + str, max) : str;
+     }
+
+
+
+	  $scope.makeTimeStamp = function(time) {
+		  time = Math.floor(time);
+		  var timeSeconds = time / 1000;
+		  var seconds = Math.floor(timeSeconds % 60);
+		  var minutes = Math.floor((timeSeconds % 3600) / 60);
+		  var hours = Math.floor(timeSeconds / 3600);
+          return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+	  }
 
       $scope.addMessage = function() {
         // TODO login check

@@ -554,9 +554,9 @@ btn-mood label::before {
 }
 
 .leaderboard {
-  table, th , td {
+  table, th, td {
     padding: 5px;
-    font-size:20px;
+    font-size: 20px;
   }
   table {
     counter-reset: rowNumber;
@@ -571,4 +571,41 @@ btn-mood label::before {
     min-width: 1em;
     margin-right: 0.5em;
   }
+}
+
+.full-width {
+	width: 100%;
+}
+
+.song-info {
+	margin-top: 75px;
+}
+
+.song-name {
+	font-size: 15px;;
+}
+
+.song-artist {
+	font-size: 15px;
+	color: rgba(255, 255, 255, 0.6);
+	font-weight: bold;
+}
+
+
+.progress-bar-background {
+	position: absolute;
+	background-color: rgba(0,0,0,0.8);
+	width: 100%;
+	height: 5px;
+}
+
+.progress-bar-progress {
+	position: absolute;
+	height: 5px;
+	background-color: #EEE;
+}
+
+.song-timestamp {
+	text-align: right;
+	font-size: 12px;
 }
