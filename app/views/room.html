@@ -22,9 +22,9 @@
 
 <div class="song-info col-md-3">
     <img src="{{room.song.artworkUrl}}" class="full-width">
-    <h2 class="song-name" ng-bind="room.song.name">Song name</h3>
-    <h3 class="song-artist" ng-bind="room.song.artist.name">Song artist</h4>
-	<h4 class="song-timestamp" ng-bind="makeTimeStamp(progress * song.duration) + ' / ' + makeTimeStamp(song.duration)"></h5>
+    <h2 class="song-name" ng-bind="room.song.name">Song name</h2>
+    <h3 class="song-artist" ng-bind="room.song.artist.name">Song artist</h3>
+	<h4 class="song-timestamp" ng-bind="makeTimeStamp(progress * song.duration) + ' / ' + makeTimeStamp(song.duration)"></h4>
     <div class="progress-bar">
         <div class="progress-bar-background" />
         <div ng-style="{width: progress * 100 + '%'}" class="progress-bar-progress" />

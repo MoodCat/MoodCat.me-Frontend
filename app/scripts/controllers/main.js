@@ -138,7 +138,7 @@ angular.module('moodCatApp')
 	    var duration = song.duration;
 	    $scope.progress = $rootScope.sound.currentTime / duration * 1000;
 	    console.log($scope.progress);
-	  }, 1000);
+	  }, 250);
 
      /**
       * Pad a string with zeroes
