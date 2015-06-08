@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc function
- * @name moodCatApp.controller:AboutCtrl
+ * @name moodCatApp.controller:ClassifyCtrl
  * @description
- * # AboutCtrl
+ * # ClassifyCtrl
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
