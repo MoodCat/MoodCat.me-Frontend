@@ -591,6 +591,10 @@ btn-mood label::before {
 	font-weight: bold;
 }
 
+.progress-bar {
+	width: 100%;
+	margin-bottom: 20px;
+}
 
 .progress-bar-background {
 	position: absolute;
@@ -608,4 +612,17 @@ btn-mood label::before {
 .song-timestamp {
 	text-align: right;
 	font-size: 12px;
+}
+
+.song-purchase, .song-purchase:visited, .song-purchase:focus {
+	font-size: 15px;
+	margin: 20px 0px;
+	color: rgba(255,255,255,0.6);
+	font-weight: bold;
+	text-decoration: none;
+}
+
+.song-purchase:hover {
+	text-decoration: none;
+	color: white;
 }

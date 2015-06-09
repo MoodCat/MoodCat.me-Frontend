@@ -25,7 +25,7 @@ angular.module('moodCatApp')
 
       this.fetchRoom = function fetchRoom(roomId) {
         return moodcatBackend.get('/api/rooms/' + roomId);
-      };
+      }
 
       this.fetchNowPlaying = function fetchNowPlaying(roomId) {
         return moodcatBackend.get('/api/rooms/' + roomId + '/now-playing');
