@@ -49,7 +49,6 @@ angular
             rooms : ['$stateParams', 'roomService', 'soundCloudService', '$q', function($stateParams, roomService, soundCloudService, $q) {
               return roomService.fetchRooms($stateParams.mood).then(function(rooms) {
                 return $q.all(rooms.map(function(room) {
-                  room.timeLeft = room.song.duration - room.time;
                   return soundCloudService
                     .fetchMetadata(room.song.soundCloudId)
                     .then(function(data) {

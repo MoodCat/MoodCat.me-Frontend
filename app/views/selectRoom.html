@@ -8,7 +8,7 @@
         <h4 ng-bind="room.name"></h4>
         <span class="remainingTime">
           <span>next song in:</span>
-          <timer countdown="room.timeLeft" interval="1000">
+          <timer countdown="room.song.duration - room.time" interval="1000">
             <span ng-bind="mminutes"></span>:<span ng-bind="sseconds"></span>
           </timer>
         </span>

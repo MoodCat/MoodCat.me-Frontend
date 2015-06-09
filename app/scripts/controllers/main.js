@@ -24,24 +24,56 @@ angular.module('moodCatApp')
         }).then(function(response) {
           return response.data;
         });
-      }
+      };
 
       this.fetchRoom = function fetchRoom(roomId) {
         return $http.get('/api/rooms/' + roomId).then(function(response) {
           return response.data;
         });
-      }
+      };
+
+      this.fetchNowPlaying = function fetchNowPlaying(roomId) {
+        return $http.get('/api/rooms/' + roomId + '/now-playing').then(function(response) {
+          return response.data;
+        });
+      };
 
       this.switchRoom = function switchRoom(room) {
         if(!room) return;
         if(!$rootScope.room || $rootScope.room.id != room.id) {
           $rootScope.room = room;
-          currentSongService.loadSong(room.song.soundCloudId);
+          currentSongService.loadSong(room.nowPlaying.song.soundCloudId, room.nowPlaying.time / 1000);
           $log.info("Joining room %s", room.name);
           $rootScope.feedbackSAM = false;
         }
         return room;
       }
+
+      setInterval((function() {
+        if(!$rootScope.room || $rootScope.sound && $rootScope.sound.paused) return;
+        this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
+          if($rootScope.song.id !== nowPlaying.song.soundCloudId) {
+            currentSongService.loadSong(nowPlaying.song.soundCloudId);
+          }
+          var currentTime = Math.round($rootScope.sound.currentTime * 1000);
+
+          if(Math.abs(currentTime - nowPlaying.time) > 1000) {
+            $rootScope.sound.setCurrentTime(nowPlaying.time / 1000);
+          }
+        })
+      }).bind(this), 1000);
+
+      this.callNextSong = function callNextSong(room){
+
+        if((room.song.duration/1000 - currentSongService.getTime()) < 1){
+          $http.get('/api/rooms/' + room.id).then(function(response) {
+             room.nextSong = response.data.song.soundCloudId;
+             currentSongService.loadSong(room.nextSong);
+             room.song = room.nextSong;
+           });
+        }
+        setTimeout(callNextSong, 1000, room);
+     }
     }
   ])
   .service('chatService', function($http, $log) {
