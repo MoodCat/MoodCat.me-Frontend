@@ -181,8 +181,8 @@
        return deferred.promise;
      }
    }])
-   .service('PointsService', ['$http','$timeout',
-      function ($http, $timeout) {
+   .service('PointsService', ['$http',
+      function ($http) {
         this.getPoints = function getPoints() {
           return $http.get('/api/users/me').then(function(user) {
             return $http.get('/api/users/' + user.data.id +'/points');

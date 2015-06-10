@@ -8,17 +8,24 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
-  .controller('LeaderBoardCtrl',['$http','$scope', '$timeout', '$rootScope', 'PointsService',
-        function ($http,$scope, $timeout, $rootScope, PointsService) {
-        	$scope.points = 0;
+    .controller('LeaderBoardCtrl', ['$http', '$scope', '$timeout', '$rootScope', 'PointsService',
+        function($http, $scope, $timeout, $rootScope, PointsService) {
+            $scope.points = 0;
 
-        	$rootScope.$watch('loggedIn', function(newValue, oldValue) {
+            $rootScope.$watch('loggedIn', function(newValue, oldValue) {
                 if (newValue !== oldValue && newValue) {
                     PointsService.getPoints().then(function(response) {
-		              $scope.points = response.data;
-		            });
+                        $scope.points = response.data;
+                    });
                 }
             });
 
-	     }	  		
-  ]);
+            this.getBoard = function getBoard() {
+                $http.get('/api/users/leaderboard').then(function(response) {
+                    $scope.board = response.data;
+                });
+            }
+            this.getBoard();
+
+        }
+    ]);
