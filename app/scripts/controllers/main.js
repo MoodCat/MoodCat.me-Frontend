@@ -8,34 +8,60 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
+  .service('moodcatBackend', ['$http', '$log', function($http, $log) {
+
+    /**
+     * Perform a HTTP call to the moodcat backend
+     * @param path Path on the moodcat server
+     * @param options options
+     * @returns {*} Promise for the result
+     */
+    this.get = function(path, options) {
+      return $http.get.apply($http, arguments)
+        .then(
+          function(res) { return res.data },
+          $log.warn.bind($log, 'Failed to fetch response')
+        );
+    };
+
+    /**
+     * Perform a HTTP call to the moodcat backend
+     * @param path Path on the moodcat server
+     * @param data data to send
+     * @param options options
+     * @returns {*} Promise for the result
+     */
+    this.post = function(path, data, options) {
+      return $http.post.apply($http, arguments)
+        .error($log.warn.bind($log, 'Failed to fetch response'))
+        .then(
+          function(res) { return res.data },
+          $log.warn.bind($log, 'Failed to fetch response')
+        );
+    };
+
+  }])
   .service('roomService', [
-    '$http',
+    'moodcatBackend',
     '$rootScope',
     'currentSongService',
     '$log',
-    function($http, $rootScope, currentSongService, $log) {
+    function(moodcatBackend, $rootScope, currentSongService, $log) {
 
       this.fetchRooms = function fetchRoom(moods) {
-        var url = '/api/rooms/';
-        return $http.get(url, {
+        return moodcatBackend.get('/api/rooms/', {
           params: {
             mood : moods
           }
-        }).then(function(response) {
-          return response.data;
         });
       };
 
       this.fetchRoom = function fetchRoom(roomId) {
-        return $http.get('/api/rooms/' + roomId).then(function(response) {
-          return response.data;
-        });
+        return moodcatBackend.get('/api/rooms/' + roomId);
       };
 
       this.fetchNowPlaying = function fetchNowPlaying(roomId) {
-        return $http.get('/api/rooms/' + roomId + '/now-playing').then(function(response) {
-          return response.data;
-        });
+        return moodcatBackend.get('/api/rooms/' + roomId + '/now-playing');
       };
 
       this.switchRoom = function switchRoom(room) {
@@ -63,47 +89,40 @@ angular.module('moodCatApp')
         })
       }).bind(this), 1000);
 
-      this.callNextSong = function callNextSong(room){
+      this.callNextSong = function callNextSong(room) {
 
         if((room.song.duration/1000 - currentSongService.getTime()) < 1){
-          $http.get('/api/rooms/' + room.id).then(function(response) {
-             room.nextSong = response.data.song.soundCloudId;
+          this.fetchNowPlaying(room.id).then(function(data) {
+             room.nextSong = data.song.soundCloudId;
              currentSongService.loadSong(room.nextSong);
              room.song = room.nextSong;
            });
         }
+
         setTimeout(callNextSong, 1000, room);
-     }
+     };
     }
   ])
-  .service('chatService', function($http, $log) {
+  .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService', function(moodcatBackend, $log, SoundCloudService) {
 
     this.sendChatMessage = function(mess, roomId) {
-      var request = $http.post('/api/rooms/' + roomId + '/messages', angular.toJson(mess));
-      // Store the data-dump of the FORM scope.
-      request.success(
-        function(response) {
-          $log.info('Received response %o', response);
+      return moodcatBackend.post('/api/rooms/' + roomId + '/messages', angular.toJson(mess), {
+        params: {
+          token : SoundCloudService.getToken()
         }
-      );
-
-      request.error($log.warn.bind($log, 'Failed to fetch response'));
+      });
     }
 
     this.fetchMessages = function(roomId) {
       $log.info('Fetched messages for chat %s', roomId);
-      return $http.get('/api/rooms/' + roomId + '/messages').then(function(response) {
-        return response.data;
-      });
+      return moodcatBackend.get('/api/rooms/' + roomId + '/messages');
     }
 
-  })
+  }])
   .service('moodService', function($http, $log) {
     this.getMoods = function() {
       $log.info('Fetching moods from API');
-      return $http.get('/mocks/moods.json').then(function(response) {
-        return response.data;
-      });
+      return moodcatBackend.get('/mocks/moods.json');
     }
   })
   .controller('moodCtrl', function ($q, $scope, $timeout, $state, soundCloudService, moodService, moods) {
@@ -144,25 +163,19 @@ angular.module('moodCatApp')
       $scope.messages = messages;
 
       $scope.chatMessage = {
-        message: '',
-        author: 'System'
+        message: ''
       };
 
       $scope.addMessage = function() {
-          if ($scope.chatMessage.message === '') {
-              return;
-          }
-
-        var message = {
-          message: $scope.chatMessage.message,
-          author: $scope.chatMessage.author
-        };
-
-        //Add the message to the local queue
-        $scope.messages.push(message);
+        // TODO login check
+        if ($scope.chatMessage.message === '') {
+            return;
+        }
 
         //Send the mesage to the server
-        chatService.sendChatMessage(message, $scope.room.id);
+        chatService.sendChatMessage($scope.chatMessage, $scope.room.id).then(function(res) {
+          $scope.messages.push(res);
+        });
 
         //Clear the chat input field
         $scope.chatMessage.message = '';
