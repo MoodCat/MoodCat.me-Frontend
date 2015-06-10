@@ -61,12 +61,22 @@
               <!--<li><a ng-click='sound.currentTime = 10'>DEBUG: Set to 10s</a></li>-->
               <!--<li><a ng-click='audioCtrl.loadSong(202846566)' class="glyphicon glyphicon-next">Load track #2</a></li>-->
               <li ng-controller="SoundCloudController as scCtrl">
-                <a ng-click="scCtrl.loginUsingSoundcloud()" ng-if="!scCtrl.loggedIn">Login</a>
-                <div ng-if="scCtrl.loggedIn" class="navbar-user-details">
+                <a ng-click="scCtrl.loginUsingSoundcloud()" ng-if="!loggedIn">Login</a>
+                <div ng-if="loggedIn" class="navbar-user-details">
                   <img ng-src="{{scCtrl.me.avatar_url}}"/>
-                  <span  ng-if="scCtrl.loggedIn" ng-bind="scCtrl.me.first_name"></span>
+                  <span ng-bind="scCtrl.me.first_name"></span>
                 </div>
               </li>
+               <li ng-controller="LeaderBoardCtrl as lbCtrl">
+                <a ui-sref="leaderboard" ng-if="loggedIn">
+                  <div class="circle" ng-bind="points"></div></a>
+              </li>
+        <!-- code to render the regular video block -->
+    </div>
+</div>
+      
+                </a>
+                </li>
             </ul>
           </div>
         </div>
@@ -113,6 +123,7 @@
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/classify.js"></script>
         <script src="scripts/controllers/moodCatAudio.js"></script>
+        <script src="scripts/controllers/leaderboard.js"></script>
         <!-- endbuild -->
 </body>
 </html>

@@ -181,15 +181,25 @@
        return deferred.promise;
      }
    }])
-   .controller('SoundCloudController', ['SoundCloudService', function(SoundCloudService) {
-     this.loggedIn = false;
-
+   .service('PointsService', ['$http','$timeout',
+      function ($http, $timeout) {
+        this.getPoints = function getPoints() {
+          return $http.get('/api/users/me').then(function(user) {
+            return $http.get('/api/users/' + user.data.id +'/points');
+          });
+        }
+      }        
+    ])
+   .controller('SoundCloudController', ['SoundCloudService', '$rootScope', function(SoundCloudService, $rootScope) {
+     $rootScope.loggedIn = false;
+     
      this.loginUsingSoundcloud = function() {
        SoundCloudService.loginUsingSoundcloud().then((function(me) {
          this.me = me;
-         this.loggedIn = true;
+         $rootScope.loggedIn = true;
        }).bind(this))
      }
+
    }])
    .directive('btnMood', function() {
      return {

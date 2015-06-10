@@ -522,3 +522,15 @@ btn-mood label::before {
     background: #333;
     color: $light-grey;
 }
+
+.circle {
+    width:30px;
+    height:30px;
+    margin:2px;
+    border-radius:50%;
+    font-size:8px;
+    color:black;
+    text-align:center;
+    line-height:32px;
+    background:$light-grey;
+}

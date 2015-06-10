@@ -87,6 +87,11 @@ angular
           templateUrl : 'views/about.html',
           controller : 'AboutCtrl'
         })
+        .state('leaderboard', {
+          url : '/leaderboard',
+          templateUrl : 'views/leaderboard.html',
+          controller : 'LeaderBoardCtrl'
+        })
         .state('classify', {
           url : '/classify',
           templateUrl : 'views/classify.html',
