@@ -132,12 +132,13 @@ angular.module('moodCatApp')
       };
 
       var song = $scope.room.song;
-      song.artworkUrl = song.artworkUrl.replace('-large', '-t500x500');
+      if (song.artworkUrl)
+        song.artworkUrl = song.artworkUrl.replace('-large', '-t500x500');
 
 	  $interval(function() {
 	    var duration = song.duration;
-	    $scope.progress = $rootScope.sound.currentTime / duration * 1000;
-	    console.log($scope.progress);
+		if ($scope.progress)
+          $scope.progress = $rootScope.sound.currentTime / duration * 1000;
 	  }, 250);
 
      /**
