@@ -160,36 +160,58 @@
         }
      }
    }])
-   .service('SoundCloudService', ['$q', 'soundCloudKey', function($q, soundCloudKey) {
+   .service('SoundCloudService', ['$q', 'soundCloudKey', '$cookieStore', function($q, soundCloudKey, $cookieStore) {
      SC.initialize({
        client_id: soundCloudKey,
-       redirect_uri: window.location.origin // Only works from localhost:8080 currently
+       redirect_uri: window.location.origin /* Only works from localhost:8080 currently*/,
+       access_token: $cookieStore.get('scAuth'),
+       scope: 'non-expiring'
      });
 
      this.loginUsingSoundcloud = function loginUsingSoundcloud() {
        var deferred = $q.defer();
        SC.connect(function() {
+           deferred.resolve();
+           $cookieStore.put('scAuth', SC.accessToken());
+       });
+       return deferred.promise;
+     };
+
+     this.getme = function() {
+         var deferred = $q.defer();
          SC.get('/me', function(me, error) {
            if(error) {
              deferred.reject(error);
            }
            else {
+             console.log("hitehre");
              deferred.resolve(me);
            }
          });
-       });
-       return deferred.promise;
-     }
-   }])
-   .controller('SoundCloudController', ['SoundCloudService', function(SoundCloudService) {
-     this.loggedIn = false;
+         return deferred.promise;
+     };
 
-     this.loginUsingSoundcloud = function() {
-       SoundCloudService.loginUsingSoundcloud().then((function(me) {
+     this.checkConnection = SC.isConnected();
+   }])
+   .controller('SoundCloudController', ['SoundCloudService', '$timeout', '$scope', function(SoundCloudService, $timeout, $scope) {
+     this.loggedIn = SoundCloudService.checkConnection;
+
+     if(this.loggedIn) {
+       SoundCloudService.getme().then((function(me) {
          this.me = me;
          this.loggedIn = true;
-       }).bind(this))
+       }).bind(this));
      }
+
+     this.loginUsingSoundcloud = function() {
+         $scope.me = SoundCloudService.loginUsingSoundcloud().then(function() {
+             return SoundCloudService.getme().then(function(me) {
+                      return me;
+                    });
+         });
+         $timeout(function() {console.log($scope.me);}, 10000);
+         this.loggedIn = true;
+     };
    }])
    .directive('btnMood', function() {
      return {
