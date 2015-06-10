@@ -45,7 +45,7 @@ angular.module('moodCatApp')
       setInterval((function() {
         if(!$rootScope.room || $rootScope.sound && $rootScope.sound.paused) return;
         this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
-          if($rootScope.song.id !== nowPlaying.song.soundCloudId) {
+          if($rootScope.song.id !== nowPlaying.song.id) {
             currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time / 1000);
           }
           else {
