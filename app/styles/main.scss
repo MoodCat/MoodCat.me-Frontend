@@ -534,3 +534,23 @@ btn-mood label::before {
     line-height:32px;
     background:$light-grey;
 }
+
+.leaderboard {
+  table, th , td {
+    padding: 5px;
+    font-size:20px;
+  }
+  table {
+    counter-reset: rowNumber;
+  }
+
+  table tr {
+    counter-increment: rowNumber;
+  }
+
+  table tr td:second-child::before {
+    content: counter(rowNumber);
+    min-width: 1em;
+    margin-right: 0.5em;
+  }
+}
