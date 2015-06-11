@@ -71,6 +71,7 @@
            $log.info('Playing song %s', song.title);
            var sound = window.cursound = $rootScope.sound =
              ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
+           $rootScope.$broadcast('next-song');
            sound.setCurrentTime(time);
            sound.play();
          }).bind(this));
@@ -98,12 +99,15 @@
    }])
    .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', 'moodcatBackend', '$log', 'soundCloudService', 'currentSongService',
         function($scope, $rootScope, ngAudio, soundCloudKey, track, moodcatBackend, $log, soundCloudService, currentSongService) {
-
     /**
      *  A boolean that checks if the user has already voted on this song.
      * @type {Boolean}
      */
-     $scope.voted = false;
+     this.voted = false;
+
+     $scope.$on('next-song', (function() {
+       this.voted = false;
+     }).bind(this));
 
      Object.defineProperty($scope, 'timestamp', {
        get: currentSongService.getTimestamp.bind(currentSongService)

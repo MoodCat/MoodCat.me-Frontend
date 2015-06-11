@@ -46,28 +46,22 @@ angular.module('moodCatApp')
         if(!$rootScope.room || $rootScope.sound && $rootScope.sound.paused) return;
         this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
           if($rootScope.song.id !== nowPlaying.song.soundCloudId) {
-            currentSongService.loadSong(nowPlaying.song.soundCloudId);
+            currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time / 1000);
           }
-          var currentTime = Math.round($rootScope.sound.currentTime * 1000);
+          else {
+            var currentTime = Math.round($rootScope.sound.currentTime * 1000);
+            var timeDiff = nowPlaying.time - currentTime;
 
-          if(Math.abs(currentTime - nowPlaying.time) > 1000) {
-            $rootScope.sound.setCurrentTime(nowPlaying.time / 1000);
+            if(Math.abs(timeDiff) > 1000) {
+              $rootScope.sound.setCurrentTime(nowPlaying.time / 1000);
+              if(timeDiff < 0) {
+                $rootScope.$broadcast('next-song');
+              }
+            }
           }
         })
       }).bind(this), 1000);
 
-      this.callNextSong = function callNextSong(room) {
-
-        if((room.song.duration/1000 - currentSongService.getTime()) < 1){
-          this.fetchNowPlaying(room.id).then(function(data) {
-             room.nextSong = data.song.soundCloudId;
-             currentSongService.loadSong(room.nextSong);
-             room.song = room.nextSong;
-           });
-        }
-
-        setTimeout(callNextSong, 1000, room);
-     };
     }
   ])
   .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService', function(moodcatBackend, $log, SoundCloudService) {

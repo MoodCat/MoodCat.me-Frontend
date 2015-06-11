@@ -54,8 +54,8 @@
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right player-controls">
-              <li><button ng-disabled="audioCtrl.voted" ng-click='audioCtrl.vote("like")'><i class="glyphicon glyphicon-thumbs-up"></i></button></li>
-              <li><button ng-disabled="audioCtrl.voted" ng-click="audioCtrl.vote('dislike'); feedbackSAM = true"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
+              <li><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click='audioCtrl.vote("like")'><i class="glyphicon glyphicon-thumbs-up"></i></button></li>
+              <li><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.vote('dislike'); feedbackSAM = true"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
               <li><button ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></button></li>
               <li>
                <button ui-sref="leaderboard" ng-if="loggedIn">
