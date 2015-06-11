@@ -19,7 +19,7 @@ angular.module('moodCatApp')
     this.get = function(path, options) {
       return $http.get.apply($http, arguments)
         .then(
-          function(res) { return res.data },
+          function(res) { return res.data; },
           $log.warn.bind($log, 'Failed to fetch response')
         );
     };
@@ -119,20 +119,24 @@ angular.module('moodCatApp')
     }
 
   }])
-  .service('moodService', function($http, $log) {
+  .service('moodService', function($http, $log, moodcatBackend) {
     this.getMoods = function() {
       $log.info('Fetching moods from API');
-      return moodcatBackend.get('/mocks/moods.json');
+      return moodcatBackend.get('/api/moods/');
     }
   })
   .controller('moodCtrl', function ($q, $scope, $timeout, $state, soundCloudService, moodService, moods) {
     $scope.moods = moods;
 
+    angular.forEach($scope.moods, function(mood) {
+         mood.enabled = false;
+    });
+
     $scope.getSelectedMoods = function getSelectedMoods() {
       return $scope.moods.filter(function(mood) {
         return mood.enabled;
       }).map(function(mood) {
-        return mood.value;
+        return mood.name;
       });
     }
 

@@ -5,7 +5,7 @@
         <div>
           <h4>In the mood?</h4>
           <div class="spaceBetween">
-              <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods">{{mood.value}}</btn-mood>
+              <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods">{{mood.name}}</btn-mood>
               <button ng-click="submitMoods()" class="btn-default next-button artworkThumb">Next <span class="glyphicon glyphicon-menu-right"></span></button>
           </div>
         </div>
