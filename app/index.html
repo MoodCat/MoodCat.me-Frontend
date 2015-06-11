@@ -54,12 +54,12 @@
               </li>
             </ul>
             <ul class="nav navbar-nav navbar-right player-controls">
-              <li><a ng-disabled="audioCtrl.voted" ng-click='audioCtrl.vote("like")'><i class="glyphicon glyphicon-thumbs-up"></i></a></li>
-              <li><a ng-disabled="audioCtrl.voted" ng-click="audioCtrl.vote('dislike'); feedbackSAM = true"><i class="glyphicon glyphicon-thumbs-down"></i></a></li>
-              <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
+              <li><button ng-disabled="audioCtrl.voted" ng-click='audioCtrl.vote("like")'><i class="glyphicon glyphicon-thumbs-up"></i></button></li>
+              <li><button ng-disabled="audioCtrl.voted" ng-click="audioCtrl.vote('dislike'); feedbackSAM = true"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
+              <li><button ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></button></li>
               <li>
-               <a ui-sref="leaderboard" ng-if="loggedIn">
-               <div class="points" ng-bind="ptsCtrl.points" ng-controller="PointsCtrl as ptsCtrl"></div></a>
+               <button ui-sref="leaderboard" ng-if="loggedIn">
+               <div class="points" ng-bind="ptsCtrl.points" ng-controller="PointsCtrl as ptsCtrl"></div></button>
               </li>
               <li sound-cloud-login></li>
             </ul>

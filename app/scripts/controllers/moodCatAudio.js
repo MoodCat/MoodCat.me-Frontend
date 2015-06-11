@@ -149,8 +149,8 @@
       * @return nothing
       */
       this.vote = function vote(oriantation){
-        if(angular.isObject($scope.sound) && !$scope.voted){
-          $scope.voted = true;
+        if(angular.isObject($scope.sound) && !this.voted){
+          this.voted = true;
           moodcatBackend.post('/api/songs/'+$scope.song.id+'/vote/'+oriantation);
           $log.info(oriantation + ' send to song ' + $scope.song.id);
         }
