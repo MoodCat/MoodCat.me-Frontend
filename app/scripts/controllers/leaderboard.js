@@ -17,7 +17,7 @@ angular.module('moodCatApp')
 
             //When a user is loggedIn we need to fetch te points.
             $rootScope.$watch('loggedIn', function(newValue, oldValue) {
-                if (newValue !== oldValue && newValue) {
+                if (newValue !== oldValue || newValue) {
                     PointsService.getPoints().then(function(response) {
                         $scope.points = response.data;
                     });

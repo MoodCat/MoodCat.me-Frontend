@@ -205,13 +205,17 @@
     * Gets the points from the backend.
     * @return {Number} Points of a user.
     */
-   .service('PointsService', ['$http',
-      function ($http) {
+   .service('PointsService', ['$http','SoundCloudService',
+      function ($http,SoundCloudService) {
         this.getPoints = function getPoints() {
           return $http.get('/api/users/me').then(function(user) {
-            return $http.get('/api/users/' + user.data.id +'/points');
+            return $http.get('/api/users/' + user.data.soundCloudUserId +'/points' , {
+              params: {
+                token : SoundCloudService.getToken()
+              }
+            });
           });
-        };
+        }
       }
     ])
 

@@ -523,14 +523,14 @@ btn-mood label::before {
     color: $light-grey;
 }
 
-.circle {
+.points {
     height:20px;
     font-size:18px;
     color:$light-grey;
     text-align:center;
     line-height:20px;
 }
-.circle:after {
+.points:after {
     content: " points";
 }
 

@@ -59,7 +59,7 @@
               <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
               <li ng-controller="LeaderBoardCtrl as lbCtrl">
                <a ui-sref="leaderboard" ng-if="loggedIn">
-                 <div class="circle" ng-bind="points"></div></a>
+                 <div class="points" ng-bind="points"></div></a>
               </li>
               <li sound-cloud-login></li>
             </ul>
