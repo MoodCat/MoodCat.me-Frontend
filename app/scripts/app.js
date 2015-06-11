@@ -1,5 +1,6 @@
 'use strict';
 
+angular.module('moodCatUtil', []);
 angular.module('moodCatAudio', ['ngAudio', 'moodCatUtil']);
 
 /**

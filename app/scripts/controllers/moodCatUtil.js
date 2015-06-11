@@ -1,6 +1,5 @@
-var module = angular.module('moodCatUtil', []);
-
-module.service('moodcatBackend', ['$http', '$log', function($http, $log) {
+angular.module('moodCatUtil')
+  .service('moodcatBackend', ['$http', '$log', function($http, $log) {
 
   /**
    * Perform a HTTP call to the moodcat backend
