@@ -64,17 +64,11 @@
        if(angular.isObject($rootScope.sound)) {
            this.stop();
        }
-
-       return soundCloudService.fetchMetadata(trackID)
-         .then((function(song) {
-           $rootScope.song = song;
-           $log.info('Playing song %s', song.name);
            var sound = window.cursound = $rootScope.sound =
              ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
            $rootScope.$broadcast('next-song');
            sound.setCurrentTime(time);
            sound.play();
-         }).bind(this));
      }
 
      /**

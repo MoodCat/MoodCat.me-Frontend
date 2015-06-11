@@ -32,9 +32,10 @@ angular.module('moodCatApp')
       };
 
       this.switchRoom = function switchRoom(room) {
-        if(!room) return;
-        if(!$rootScope.room || $rootScope.room.id != room.id) {
+        if(!room) {return;}
+        if(!$rootScope.room || $rootScope.room.id !== room.id) {
           $rootScope.room = room;
+		  $rootScope.song = room.nowPlaying.song;
           currentSongService.loadSong(room.nowPlaying.song.soundCloudId, room.nowPlaying.time / 1000);
           $log.info("Joining room %s", room.name);
           $rootScope.feedbackSAM = false;
@@ -61,7 +62,6 @@ angular.module('moodCatApp')
           }
         })
       }).bind(this), 1000);
-
     }
   ])
   .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService', function(moodcatBackend, $log, SoundCloudService) {
@@ -132,13 +132,13 @@ angular.module('moodCatApp')
       };
 
       var song = $scope.room.song;
-      if (song.artworkUrl)
+	  if (song.artworkUrl)
         song.artworkUrl = song.artworkUrl.replace('-large', '-t500x500');
 
 	  $interval(function() {
 	    var duration = song.duration;
-		if ($scope.progress)
-          $scope.progress = $rootScope.sound.currentTime / duration * 1000;
+		if (!$rootScope.sound || !$rootScope.sound.currentTime) return;
+	    $scope.progress = $rootScope.sound.currentTime / duration * 1000;
 	  }, 250);
 
      /**
