@@ -181,6 +181,11 @@
        return deferred.promise;
      }
    }])
+   
+   /**
+    * Gets the points from the backend.
+    * @return {Number} Points of a user.
+    */
    .service('PointsService', ['$http',
       function ($http) {
         this.getPoints = function getPoints() {
@@ -190,6 +195,7 @@
         }
       }        
     ])
+
    .controller('SoundCloudController', ['SoundCloudService', '$rootScope', function(SoundCloudService, $rootScope) {
      $rootScope.loggedIn = false;
      
