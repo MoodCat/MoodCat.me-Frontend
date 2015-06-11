@@ -49,11 +49,7 @@ angular
           templateUrl : 'views/selectRoom.html',
           resolve : {
             rooms : ['$stateParams', 'roomService', 'soundCloudService', '$q', function($stateParams, roomService, soundCloudService, $q) {
-              return roomService.fetchRooms($stateParams.mood).then(function(rooms) {
-                return $q.all(rooms.map(function(room) {
-                  return room;
-                }));
-              });
+              return roomService.fetchRooms($stateParams.mood);
             }]
           },
           controller : 'selectRoomController'
