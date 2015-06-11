@@ -37,15 +37,15 @@ angular.module('moodCatApp')
             });
 
           $scope.loadForClassify = function loadForClassify(song) {
-              currentSongService.loadSong(song.soundCloudId);
+              var duration = Math.min(song.duration / 4.0, 30) * 1000;
+
+              currentSongService.loadSong(song.soundCloudId, duration);
               $scope.activeSong = song;
               $rootScope.feedbackSAM = true;
 
               timeout = $timeout(function() {
                   $rootScope.sound.stop();
-              },
-              // We will let the user listen to 25% of the song, but maximally 30 seconds.
-              Math.min(song.duration / 4.0, 30) * 1000);
+              }, duration);
           };
       }
   ]);

@@ -160,15 +160,30 @@
         }
      }
    }])
-   .service('SoundCloudService', ['$q', 'soundCloudKey', function($q, soundCloudKey) {
+   .service('SoundCloudService', ['$q', 'soundCloudKey', '$cookieStore', '$rootScope', function($q, soundCloudKey, $cookieStore, $rootScope) {
      SC.initialize({
        client_id: soundCloudKey,
-       redirect_uri: window.location.origin // Only works from localhost:8080 currently
+       redirect_uri: window.location.origin /* Only works from localhost:8080 currently*/,
+       access_token: $cookieStore.get('scAuth'),
+       scope: 'non-expiring'
      });
 
      this.loginUsingSoundcloud = function loginUsingSoundcloud() {
        var deferred = $q.defer();
+
        SC.connect(function() {
+         deferred.resolve();
+         var accessToken = SC.accessToken();
+         $cookieStore.put('scAuth', accessToken);
+         $rootScope.loggedIn = true;
+         $rootScope.$broadcast('soundcloud-login');
+       });
+
+       return deferred.promise;
+     };
+
+     this.getMe = function getMe() {
+         var deferred = $q.defer();
          SC.get('/me', function(me, error) {
            if(error) {
              deferred.reject(error);
@@ -177,11 +192,15 @@
              deferred.resolve(me);
            }
          });
-       });
-       return deferred.promise;
-     }
+         return deferred.promise;
+     };
+
+     $rootScope.loggedIn = SC.isConnected();
+     this.checkConnection = SC.isConnected.bind(SC);
+     this.getToken = $cookieStore.get.bind($cookieStore, 'scAuth');
+
    }])
-   
+
    /**
     * Gets the points from the backend.
     * @return {Number} Points of a user.
@@ -192,21 +211,37 @@
           return $http.get('/api/users/me').then(function(user) {
             return $http.get('/api/users/' + user.data.id +'/points');
           });
-        }
-      }        
+        };
+      }
     ])
 
-   .controller('SoundCloudController', ['SoundCloudService', '$rootScope', function(SoundCloudService, $rootScope) {
-     $rootScope.loggedIn = false;
-     
-     this.loginUsingSoundcloud = function() {
-       SoundCloudService.loginUsingSoundcloud().then((function(me) {
+   .controller('SoundCloudController', ['SoundCloudService', '$timeout', '$scope', function(SoundCloudService, $timeout, $scope) {
+
+     this.updateMe = function() {
+       SoundCloudService.getMe().then((function(me) {
          this.me = me;
-         $rootScope.loggedIn = true;
-       }).bind(this))
+       }).bind(this));
+     };
+
+     if($scope.loggedIn) {
+       this.updateMe();
      }
 
+     $scope.$on('soundcloud-login', this.updateMe.bind(this));
+     this.loginUsingSoundcloud = SoundCloudService.loginUsingSoundcloud.bind(SoundCloudService);
    }])
+   .directive('soundCloudLogin', function() {
+     return {
+       restrict: 'EA',
+       controller: 'SoundCloudController',
+       controllerAs: 'scCtrl',
+       template: ' <a ng-click="scCtrl.loginUsingSoundcloud()" ng-if="!loggedIn">Login</a>\
+          <div ng-if="loggedIn" class="navbar-user-details">\
+            <img ng-src="{{scCtrl.me.avatar_url}}"/>\
+          <span  ng-bind="scCtrl.me.first_name"></span>\
+         </div>'
+     };
+   })
    .directive('btnMood', function() {
      return {
        restrict: 'E',
@@ -215,12 +250,12 @@
          ngModel : '='
        },
        template: '<label noselect class="flexbtn"><input type="checkbox" ng-model="ngModel"/><span ng-transclude class="mood-label"></span></label>'
-     }
+     };
    })
    .directive('feedbackSam', function() {
        return {
            restrict : 'E',
            scope : false,
            templateUrl : 'views/feedbackSAM.html'
-       }
+       };
    });

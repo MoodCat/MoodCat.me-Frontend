@@ -39,6 +39,7 @@
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
             <ul class="nav navbar-nav navbar-left">
               <li><a ui-sref="moods">Home</a></li> <!-- .active for current page TODO -->
+              <li><a ui-sref="classify">Rating game</a></li>
               <li><a ui-sref="about">About</a></li>
             </ul>
             <ul class="nav navbar-nav hide-collapsed">
@@ -56,27 +57,11 @@
               <li><a ng-disabled="audioCtrl.voted" ng-click='audioCtrl.vote("like")'><i class="glyphicon glyphicon-thumbs-up"></i></a></li>
               <li><a ng-disabled="audioCtrl.voted" ng-click="audioCtrl.vote('dislike'); feedbackSAM = true"><i class="glyphicon glyphicon-thumbs-down"></i></a></li>
               <li><a ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></a></li>
-              <li><a ng-click='sound.paused ? sound.play() : sound.pause()' ng-class="sound.paused ? 'glyphicon glyphicon-play' : 'glyphicon glyphicon-pause'"></a></li>
-              <li><a ng-click='sound.restart()' class="glyphicon glyphicon-stop"></a></li>
-              <!--<li><a ng-click='sound.currentTime = 10'>DEBUG: Set to 10s</a></li>-->
-              <!--<li><a ng-click='audioCtrl.loadSong(202846566)' class="glyphicon glyphicon-next">Load track #2</a></li>-->
-              <li ng-controller="SoundCloudController as scCtrl">
-                <a ng-click="scCtrl.loginUsingSoundcloud()" ng-if="!loggedIn">Login</a>
-                <div ng-if="loggedIn" class="navbar-user-details">
-                  <img ng-src="{{scCtrl.me.avatar_url}}"/>
-                  <span ng-bind="scCtrl.me.first_name"></span>
-                </div>
+              <li ng-controller="LeaderBoardCtrl as lbCtrl">
+               <a ui-sref="leaderboard" ng-if="loggedIn">
+                 <div class="circle" ng-bind="points"></div></a>
               </li>
-               <li ng-controller="LeaderBoardCtrl as lbCtrl">
-                <a ui-sref="leaderboard" ng-if="loggedIn">
-                  <div class="circle" ng-bind="points"></div></a>
-              </li>
-        <!-- code to render the regular video block -->
-    </div>
-</div>
-      
-                </a>
-                </li>
+              <li sound-cloud-login></li>
             </ul>
           </div>
         </div>
