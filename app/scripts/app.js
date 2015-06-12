@@ -1,6 +1,7 @@
 'use strict';
 
-angular.module('moodCatAudio', ['ngAudio']);
+angular.module('moodCatUtil', []);
+angular.module('moodCatAudio', ['ngAudio', 'moodCatUtil']);
 
 /**
  * @ngdoc overview
@@ -21,7 +22,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'timer',
-    'moodCatAudio'
+    'moodCatAudio',
+    'moodCatUtil'
   ])
   .config(function($stateProvider, $urlRouterProvider) {
       $urlRouterProvider.otherwise('/');
@@ -86,6 +88,17 @@ angular
           url : '/about',
           templateUrl : 'views/about.html',
           controller : 'AboutCtrl'
+        })
+        .state('leaderboard', {
+          url : '/leaderboard',
+          templateUrl : 'views/leaderboard.html',
+          resolve: {
+            board: ['moodcatBackend', function(moodcatBackend) {
+              return moodcatBackend.get('/api/users/leaderboard');
+            }]
+          },
+          controller : 'LeaderBoardCtrl',
+          controllerAs : 'leaderBoardController'
         })
         .state('classify', {
           url : '/classify',
