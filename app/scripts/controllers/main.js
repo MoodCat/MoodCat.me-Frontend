@@ -25,16 +25,17 @@ angular.module('moodCatApp')
 
       this.fetchRoom = function fetchRoom(roomId) {
         return moodcatBackend.get('/api/rooms/' + roomId);
-      };
+      }
 
       this.fetchNowPlaying = function fetchNowPlaying(roomId) {
         return moodcatBackend.get('/api/rooms/' + roomId + '/now-playing');
       };
 
       this.switchRoom = function switchRoom(room) {
-        if(!room) return;
-        if(!$rootScope.room || $rootScope.room.id != room.id) {
+        if(!room) {return;}
+        if(!$rootScope.room || $rootScope.room.id !== room.id) {
           $rootScope.room = room;
+		  $rootScope.song = room.nowPlaying.song;
           currentSongService.loadSong(room.nowPlaying.song.soundCloudId, room.nowPlaying.time / 1000);
           $log.info("Joining room %s", room.name);
           $rootScope.feedbackSAM = false;
@@ -45,7 +46,7 @@ angular.module('moodCatApp')
       setInterval((function() {
         if(!$rootScope.room || $rootScope.sound && $rootScope.sound.paused) return;
         this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
-          if($rootScope.song.id !== nowPlaying.song.soundCloudId) {
+          if($rootScope.song.id !== nowPlaying.song.id) {
             currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time / 1000);
           }
           else {
@@ -61,7 +62,6 @@ angular.module('moodCatApp')
           }
         })
       }).bind(this), 1000);
-
     }
   ])
   .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService', function(moodcatBackend, $log, SoundCloudService) {
@@ -123,13 +123,45 @@ angular.module('moodCatApp')
     };
 
   }])
-  .controller('roomController', function($scope, $timeout, chatService, messages) {
+  .controller('roomController', function($rootScope, $scope, $timeout, $interval, chatService, messages) {
 
       $scope.messages = messages;
 
       $scope.chatMessage = {
         message: ''
       };
+
+      var song = $scope.room.song;
+	  if (song.artworkUrl)
+        song.artworkUrl = song.artworkUrl.replace('-large', '-t500x500');
+
+	  $interval(function() {
+	    var duration = song.duration;
+		if (!$rootScope.sound || !$rootScope.sound.currentTime) return;
+	    $scope.progress = $rootScope.sound.currentTime / duration * 1000;
+	  }, 250);
+
+     /**
+      * Pad a string with zeroes
+      * @param str string to pad
+      * @param max wanted string length
+      * @returns {String} padded string
+      */
+     function pad (str, max) {
+       str = str.toString();
+       return str.length < max ? pad('0' + str, max) : str;
+     }
+
+
+
+	  $scope.makeTimeStamp = function(time) {
+		  time = Math.floor(time);
+		  var timeSeconds = time / 1000;
+		  var seconds = Math.floor(timeSeconds % 60);
+		  var minutes = Math.floor((timeSeconds % 3600) / 60);
+		  var hours = Math.floor(timeSeconds / 3600);
+          return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+	  }
 
       $scope.addMessage = function() {
         // TODO login check
