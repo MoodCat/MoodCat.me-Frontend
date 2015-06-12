@@ -91,8 +91,8 @@
      }
 
    }])
-   .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', 'moodcatBackend', '$log', 'soundCloudService', 'currentSongService',
-        function($scope, $rootScope, ngAudio, soundCloudKey, track, moodcatBackend, $log, soundCloudService, currentSongService) {
+   .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', 'moodcatBackend', '$log', 'SoundCloudService', 'currentSongService',
+        function($scope, $rootScope, ngAudio, soundCloudKey, track, moodcatBackend, $log, SoundCloudService, currentSongService) {
     /**
      *  A boolean that checks if the user has already voted on this song.
      * @type {Boolean}
@@ -149,7 +149,11 @@
       this.vote = function vote(oriantation){
         if(angular.isObject($scope.sound) && !this.voted){
           this.voted = true;
-          moodcatBackend.post('/api/songs/'+$scope.song.id+'/vote/'+oriantation);
+          moodcatBackend.post('/api/rooms/'+$scope.room.id+'/vote/'+oriantation, null, {
+            params: {
+              token : SoundCloudService.getToken()
+            }
+          });
           $log.info(oriantation + ' send to song ' + $scope.song.id);
         }
      }
