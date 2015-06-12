@@ -90,19 +90,38 @@ p {
     to { opacity: 1; }
 }
 
+.navbar-default .navbar-nav > li > button,
+.navbar-default .player-controls > li > button
+{
+  outline: none;
+  border: none;
+  padding: 15px;
+}
+
+.navbar-default .navbar-nav > li > button:disabled,
+.navbar-default .player-controls > li > button:disabled
+{
+  color: grey;
+}
 
 .navbar-default,
 .navbar-default .player-controls > li > a,
 .navbar-default .player-controls > li > a:focus,
 .navbar-default .navbar-nav > li > a,
-.navbar-default .navbar-nav > li > a:focus {
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .player-controls > li > button,
+.navbar-default .player-controls > li > button:focus,
+.navbar-default .navbar-nav > li > button,
+.navbar-default .navbar-nav > li > button:focus {
   background: $dark-grey;
   color: $light-grey;
   font-size: $font-medium;
 }
 
 .navbar-default .player-controls > li > a:hover,
-.navbar-default .navbar-nav > li > a:hover {
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .player-controls > li > button:hover:not(:disabled),
+.navbar-default .navbar-nav > li > button:hover:not(:disabled)  {
   background: lighten($dark-grey, 10%);
   color: $light-grey;
 }

@@ -10,7 +10,7 @@
  angular.module('moodCatAudio')
    .value('soundCloudKey', 'cef809be114bdf9f856c735139f2aeba')
    .value('track', '202330997')
-   .service('soundCloudService', ['soundCloudKey', '$http', '$log', 'ngAudioGlobals', function(soundCloudKey, $http, $log, ngAudioGlobals) {
+   .service('soundCloudService', ['soundCloudKey', 'moodcatBackend', '$log', 'ngAudioGlobals', function(soundCloudKey, moodcatBackend, $log, ngAudioGlobals) {
 
      ngAudioGlobals.unlock = false;
 
@@ -21,10 +21,8 @@
       */
      this.fetchMetadata = function fetchMetadata(trackID) {
        $log.info('Fetch meta data for trackID %d', trackID);
-       return $http.get('https://api.soundcloud.com/tracks/'+trackID+
-                  '?client_id='+soundCloudKey).then(function(response) {
-         return response.data;
-       });
+       return moodcatBackend.get('https://api.soundcloud.com/tracks/'+trackID+
+         '?client_id='+soundCloudKey);
      }
 
    }])
@@ -73,6 +71,7 @@
            $log.info('Playing song %s', song.title);
            var sound = window.cursound = $rootScope.sound =
              ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
+           $rootScope.$broadcast('next-song');
            sound.setCurrentTime(time);
            sound.play();
          }).bind(this));
@@ -98,14 +97,17 @@
      }
 
    }])
-   .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', '$http', '$log', 'soundCloudService', 'currentSongService',
-        function($scope, $rootScope, ngAudio, soundCloudKey, track, $http, $log, soundCloudService, currentSongService) {
-
+   .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', 'moodcatBackend', '$log', 'soundCloudService', 'currentSongService',
+        function($scope, $rootScope, ngAudio, soundCloudKey, track, moodcatBackend, $log, soundCloudService, currentSongService) {
     /**
      *  A boolean that checks if the user has already voted on this song.
      * @type {Boolean}
      */
-     $scope.voted = false;
+     this.voted = false;
+
+     $scope.$on('next-song', (function() {
+       this.voted = false;
+     }).bind(this));
 
      Object.defineProperty($scope, 'timestamp', {
        get: currentSongService.getTimestamp.bind(currentSongService)
@@ -134,12 +136,10 @@
        return;
       }
       // TODO: convert to own ID instead of SoundCloud track ID.
-      var request = $http.post('/api/songs/' + $scope.song.id + '/classify', $scope.classification);
-      request.success(
-        function(response) {
-         $log.info('Thank you for your feedback!');
-       }
-      );
+      moodcatBackend.post('/api/songs/' + $scope.song.id + '/classify', $scope.classification).then(function() {
+        $log.info('Thank you for your feedback!');
+      });
+
       $scope.hideFeedback();
     };
 
@@ -153,9 +153,9 @@
       * @return nothing
       */
       this.vote = function vote(oriantation){
-        if(angular.isObject($scope.sound) && !$scope.voted){
-          $scope.voted = true;
-          $http.post('/api/songs/'+$scope.song.id+'/vote/'+oriantation);
+        if(angular.isObject($scope.sound) && !this.voted){
+          this.voted = true;
+          moodcatBackend.post('/api/songs/'+$scope.song.id+'/vote/'+oriantation);
           $log.info(oriantation + ' send to song ' + $scope.song.id);
         }
      }
@@ -196,6 +196,9 @@
      };
 
      $rootScope.loggedIn = SC.isConnected();
+     if($rootScope.loggedIn) {
+       $rootScope.$broadcast('soundcloud-login');
+     }
      this.checkConnection = SC.isConnected.bind(SC);
      this.getToken = $cookieStore.get.bind($cookieStore, 'scAuth');
 
@@ -205,15 +208,15 @@
     * Gets the points from the backend.
     * @return {Number} Points of a user.
     */
-   .service('PointsService', ['$http','SoundCloudService',
-      function ($http,SoundCloudService) {
+   .service('PointsService', ['moodcatBackend','SoundCloudService',
+      function (moodcatBackend,SoundCloudService) {
         this.getPoints = function getPoints() {
-          return $http.get('/api/users/me').then(function(user) {
-            return $http.get('/api/users/' + user.data.soundCloudUserId +'/points' , {
-              params: {
-                token : SoundCloudService.getToken()
-              }
-            });
+          return moodcatBackend.get('/api/users/me', {
+            params: {
+              token : SoundCloudService.getToken()
+            }
+          }).then(function(user) {
+            return moodcatBackend.get('/api/users/' + user.id +'/points');
           });
         }
       }
