@@ -9,12 +9,10 @@
  */
 angular.module('moodCatApp')
     .service('classifySongService', [
-        '$http',
-        function($http) {
+        'moodcatBackend',
+        function(moodcatBackend) {
             this.getSongs = function getSongs() {
-                return $http.get('/api/songs/toclassify').then(function(response) {
-                  return response.data;
-                });
+                return moodcatBackend.get('/api/songs/toclassify');
             };
         }
     ])
@@ -31,7 +29,7 @@ angular.module('moodCatApp')
                         $scope.songs = response;
                         $timeout.cancel(timeout);
                         currentSongService.stop();
-                        $scope.activeSong = null;
+                        $scope.song = null;
                     });
                 }
             });
@@ -40,7 +38,7 @@ angular.module('moodCatApp')
               var duration = Math.min(song.duration / 4.0, 30) * 1000;
 
               currentSongService.loadSong(song.soundCloudId, duration);
-              $scope.activeSong = song;
+              $rootScope.song = song;
               $rootScope.feedbackSAM = true;
 
               timeout = $timeout(function() {

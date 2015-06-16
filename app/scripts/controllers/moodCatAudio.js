@@ -130,7 +130,7 @@
        return;
       }
       // TODO: convert to own ID instead of SoundCloud track ID.
-      moodcatBackend.post('/api/songs/' + $scope.song.id + '/classify', $scope.classification).then(function() {
+      moodcatBackend.post('/api/songs/' + $scope.song.soundCloudId + '/classify', $scope.classification).then(function() {
         $log.info('Thank you for your feedback!');
       });
 
@@ -141,20 +141,28 @@
       $rootScope.feedbackSAM = false;
     };
 
+   this.voteUp = function voteUp() {
+     this.vote("LIKE");
+   };
+
+   this.voteDown = function voteDown() {
+     this.vote("DISLIKE");
+     $rootScope.feedbackSAM = true;
+   };
      /**
       * Function to handle votes.
-      * @param  oriantation, if a song is liked or disliked.
+      * @param  orientation, if a song is liked or disliked.
       * @return nothing
       */
-      this.vote = function vote(oriantation){
+      this.vote = function vote(orientation){
         if(angular.isObject($scope.sound) && !this.voted){
           this.voted = true;
-          moodcatBackend.post('/api/rooms/'+$scope.room.id+'/vote/'+oriantation, null, {
+          moodcatBackend.post('/api/rooms/'+$scope.room.id+'/vote/'+orientation, null, {
             params: {
               token : SoundCloudService.getToken()
             }
           });
-          $log.info(oriantation + ' send to song ' + $scope.song.id);
+          $log.info('%s send to song %d', orientation, $scope.song.id);
         }
      }
    }])
