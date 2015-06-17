@@ -30,7 +30,6 @@ module.exports = function(config) {
       'bower_components/angular-cookies/angular-cookies.js',
       'bower_components/angular-messages/angular-messages.js',
       'bower_components/angular-resource/angular-resource.js',
-      'bower_components/angular-route/angular-route.js',
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/angular-audio/app/angular.audio.js',
@@ -40,7 +39,6 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/ui-router-extras/release/ct-ui-router-extras.js',
       'bower_components/angular-mocks/angular-mocks.js',
-      'bower_components/angular-gravatar/build/angular-gravatar.js',
       // endbower
       "app/scripts/**/*.js",
       "test/mock/**/*.js",
