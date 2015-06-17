@@ -69,7 +69,7 @@ angular.module('moodCatApp')
       }).bind(this), 1000);
     }
   ])
-  .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService', function(moodcatBackend, $log, SoundCloudService) {
+  .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService' ,function(moodcatBackend, $log, SoundCloudService) {
 
     this.sendChatMessage = function(mess, roomId) {
       return moodcatBackend.post('/api/rooms/' + roomId + '/messages', angular.toJson(mess), {
@@ -84,7 +84,13 @@ angular.module('moodCatApp')
       return moodcatBackend.get('/api/rooms/' + roomId + '/messages');
     }
 
+    this.fetchMessagesFromMessage = function(roomId,latestId) {
+      $log.info('Fetched messages for chat %s', roomId);
+      return moodcatBackend.get('/api/rooms/' + roomId + '/messages/' + latestId);
+    }
+
   }])
+
   .service('moodService', ['$log', 'moodcatBackend', function($log, moodcatBackend) {
     this.getMoods = function() {
       $log.info('Fetching moods from API');
@@ -136,7 +142,7 @@ angular.module('moodCatApp')
   .controller('roomController', function($rootScope, $scope, $timeout, $interval, chatService, messages) {
 
       $scope.messages = messages;
-
+    
       $scope.chatMessage = {
         message: ''
       };
@@ -178,9 +184,7 @@ angular.module('moodCatApp')
         }
 
         //Send the mesage to the server
-        chatService.sendChatMessage($scope.chatMessage, $scope.room.id).then(function(res) {
-          $scope.messages.push(res);
-        });
+        chatService.sendChatMessage($scope.chatMessage, $scope.room.id);
 
         //Clear the chat input field
         $scope.chatMessage.message = '';
@@ -190,6 +194,42 @@ angular.module('moodCatApp')
           list.scrollTop = list.scrollHeight;
         })
       }
+
+      $scope.setLatestMessage = function(gottenmessages) {
+        var biggest = -1;
+        for (var i = 0; i < gottenmessages.length; i++) {
+            if (gottenmessages[i].id > biggest) {
+             biggest = gottenmessages[i].id;
+            }
+        }
+        $scope.room.lastMessageId = biggest;
+      }
+
+      $scope.firstLatestMessage = function(){
+          $scope.setLatestMessage($scope.messages);
+      }
+
+      $scope.fetchMessages = function(){
+        if(!angular.isObject($scope.room.lastMessageId)){
+          $scope.firstLatestMessage();
+        }
+        if($scope.room.lastMessageId != -1){
+        chatService.fetchMessagesFromMessage($scope.room.id,$scope.room.lastMessageId).then(function(response){
+          $scope.setLatestMessage(response);
+          $scope.messages = $scope.messages.concat(response);
+        });
+      }
+        else{
+          chatService.fetchMessages($scope.room.id).then(function(response){
+          $scope.setLatestMessage(response);
+          $scope.messages = response;
+        });
+      }
+
+        setTimeout($scope.fetchMessages,1000);
+      }
+
+      $scope.fetchMessages();
   })
   .directive('fallbackSrc', function () {
     return{
