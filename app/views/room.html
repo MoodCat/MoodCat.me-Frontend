@@ -29,5 +29,7 @@
         <div class="progress-bar-background"></div>
         <div ng-style="{width: progress * 100 + '%'}" class="progress-bar-progress"></div>
     </div>
-    <a class="song-purchase" ng-if="song.purchaseTitle" ng-href="{{song.purchaseUrl}}" target="_blank" ng-bind="song.purchaseTitle"></a>
+    <div class="purchase-container">
+        <a class="song-purchase" ng-if="song.purchaseTitle" ng-href="{{song.purchaseUrl}}" target="_blank" ng-bind="song.purchaseTitle"></a>
+    </div>
 </div>
