@@ -69,7 +69,7 @@ angular.module('moodCatApp')
       }).bind(this), 1000);
     }
   ])
-  .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService' ,function(moodcatBackend, $log, SoundCloudService) {
+  .service('chatService', ['moodcatBackend', '$log', 'SoundCloudService', function(moodcatBackend, $log, SoundCloudService) {
 
     this.sendChatMessage = function(mess, roomId) {
       return moodcatBackend.post('/api/rooms/' + roomId + '/messages', angular.toJson(mess), {
@@ -149,11 +149,13 @@ angular.module('moodCatApp')
 
       var song = $scope.room.song;
 
-	  $interval(function() {
-	    var duration = song.duration;
-		if (!$rootScope.sound || !$rootScope.sound.currentTime) return;
-	    $scope.progress = $rootScope.sound.currentTime / duration * 1000;
-	  }, 250);
+      var progressInterval = $interval(function() {
+        var duration = song.duration;
+        if (!$rootScope.sound || !$rootScope.sound.currentTime) return;
+          $scope.progress = $rootScope.sound.currentTime / duration * 1000;
+      }, 250);
+
+      $scope.$on('$destroy', $interval.cancel.bind($interval, progressInterval));
 
      /**
       * Pad a string with zeroes
@@ -166,8 +168,6 @@ angular.module('moodCatApp')
        return str.length < max ? pad('0' + str, max) : str;
      }
 
-
-
 	  $scope.makeTimeStamp = function(time) {
 		  time = Math.floor(time);
 		  var timeSeconds = time / 1000;
@@ -177,59 +177,53 @@ angular.module('moodCatApp')
           return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
 	  }
 
-      $scope.addMessage = function() {
+      this.addMessage = function addMessage() {
         // TODO login check
         if ($scope.chatMessage.message === '') {
             return;
         }
 
         //Send the mesage to the server
-        chatService.sendChatMessage($scope.chatMessage, $scope.room.id);
+        chatService.sendChatMessage($scope.chatMessage, $scope.room.id)
+          .then(this.fetchMessages.bind(this));
 
         //Clear the chat input field
         $scope.chatMessage.message = '';
 
+      };
+
+      $scope.addMessage = this.addMessage.bind(this);
+
+      this.scrollDown = function scrollDown() {
         $timeout(function() {
           var list = angular.element('#chat-messages-list')[0];
           list.scrollTop = list.scrollHeight;
-        })
-      }
-
-      $scope.setLatestMessage = function(gottenmessages) {
-        var biggest = -1;
-        for (var i = 0; i < gottenmessages.length; i++) {
-            if (gottenmessages[i].id > biggest) {
-             biggest = gottenmessages[i].id;
-            }
-        }
-        $scope.room.lastMessageId = biggest;
-      }
-
-      $scope.firstLatestMessage = function(){
-          $scope.setLatestMessage($scope.messages);
-      }
-
-      $scope.fetchMessages = function(){
-        if(!angular.isObject($scope.room.lastMessageId)){
-          $scope.firstLatestMessage();
-        }
-        if($scope.room.lastMessageId != -1){
-        chatService.fetchMessagesFromMessage($scope.room.id,$scope.room.lastMessageId).then(function(response){
-          $scope.setLatestMessage(response);
-          $scope.messages = $scope.messages.concat(response);
-        });
-      }
-        else{
-          chatService.fetchMessages($scope.room.id).then(function(response){
-          $scope.setLatestMessage(response);
-          $scope.messages = response;
         });
       }
 
-        setTimeout($scope.fetchMessages,1000);
-      }
+      /**
+       * Fetch the new messages send.
+       */
+      this.fetchMessages = function fetchMessages(){
+        var lastMessageId = -1;
 
-      $scope.fetchMessages();
+        if($scope.messages && $scope.messages.length) {
+          lastMessageId = Math.max.apply(null, $scope.messages.map(function(message) {
+            return message.id;
+          }));
+        }
+
+        chatService.fetchMessagesFromMessage($scope.room.id, lastMessageId).then((function(response){
+            $scope.messages = $scope.messages.concat(response);
+            this.scrollDown();
+          }).bind(this));
+
+      };
+
+      this.scrollDown();
+      var intervalMessages = $interval(this.fetchMessages.bind(this), 1000);
+      $scope.$on('$destroy', $interval.cancel.bind($interval, intervalMessages));
+
   })
   .directive('fallbackSrc', function () {
     return{
