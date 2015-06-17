@@ -13,7 +13,8 @@ angular.module('moodCatApp')
     '$rootScope',
     'currentSongService',
     '$log',
-    function(moodcatBackend, $rootScope, currentSongService, $log) {
+    '$interval',
+    function(moodcatBackend, $rootScope, currentSongService, $log, $interval) {
 
       this.fetchRooms = function fetchRoom(moods) {
         return moodcatBackend.get('/api/rooms/', {
@@ -43,8 +44,8 @@ angular.module('moodCatApp')
         return room;
       }
 
-      setInterval((function() {
-        if(!$rootScope.room) {
+      $interval((function() {
+        if(!$rootScope.room || !$rootScope.sound) {
           return;
         }
         this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {

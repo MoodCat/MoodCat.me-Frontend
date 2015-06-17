@@ -91,8 +91,8 @@
      }
 
    }])
-   .controller('AudioCtrl', ['$scope', '$rootScope', 'ngAudio', 'soundCloudKey', 'track', 'moodcatBackend', '$log', 'SoundCloudService', 'currentSongService',
-        function($scope, $rootScope, ngAudio, soundCloudKey, track, moodcatBackend, $log, SoundCloudService, currentSongService) {
+   .controller('AudioCtrl', ['$scope', '$rootScope', '$compile', 'moodcatBackend', '$log', 'SoundCloudService', 'currentSongService',
+        function($scope, $rootScope, $compile, moodcatBackend, $log, SoundCloudService, currentSongService) {
     /**
      *  A boolean that checks if the user has already voted on this song.
      * @type {Boolean}
@@ -107,54 +107,31 @@
        get: currentSongService.getTimestamp.bind(currentSongService)
      });
 
-     $scope.arousalOptions = [-1.0, -0.5, 0.0, 0.5, 1.0].map(function(i) {
-       return {
-         value: i
-       };
-     });
+   this.voteUp = function voteUp() {
+     this.vote("LIKE");
+   };
 
-     $scope.valenceOptions = [-1.0, -0.5, 0.0, 0.5, 1.0].map(function(i) {
-       return {
-        value: i
-       };
-     });
+   this.voteDown = function voteDown() {
+     this.vote("DISLIKE");
 
-     $scope.classification = {
-       valence: $scope.valenceOptions[2].value,
-       arousal: $scope.arousalOptions[2].value
-     };
-
-     $scope.sendClassification = function sendClassification() {
-      // You can only classify if there is currently a song playing
-      if(!angular.isObject($scope.sound)) {
-       return;
-      }
-      // TODO: convert to own ID instead of SoundCloud track ID.
-      moodcatBackend.post('/api/songs/' + $scope.song.id + '/classify', $scope.classification).then(function() {
-        $log.info('Thank you for your feedback!');
-      });
-
-      $scope.hideFeedback();
-    };
-
-    $scope.hideFeedback = function() {
-      $rootScope.feedbackSAM = false;
-    };
-
+     var elem = angular.element('<feedback-sam/>');
+     angular.element('#feedback-sam-container').append(elem);
+     $compile(elem)($scope);
+   };
      /**
       * Function to handle votes.
-      * @param  oriantation, if a song is liked or disliked.
+      * @param  orientation, if a song is liked or disliked.
       * @return nothing
       */
-      this.vote = function vote(oriantation){
+      this.vote = function vote(orientation){
         if(angular.isObject($scope.sound) && !this.voted){
           this.voted = true;
-          moodcatBackend.post('/api/rooms/'+$scope.room.id+'/vote/'+oriantation, null, {
+          moodcatBackend.post('/api/rooms/'+$scope.room.id+'/vote/'+orientation, null, {
             params: {
               token : SoundCloudService.getToken()
             }
           });
-          $log.info(oriantation + ' send to song ' + $scope.song.id);
+          $log.info('%s send to song %d', orientation, $scope.song.id);
         }
      }
    }])
@@ -257,10 +234,58 @@
        template: '<label noselect class="flexbtn"><input type="checkbox" ng-model="ngModel"/><span ng-transclude class="mood-label"></span></label>'
      };
    })
-   .directive('feedbackSam', function() {
-       return {
-           restrict : 'E',
-           scope : false,
-           templateUrl : 'views/feedbackSAM.html'
-       };
-   });
+   .service('ClassificationService', ['moodcatBackend', '$log', function ClassificationService(moodcatBackend, $log) {
+
+     /**
+      * Send a classification to the backend.
+      *
+      * @param song Song to be classified.
+      * @param classification Classification to send.
+      * @returns {*} A promise
+      */
+     this.sendClassification = function sendClassification(song, classification) {
+       // TODO: convert to own ID instead of SoundCloud track ID.
+       return moodcatBackend.post('/api/songs/' + song.soundCloudId + '/classify', classification).then(function() {
+         $log.info('Thank you for your feedback!');
+       });
+     };
+
+   }])
+   .directive('feedbackSam', ['ClassificationService', function(ClassificationService) {
+     return {
+       restrict : 'AE',
+       templateUrl : 'views/feedbackSAM.html',
+       scope: true,
+       controllerAs : 'feedbackCtrl',
+       controller: ['$element', '$scope', function feedbackSamController($element, $scope) {
+
+         function mapToObjectWithValue(i) {
+           return { value: i };
+         };
+
+         this.arousalOptions = [-1.0, -0.5, 0.0, 0.5, 1.0].map(mapToObjectWithValue);
+         this.valenceOptions = [-1.0, -0.5, 0.0, 0.5, 1.0].map(mapToObjectWithValue);
+
+         this.classification = {
+           valence: this.valenceOptions[2].value,
+           arousal: this.arousalOptions[2].value
+         };
+
+         this.sendClassification = function sendClassification() {
+           // You can only classify if there is currently a song playing
+           if(!angular.isObject($scope.sound)) {
+             return;
+           }
+
+           ClassificationService.sendClassification($scope.song, this.classification);
+           this.hideFeedback();
+         };
+
+         this.hideFeedback = function hideFeedback() {
+           $scope.$emit('classification-end');
+           $scope.$destroy();
+           $element.remove();
+         };
+       }]
+     };
+   }]);
