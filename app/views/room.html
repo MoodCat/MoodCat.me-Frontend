@@ -21,13 +21,13 @@
 </div>
 
 <div class="song-info col-md-4">
-    <img src="{{room.song.artworkUrl}}" class="full-width">
-    <h2 class="song-name" ng-bind="room.song.name">Song name</h2>
-    <h3 class="song-artist" ng-bind="room.song.artist.name">Song artist</h3>
+    <img src="{{song.artworkUrl}}" class="full-width">
+    <h2 class="song-name" ng-bind="song.name">Song name</h2>
+    <h3 class="song-artist" ng-bind="song.artist.name">Song artist</h3>
     <h4 class="song-timestamp" ng-bind="makeTimeStamp(progress * song.duration) + ' / ' + makeTimeStamp(song.duration)"></h4>
     <div class="progress-bar">
         <div class="progress-bar-background"></div>
         <div ng-style="{width: progress * 100 + '%'}" class="progress-bar-progress"></div>
     </div>
-    <a class="song-purchase" ng-if="song.purchaseTitle" ng-href="{{song.purchaseUrl}}" target="_blank" ng-bind="room.song.purchaseTitle"></a>
+    <a class="song-purchase" ng-if="song.purchaseTitle" ng-href="{{song.purchaseUrl}}" target="_blank" ng-bind="song.purchaseTitle"></a>
 </div>
