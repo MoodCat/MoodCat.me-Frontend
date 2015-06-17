@@ -186,12 +186,10 @@
    .service('PointsService', ['moodcatBackend','SoundCloudService',
       function (moodcatBackend,SoundCloudService) {
         this.getPoints = function getPoints() {
-          return moodcatBackend.get('/api/users/me', {
-            params: {
-              token : SoundCloudService.getToken()
-            }
-          }).then(function(user) {
-            return moodcatBackend.get('/api/users/' + user.id +'/points');
+          return moodcatBackend.get('/api/users/points', {
+              params: {
+                  token: SoundCloudService.getToken()
+              }
           });
         }
       }
