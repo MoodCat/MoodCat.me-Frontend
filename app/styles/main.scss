@@ -369,41 +369,44 @@ btn-mood label::before {
 .list-rooms li > a {
   display: block;
   margin: 0 5px 10px 0;
-  padding: 5px 5px 5px 0;
   color: #fff;
   font-size: 0.9em;
   height: 80px;
   background: rgba(0, 0, 0, 0.40);
   cursor: pointer;
   outline: none;
-}
+  padding: 5px;
+  overflow: hidden;
 
-.list-rooms li > a.roomActive {
-  background: rgba(160, 158, 158, 0.4);
-}
+  &.active {
+    background: rgba(160, 158, 158, 0.4);
+  }
 
-.list-rooms li > a:hover,
-.list-rooms li > a:active {
-  text-decoration: none;
-}
+  &:hover,
+  &:active {
+    text-decoration: none;
+  }
 
-.list-rooms li > a > i {
-  color: #fff;
-  float: left;
-  font-size: 40px;
-  padding: 8px 8px 8px 5px;
-  margin-right: 10px;
-}
+  & > i {
+    color: #fff;
+    float: left;
+    font-size: 40px;
+    padding: 8px 8px 8px 5px;
+    margin-right: 10px;
+  }
 
-.list-rooms li > a > img {
-  float: left;
-  width: 70px;
-  margin-left: 5px;
-  margin-right: 10px;
-}
+  & > img {
+    float: left;
+    width: 70px;
+    margin-right: 10px;
+  }
 
-.list-rooms li > a > h4 {
-  font-size: 1em;
+  & > h4 {
+    font-size: 1em;
+    margin-top: 4px;
+    font-weight: bold;
+    margin-bottom: 0px;
+  }
 }
 
 .messages-container {
