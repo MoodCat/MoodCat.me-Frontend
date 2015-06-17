@@ -16,22 +16,23 @@ angular.module('moodCatApp')
             };
         }
     ])
-  .controller('ClassifyCtrl', ['$scope', 'classifySongService', 'songs', 'currentSongService', '$timeout', '$rootScope',
-        function ($scope, classifySongService, songs, currentSongService, $timeout, $rootScope) {
+  .controller('ClassifyCtrl', ['$scope', '$element', '$compile', 'classifySongService', 'songs', 'currentSongService', '$timeout', '$rootScope',
+        function ($scope, $element, $compile, classifySongService, songs, currentSongService, $timeout, $rootScope) {
+
             $scope.songs = songs;
 
             var timeout;
 
             // When the SAMs are hidden, we have to refresh our list.
-            $scope.$watch('feedbackSAM', function(newValue, oldValue) {
-                if (newValue !== oldValue && !newValue) {
-                    classifySongService.getSongs().then(function(response) {
-                        $scope.songs = response;
-                        $timeout.cancel(timeout);
-                        currentSongService.stop();
-                        $scope.song = null;
-                    });
-                }
+            $scope.$on('classification-end', function afterClassification() {
+                console.log('classification-end!');
+                classifySongService.getSongs().then(function(songs) {
+                    $scope.songs = songs;
+                    $timeout.cancel(timeout);
+                    currentSongService.stop();
+                    $rootScope.song = null;
+                    $scope.feedbackSAM = false;
+                });
             });
 
           $scope.loadForClassify = function loadForClassify(song) {
@@ -39,11 +40,16 @@ angular.module('moodCatApp')
 
               currentSongService.loadSong(song.soundCloudId, duration);
               $rootScope.song = song;
-              $rootScope.feedbackSAM = true;
+              $scope.feedbackSAM = true;
 
               timeout = $timeout(function() {
                   $rootScope.sound.stop();
               }, duration);
+
+              var elem = angular.element('<feedback-sam/>');
+              elem.insertAfter($element.find('#classify-song-list'));
+              $compile(elem)($scope);
+
           };
       }
   ]);
