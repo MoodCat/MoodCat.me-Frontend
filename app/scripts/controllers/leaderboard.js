@@ -8,7 +8,7 @@
  * Controller of the moodCatApp
  */
 angular.module('moodCatApp')
-  .controller('PointsCtrl', ['PointsService', '$scope', function(PointsService, $scope) {
+  .controller('PointsCtrl', ['PointsService', '$scope', '$interval', function(PointsService, $scope, $interval) {
 
       /**
        * The points of a user.
@@ -21,7 +21,9 @@ angular.module('moodCatApp')
           }).bind(this));
       };
 
+      var interval = $interval(this.fetchPoints.bind(this), 1000);
       $scope.$on('soundcloud-login', this.fetchPoints.bind(this));
+      $scope.$on('$destroy', $interval.cancel.bind($interval, interval));
       this.fetchPoints();
 
   }])
