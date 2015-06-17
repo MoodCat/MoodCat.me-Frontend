@@ -115,7 +115,7 @@
      this.vote("DISLIKE");
 
      var elem = angular.element('<feedback-sam/>');
-     elem.insertAfter(angular.element('#feedback-sam-container'));
+     angular.element('#feedback-sam-container').append(elem);
      $compile(elem)($scope);
    };
      /**

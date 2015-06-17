@@ -626,3 +626,10 @@ btn-mood label::before {
 	text-decoration: none;
 	color: white;
 }
+
+#feedback-sam-container {
+  position: fixed;
+  z-index: 5;
+  right: 20px;
+  top: 12px;
+}
