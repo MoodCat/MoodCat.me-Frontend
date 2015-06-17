@@ -67,7 +67,9 @@
            var sound = window.cursound = $rootScope.sound =
              ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
            $rootScope.$broadcast('next-song');
-           sound.setCurrentTime(time);
+           if(time && isFinite(time)) {
+             sound.setCurrentTime(time);
+           }
            sound.play();
      }
 
@@ -186,12 +188,10 @@
    .service('PointsService', ['moodcatBackend','SoundCloudService',
       function (moodcatBackend,SoundCloudService) {
         this.getPoints = function getPoints() {
-          return moodcatBackend.get('/api/users/me', {
-            params: {
-              token : SoundCloudService.getToken()
-            }
-          }).then(function(user) {
-            return moodcatBackend.get('/api/users/' + user.id +'/points');
+          return moodcatBackend.get('/api/users/me/points', {
+              params: {
+                  token: SoundCloudService.getToken()
+              }
           });
         }
       }
@@ -234,7 +234,7 @@
        template: '<label noselect class="flexbtn"><input type="checkbox" ng-model="ngModel"/><span ng-transclude class="mood-label"></span></label>'
      };
    })
-   .service('ClassificationService', ['moodcatBackend', '$log', function ClassificationService(moodcatBackend, $log) {
+   .service('ClassificationService', ['moodcatBackend', '$log', 'SoundCloudService', function ClassificationService(moodcatBackend, $log, SoundCloudService) {
 
      /**
       * Send a classification to the backend.
@@ -245,7 +245,11 @@
       */
      this.sendClassification = function sendClassification(song, classification) {
        // TODO: convert to own ID instead of SoundCloud track ID.
-       return moodcatBackend.post('/api/songs/' + song.soundCloudId + '/classify', classification).then(function() {
+       return moodcatBackend.post('/api/songs/' + song.soundCloudId + '/classify', classification, {
+         params: {
+           token : SoundCloudService.getToken()
+         }
+       }).then(function() {
          $log.info('Thank you for your feedback!');
        });
      };
