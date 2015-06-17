@@ -594,9 +594,14 @@ btn-mood label::before {
 	font-weight: bold;
 }
 
+.purchase-container {
+	margin-bottom: 80px;
+}
+
 .progress-bar {
 	width: 100%;
 	margin-bottom: 20px;
+	margin-left: -15px;
 }
 
 .progress-bar-background {
@@ -620,6 +625,7 @@ btn-mood label::before {
 .song-purchase, .song-purchase:visited, .song-purchase:focus {
 	font-size: 15px;
 	margin: 20px 0px;
+	margin-bottom: 50px;
 	color: rgba(255,255,255,0.6);
 	font-weight: bold;
 	text-decoration: none;
