@@ -128,6 +128,11 @@ angular.module('moodCatApp')
     };
 
   }])
+  .filter('highres', function() {
+    return function(input) {
+      return input ? input.replace('-large', '-t500x500') : input;
+    }
+  })
   .controller('roomController', function($rootScope, $scope, $timeout, $interval, chatService, messages) {
 
       $scope.messages = messages;
@@ -137,8 +142,6 @@ angular.module('moodCatApp')
       };
 
       var song = $scope.room.song;
-	  if (song.artworkUrl)
-        song.artworkUrl = song.artworkUrl.replace('-large', '-t500x500');
 
 	  $interval(function() {
 	    var duration = song.duration;
