@@ -24,10 +24,14 @@
     <img src="{{song.artworkUrl | highres}}" class="full-width">
     <h2 class="song-name" ng-bind="song.name">Song name</h2>
     <h3 class="song-artist" ng-bind="song.artist.name">Song artist</h3>
-    <h4 class="song-timestamp" ng-bind="makeTimeStamp(progress * song.duration) + ' / ' + makeTimeStamp(song.duration)"></h4>
+    <h4 class="song-timestamp">
+        <span ng-bind="currentTimecode"></span>
+        /
+        <span ng-bind="durationTimecode"></span>
+    </h4>
     <div class="progress-bar">
         <div class="progress-bar-background"></div>
-        <div ng-style="{width: progress * 100 + '%'}" class="progress-bar-progress"></div>
+        <div ng-style="{width: sound.progress * 100 + '%'}" class="progress-bar-progress"></div>
     </div>
     <div class="purchase-container">
         <a class="song-purchase" ng-if="song.purchaseTitle" ng-href="{{song.purchaseUrl}}" target="_blank" ng-bind="song.purchaseTitle"></a>

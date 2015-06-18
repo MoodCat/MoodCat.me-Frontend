@@ -1,21 +1,6 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name moodCatApp.controller:ClassifyCtrl
- * @description
- * # ClassifyCtrl
- * Controller of the moodCatApp
- */
 angular.module('moodCatApp')
-    .service('classifySongService', [
-        'moodcatBackend',
-        function(moodcatBackend) {
-            this.getSongs = function getSongs() {
-                return moodcatBackend.get('/api/songs/toclassify');
-            };
-        }
-    ])
   .controller('ClassifyCtrl', ['$scope', '$element', '$compile', 'classifySongService', 'songs', 'currentSongService', '$timeout', '$rootScope',
         function ($scope, $element, $compile, classifySongService, songs, currentSongService, $timeout, $rootScope) {
 
@@ -43,7 +28,9 @@ angular.module('moodCatApp')
               $scope.feedbackSAM = true;
 
               timeout = $timeout(function() {
-                  $rootScope.sound.stop();
+                  if($rootScope.sound) {
+                      $rootScope.sound.stop();
+                  }
               }, duration);
 
               var elem = angular.element('<feedback-sam/>');

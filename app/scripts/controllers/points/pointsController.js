@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name moodCatApp.controller:LeaderBoardCtrl
- * @description
- * # LeaderBoardCtrl
- * Controller of the moodCatApp
- */
 angular.module('moodCatApp')
   .controller('PointsCtrl', ['PointsService', '$scope', '$interval', function(PointsService, $scope, $interval) {
 
@@ -26,9 +19,4 @@ angular.module('moodCatApp')
       $scope.$on('$destroy', $interval.cancel.bind($interval, interval));
       this.fetchPoints();
 
-  }])
-  .controller('LeaderBoardCtrl', ['board',
-    function(board) {
-        this.board = board;
-    }
-  ]);
+  }]);
