@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('moodCatUtil')
   .service('moodcatBackend', ['$http', '$log', function($http, $log) {
 
