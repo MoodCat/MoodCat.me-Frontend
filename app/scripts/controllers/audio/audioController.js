@@ -13,10 +13,6 @@
        this.voted = false;
      }).bind(this));
 
-     Object.defineProperty($scope, 'timestamp', {
-       get: currentSongService.getTimestamp.bind(currentSongService)
-     });
-
    this.voteUp = function voteUp() {
      this.vote('LIKE');
    };

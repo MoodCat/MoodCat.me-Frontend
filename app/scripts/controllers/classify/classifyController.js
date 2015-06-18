@@ -28,7 +28,9 @@ angular.module('moodCatApp')
               $scope.feedbackSAM = true;
 
               timeout = $timeout(function() {
-                  $rootScope.sound.stop();
+                  if($rootScope.sound) {
+                      $rootScope.sound.stop();
+                  }
               }, duration);
 
               var elem = angular.element('<feedback-sam/>');

@@ -49,22 +49,44 @@
      };
 
      /**
-      * Get the timestamp
-      * @returns {string} Timestamp string (hh:mm:ss)
+      * Create a timestamp in HH:MM:SS format from a value
+      * @param value magic numbers go in here
+      * @returns {*} sane strings go out
       */
-     this.getTimestamp = function getTimestamp() {
-       var val = 0.0, seconds, minutes, millis, hours;
-       if (angular.isObject($rootScope.sound)) {
-         val = $rootScope.sound.currentTime;
+     function createTimestamp(value) {
+       var seconds, minutes, hours;
+       if(!isFinite(value)) {
+         return '00:00:00';
        }
-       seconds = Math.floor(val);
+       seconds = Math.floor(value);
        minutes = seconds == 0 ? 0 : Math.floor(seconds / 60);
        hours = minutes == 0 ? 0 : Math.floor(minutes / 60);
        minutes -= hours * 60;
-       //millis = Math.round((val - seconds) * 1000);
        seconds -= minutes * 60;
 
-       return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);// + '.' + pad(millis, 3);
-     };
+       return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
+     }
+
+     Object.defineProperty($rootScope, 'currentTimecode', {
+       get: function getTimestamp() {
+         var val = 0.0;
+         if (angular.isObject($rootScope.sound)) {
+           val = $rootScope.sound.currentTime;
+         }
+
+         return createTimestamp(val);
+       }
+     });
+
+     Object.defineProperty($rootScope, 'durationTimecode', {
+       get: function getTimestamp() {
+         var val = 0.0;
+         if (angular.isObject($rootScope.sound)) {
+           val = $rootScope.sound.duration;
+         }
+
+         return createTimestamp(val);
+       }
+     });
 
  }]);

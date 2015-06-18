@@ -9,36 +9,6 @@ angular.module('moodCatApp')
         message: ''
       };
 
-      var song = $scope.room.song;
-
-      var progressInterval = $interval(function() {
-        var duration = song.duration;
-        if (!$rootScope.sound || !$rootScope.sound.currentTime) return;
-          $scope.progress = $rootScope.sound.currentTime / duration * 1000;
-      }, 250);
-
-      $scope.$on('$destroy', $interval.cancel.bind($interval, progressInterval));
-
-     /**
-      * Pad a string with zeroes
-      * @param str string to pad
-      * @param max wanted string length
-      * @returns {String} padded string
-      */
-     function pad (str, max) {
-       str = str.toString();
-       return str.length < max ? pad('0' + str, max) : str;
-     }
-
-	  $scope.makeTimeStamp = function(time) {
-		  time = Math.floor(time);
-		  var timeSeconds = time / 1000;
-		  var seconds = Math.floor(timeSeconds % 60);
-		  var minutes = Math.floor((timeSeconds % 3600) / 60);
-		  var hours = Math.floor(timeSeconds / 3600);
-          return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
-	  }
-
       this.addMessage = function addMessage() {
         // TODO login check
         if ($scope.chatMessage.message === '') {

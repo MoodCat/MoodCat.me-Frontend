@@ -37,28 +37,47 @@ angular.module('moodCatApp')
         return room;
     };
 
-      $interval((function() {
-        if(!$rootScope.room || !$rootScope.sound) {
-          return;
-        }
-        this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
-          if($rootScope.song.id !== nowPlaying.song.id) {
-            $rootScope.song = nowPlaying.song;
-            currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time / 1000);
-            $rootScope.song = nowPlaying.song;
+      this.startInterval = function startInterval() {
+        if(this.interval != null) return;
+        this.interval = $interval((function() {
+          if(!$rootScope.room) {
+            return;
           }
-          else {
-            var currentTime = Math.round($rootScope.sound.currentTime * 1000);
-            var timeDiff = nowPlaying.time - currentTime;
+          this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
+            if(!$rootScope.song || $rootScope.song.id !== nowPlaying.song.id) {
+              $rootScope.song = nowPlaying.song;
+              currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time / 1000);
+              $rootScope.song = nowPlaying.song;
+            }
+            else {
+              var currentTime = Math.round($rootScope.sound.currentTime * 1000);
+              var timeDiff = nowPlaying.time - currentTime;
 
-            if(Math.abs(timeDiff) > 1000) {
-              $rootScope.sound.setCurrentTime(nowPlaying.time / 1000);
-              if(timeDiff < 0) {
-                $rootScope.$broadcast('next-song');
+              if(Math.abs(timeDiff) > 1000) {
+                $rootScope.sound.setCurrentTime(nowPlaying.time / 1000);
+                if(timeDiff < 0) {
+                  $rootScope.$broadcast('next-song');
+                }
               }
             }
-          }
-      });
-      }).bind(this), 1000);
+          });
+        }).bind(this), 1000);
+      };
+
+      this.clearInterval = function() {
+        $interval.cancel(this.interval);
+        this.interval = null;
+      };
+
+      this.startInterval();
+
+      $rootScope.$on('$stateChangeStart', (function(event, toState, toParams, fromState, fromParams){
+        if(toState.name === 'classify') {
+          this.clearInterval();
+        }
+        else {
+          this.startInterval();
+        }
+      }).bind(this));
     }
 ]);
