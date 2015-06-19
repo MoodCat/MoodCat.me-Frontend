@@ -59,7 +59,7 @@ angular.module('moodCatApp')
        * Syncs song to the data provided by the server.
        */
       this.startInterval = function startInterval() {
-        if(this.interval !== null) return;
+        if(this.interval) return;
         this.interval = $interval((function() {
           if(!$rootScope.room) {
             return;
