@@ -30,6 +30,7 @@
           deferred.resolve();
           var accessToken = SC.accessToken();
           $cookieStore.put('scAuth', accessToken);
+          window.localStorage.setItem("scAuth", accessToken);
           $rootScope.loggedIn = true;
           $rootScope.$broadcast('soundcloud-login');
         });
@@ -55,6 +56,6 @@
         $rootScope.$broadcast('soundcloud-login');
       }
       this.checkConnection = SC.isConnected.bind(SC);
-      this.getToken = $cookieStore.get.bind($cookieStore, 'scAuth');
+      this.getToken = function() { return window.localStorage.getItem("scAuth"); } //$cookieStore.get.bind($cookieStore, 'scAuth');
 
 }]);

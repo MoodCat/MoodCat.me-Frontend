@@ -95,6 +95,7 @@ angular.module('moodCatApp', [
   })
   .filter('highres', function() {
     return function(input) {
+      // Used to retrieve a higher resolution artwork image from the SoundCloud API.
       return input ? input.replace('-large', '-t500x500') : input;
     };
   });

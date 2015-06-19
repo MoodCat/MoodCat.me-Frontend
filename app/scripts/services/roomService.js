@@ -9,6 +9,10 @@ angular.module('moodCatApp')
     '$interval',
     function(moodcatBackend, $rootScope, currentSongService, $log, $interval) {
 
+      /**
+       * Retrieves list of suitable rooms based on given moods
+       * @param {List<String>} moods List of moods to get roosm for.
+       */
       this.fetchRooms = function fetchRoom(moods) {
         return moodcatBackend.get('/api/rooms/', {
           params: {
@@ -17,14 +21,28 @@ angular.module('moodCatApp')
         });
       };
 
+      /**
+       * Fetch a Room object from the API, based on its roomID
+       * @param {int} roomId The roomID for which to fetch the room.
+       */
       this.fetchRoom = function fetchRoom(roomId) {
         return moodcatBackend.get('/api/rooms/' + roomId);
-    };
+      };
 
+      /**
+       * Fetch the current status of the music playing from the API.
+       * This is used to sync the user with the server.
+       * @param {int} roomId RoomID to retrieve status for.
+       */
       this.fetchNowPlaying = function fetchNowPlaying(roomId) {
         return moodcatBackend.get('/api/rooms/' + roomId + '/now-playing');
       };
 
+      /**
+       * Switch current room to the given room.
+       * This resets state and loads the song of the new room.
+       * @param {Object} room Room to join.
+       */
       this.switchRoom = function switchRoom(room) {
         if(!room) {return;}
         if(!$rootScope.room || $rootScope.room.id !== room.id) {
@@ -37,8 +55,11 @@ angular.module('moodCatApp')
         return room;
     };
 
+      /**
+       * Syncs song to the data provided by the server.
+       */
       this.startInterval = function startInterval() {
-        if(this.interval != null) return;
+        if(this.interval !== null) return;
         this.interval = $interval((function() {
           if(!$rootScope.room) {
             return;
@@ -64,13 +85,18 @@ angular.module('moodCatApp')
         }).bind(this), 1000);
       };
 
+      /**
+       * Stops the syncing of the current song.
+       */
       this.clearInterval = function() {
         $interval.cancel(this.interval);
         this.interval = null;
       };
 
+      // Start the interval on controller creation.
       this.startInterval();
 
+      // Fix state issues when switching to classify game.
       $rootScope.$on('$stateChangeStart', (function(event, toState, toParams, fromState, fromParams){
         if(toState.name === 'classify') {
           this.clearInterval();

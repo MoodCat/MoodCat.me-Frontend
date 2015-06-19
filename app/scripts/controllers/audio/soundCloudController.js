@@ -3,6 +3,9 @@
  angular.module('moodCatAudio')
    .controller('SoundCloudController', ['soundCloudService', '$timeout', '$scope', function(soundCloudService, $timeout, $scope) {
 
+     /**
+      * Call the SoundCloud API to retrieve data about the current user.
+      */
      this.updateMe = function() {
        soundCloudService.getMe().then((function(me) {
          this.me = me;
