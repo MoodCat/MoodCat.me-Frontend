@@ -7,6 +7,11 @@
     */
    .service('PointsService', ['moodcatBackend','soundCloudService',
       function (moodcatBackend,soundCloudService) {
+
+        /**
+         * Retrieves the points of the current user.
+         * This function is authenticated with a soundcloud usertoken.
+         */
         this.getPoints = function getPoints() {
           return moodcatBackend.get('/api/users/me/points', {
               params: {

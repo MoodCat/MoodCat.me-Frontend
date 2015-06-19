@@ -20,6 +20,11 @@ angular.module('moodCatApp')
                 });
             });
 
+          /**
+           * Loads the given song, and set it to play for 30 seconds.
+           * Also enables the feedbackSAM dialog.
+           * @param {int} song The song ID to load for classification.
+           */
           $scope.loadForClassify = function loadForClassify(song) {
               var duration = Math.min(song.duration / 4.0, 30) * 1000;
 

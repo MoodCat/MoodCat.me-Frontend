@@ -20,8 +20,14 @@
        return str.length < max ? pad('0' + str, max) : str;
      }
 
+     /**
+      * Initialize the visibility of the feedbackSAMs to hidden until we need it.
+      */
      $rootScope.feedbackSAM = false;
 
+     /**
+      * Stops and unloads the song playing.
+      */
      this.stop = function stop() {
          $rootScope.sound.stop();
          $rootScope.sound.unbind();
@@ -30,7 +36,8 @@
 
      /**
       * Load a song
-      * @param trackID
+      * @param trackID - The SoundCloud trackID to load.
+      * @param time - the timestamp to set the song to initially.
       * @returns {*} Promise
       */
      this.loadSong = function loadSong(trackID, time) {
@@ -67,6 +74,10 @@
        return pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2);
      }
 
+     /**
+      * Defines $rootScope.currentTimecode, a global getter for the progression of the song.
+      * @return {String} A readable timestamp indication how far the current song has progressed.
+      */
      Object.defineProperty($rootScope, 'currentTimecode', {
        get: function getTimestamp() {
          var val = 0.0;
@@ -78,6 +89,10 @@
        }
      });
 
+     /**
+      * Defines $rootScope.durationTimecode, a global getter for the duration of the song.
+      * @return {String} A readable timestamp indicating how long the song is.
+      */
      Object.defineProperty($rootScope, 'durationTimecode', {
        get: function getTimestamp() {
          var val = 0.0;
