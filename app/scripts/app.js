@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('moodCatUtil', []);
-angular.module('moodCatAudio', ['ngAudio', 'moodCatUtil']);
+angular.module('moodCatAudio', ['ngAudio', 'moodCatUtil', 'SoundCloud']);
 
 angular.module('moodCatApp', [
   'ct.ui.router.extras.sticky',

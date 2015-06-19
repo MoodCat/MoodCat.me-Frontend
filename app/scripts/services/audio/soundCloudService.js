@@ -1,7 +1,9 @@
 'use strict';
 
  angular.module('moodCatAudio')
-   .service('soundCloudService', ['$q', '$cookieStore', '$rootScope', 'soundCloudKey', 'moodcatBackend', '$log', 'ngAudioGlobals', function($q, $cookieStore, $rootScope, soundCloudKey, moodcatBackend, $log, ngAudioGlobals) {
+   .service('soundCloudService', ['$cookieStore', '$rootScope',
+     'ngAudioGlobals', 'SoundCloudLogin', 'SoundCloudAPI', 'SoundCloudSessionManager',
+     function($cookieStore, $rootScope, ngAudioGlobals, SoundCloudLogin, SoundCloudAPI, SoundCloudSessionManager) {
 
      ngAudioGlobals.unlock = false;
 
@@ -10,52 +12,45 @@
       * @param trackID
       * @returns {*} Promise
       */
-     this.fetchMetadata = function fetchMetadata(trackID) {
-       $log.info('Fetch meta data for trackID %d', trackID);
-       return moodcatBackend.get('https://api.soundcloud.com/tracks/'+trackID+
-         '?client_id='+soundCloudKey);
+     this.fetchMetadata = SoundCloudAPI.fetchMetadata;
+
+     /**
+      * Login to SoundCloud using a popup dialog.
+      *
+      * @returns {*} a promise
+      */
+     this.loginUsingSoundcloud = function() {
+       return SoundCloudLogin.connect().then(function SoundCloudLoginCallback() {
+         $cookieStore.put('scAuth', SoundCloudSessionManager.accessToken);
+         $rootScope.loggedIn = true;
+         $rootScope.$broadcast('soundcloud-login');
+       });
      };
 
-      SC.initialize({
-        client_id: soundCloudKey,
-        redirect_uri: window.location.origin /* Only works from localhost:8080 currently*/,
-        access_token: $cookieStore.get('scAuth'),
-        scope: 'non-expiring'
-      });
+     /**
+      * Logout from SoundCloud.
+      */
+     this.logout = function() {
+       SoundCloudSessionManager.disconnect();
+       $rootScope.$broadcast('soundcloud-logout');
+       $rootScope.loggedIn = false;
+       $cookieStore.remove('scAuth');
+     };
 
-      this.loginUsingSoundcloud = function loginUsingSoundcloud() {
-        var deferred = $q.defer();
+     SoundCloudSessionManager.init($cookieStore.get('scAuth'));
 
-        SC.connect(function() {
-          deferred.resolve();
-          var accessToken = SC.accessToken();
-          $cookieStore.put('scAuth', accessToken);
-          window.localStorage.setItem("scAuth", accessToken);
-          $rootScope.loggedIn = true;
-          $rootScope.$broadcast('soundcloud-login');
-        });
+     /**
+      * Get information about the logged in user.
+      * @returns {*} metadata about the user
+      */
+     this.getMe = SoundCloudAPI.me;
 
-        return deferred.promise;
-      };
+     $rootScope.loggedIn = SoundCloudSessionManager.isConnected();
+     if($rootScope.loggedIn) {
+       $rootScope.$broadcast('soundcloud-login');
+     }
 
-      this.getMe = function getMe() {
-          var deferred = $q.defer();
-          SC.get('/me', function(me, error) {
-            if(error) {
-              deferred.reject(error);
-            }
-            else {
-              deferred.resolve(me);
-            }
-          });
-          return deferred.promise;
-      };
-
-      $rootScope.loggedIn = SC.isConnected();
-      if($rootScope.loggedIn) {
-        $rootScope.$broadcast('soundcloud-login');
-      }
-      this.checkConnection = SC.isConnected.bind(SC);
-      this.getToken = function() { return window.localStorage.getItem("scAuth"); } //$cookieStore.get.bind($cookieStore, 'scAuth');
+     this.checkConnection = SoundCloudSessionManager.isConnected.bind(SoundCloudSessionManager);
+     this.getToken = SoundCloudSessionManager.getToken;
 
 }]);
