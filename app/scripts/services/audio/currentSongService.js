@@ -43,16 +43,23 @@
      this.loadSong = function loadSong(trackID, time) {
        time = time || 0;
        $log.info('Loading track id %s', trackID);
+
+       var muting = false;
+
        if(angular.isObject($rootScope.sound)) {
+           muting = $rootScope.sound.muting;
            this.stop();
        }
-           var sound = window.cursound = $rootScope.sound =
-             ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
-           $rootScope.$broadcast('next-song');
-           if(time && isFinite(time)) {
-             sound.setCurrentTime(time);
-           }
-           sound.play();
+
+       var sound = window.cursound = $rootScope.sound =
+         ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
+
+       $rootScope.$broadcast('next-song');
+
+       sound.setCurrentTime(time);
+
+       sound.play();
+       sound.muting = muting;
      };
 
      /**
