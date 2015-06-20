@@ -44,7 +44,17 @@ angular.module('moodCatApp')
       this.scrollDown = function scrollDown() {
         $timeout(function() {
           var list = angular.element('#chat-messages-list')[0];
-          list.scrollTop = list.scrollHeight;
+
+          /*
+            The clientHeight is the total length of the currently visible part of the element.
+            The scrollTop is the value of how far the element has been scrolled.
+            The scrollHeight is the value of how far the element can scroll.
+            Therefore the scrollTop can be maximally clientHeight + scrollTop,
+            as an element without a scrollbar can't scroll, which requires the clientHeight.
+           */
+          if ((list.clientHeight + list.scrollTop) / list.scrollHeight > 0.9) {
+            list.scrollTop = list.scrollHeight;
+          }
         });
       };
 
