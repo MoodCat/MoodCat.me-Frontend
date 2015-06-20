@@ -39,6 +39,7 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/ui-router-extras/release/ct-ui-router-extras.js',
       'bower_components/angular-soundcloud/src/angular-soundcloud.js',
+      'bower_components/howler.js/howler.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

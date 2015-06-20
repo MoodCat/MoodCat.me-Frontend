@@ -70,7 +70,7 @@ angular.module('moodCatApp')
               currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time / 1000);
               $rootScope.song = nowPlaying.song;
             }
-            else {
+            else if ($rootScope.sound) {
               var currentTime = Math.round($rootScope.sound.currentTime * 1000);
               var timeDiff = nowPlaying.time - currentTime;
 

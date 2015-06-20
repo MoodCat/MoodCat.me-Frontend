@@ -1,13 +1,83 @@
 'use strict';
 
  angular.module('moodCatAudio')
+   .constant('HowlDefaults', {
+     format: 'mp3',
+     autoplay: false,
+     buffer: true
+   })
+   .service('HowlService', ['HowlDefaults', '$q', '$timeout', function(HowlDefaults, $q, $timeout) {
+      this.loadSong = function loadSong(url) {
+
+        var dfd, muted, howler, wrapper;
+
+        dfd = $q.defer();
+        muted = false;
+
+        window.howler = howler = new Howl(angular.extend({
+          urls: [url]
+        }, HowlDefaults));
+
+        wrapper = {
+          unbind: howler.unload.bind(howler),
+          play: howler.play.bind(howler),
+          pause: howler.pause.bind(howler),
+          stop: howler.stop.bind(howler),
+          setCurrentTime: howler.pos.bind(howler)
+        };
+
+        Object.defineProperty(wrapper, 'muting', {
+          get: function() {
+            return muted;
+          },
+          set: function(value) {
+            if(muted = value) {
+              howler.mute();
+            }
+            else {
+              howler.unmute();
+            }
+          }
+        });
+
+        Object.defineProperty(wrapper, 'currentTime', {
+          get: function() {
+            return howler.pos();
+          },
+          set: function(value) {
+            $timeout(howler.pos.bind(howler, value), 5);
+            return value;
+          }
+        });
+
+        Object.defineProperty(wrapper, 'progress', {
+          get: function() {
+            return typeof howler._duration === "number" && howler._duration !== 0.0 ?
+              Math.round(howler.pos() / howler._duration * 100) : 0;
+          }
+        });
+
+        Object.defineProperty(wrapper, 'duration', {
+          get: function() {
+            return howler._duration;
+          }
+        });
+
+        howler.on('load', dfd.resolve.bind(dfd, wrapper));
+        howler.on('loaderror', dfd.reject.bind(dfd, wrapper));
+        howler.load();
+        return dfd.promise;
+      }
+
+   }])
    .service('currentSongService', [
      'soundCloudService',
      'ngAudio',
      '$rootScope',
      'soundCloudKey',
      '$log',
-     function(soundCloudService, ngAudio, $rootScope, soundCloudKey, $log) {
+     'HowlService',
+     function(soundCloudService, ngAudio, $rootScope, soundCloudKey, $log, HowlService) {
 
      /**
       * Pad a string with zeroes
@@ -47,19 +117,20 @@
        var muting = false;
 
        if(angular.isObject($rootScope.sound)) {
-           muting = $rootScope.sound.muting;
-           this.stop();
+         this.stop();
        }
+       //var sound = window.cursound = $rootScope.sound =
+         //ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
 
-       var sound = window.cursound = $rootScope.sound =
-         ngAudio.load('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey);
-
-       $rootScope.$broadcast('next-song');
-
-       sound.setCurrentTime(time);
-
-       sound.play();
-       sound.muting = muting;
+       HowlService.loadSong('https://api.soundcloud.com/tracks/'+trackID+'/stream?client_id='+soundCloudKey)
+         .then(function soundLoaded(sound) {
+           $rootScope.sound = window.cursound = sound;
+           $rootScope.$broadcast('next-song');
+           sound.muting = muting;
+           sound.play();
+           sound.currentTime = time;
+         }, $log.warn.bind($log, "Failed to load song %s", trackID));
+       ;
      };
 
      /**
