@@ -36,7 +36,7 @@ angular.module('moodCatApp')
       if(moods.length) {
         var mood = moods[0].toLowerCase();
         angular.element('body').css('background-image', 'url(http://moodcat.me/mood-bg/' + mood + ')');
-        $state.go('moods.rooms', { mood: moods });
+        $state.go('rooms', { mood: moods });
       }
     };
 
