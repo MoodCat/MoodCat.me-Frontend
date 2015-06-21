@@ -48,7 +48,7 @@ angular.module('moodCatApp')
         if(!$rootScope.room || $rootScope.room.id !== room.id) {
           $rootScope.room = room;
 		      $rootScope.song = room.nowPlaying.song;
-          currentSongService.loadSong(room.nowPlaying.song, room.nowPlaying.time);
+          currentSongService.loadSong(room.nowPlaying.song.soundCloudId, room.nowPlaying.time);
           $log.info("Joining room %s", room.name);
           $rootScope.feedbackSAM = false;
         }
@@ -67,7 +67,7 @@ angular.module('moodCatApp')
           this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
             if(!$rootScope.song || $rootScope.song.id !== nowPlaying.song.id) {
               $rootScope.song = nowPlaying.song;
-              currentSongService.loadSong(nowPlaying.song, nowPlaying.time);
+              currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time);
               $rootScope.song = nowPlaying.song;
             }
             else if ($rootScope.sound) {

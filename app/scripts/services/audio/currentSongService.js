@@ -6,27 +6,31 @@
      autoplay: false,
      buffer: true
    })
-   .service('HowlService', ['HowlDefaults', '$q', '$timeout', 'soundCloudKey', function(HowlDefaults, $q, $timeout, soundCloudKey) {
+   .service('HowlService', ['HowlDefaults', '$q', '$timeout', function(HowlDefaults, $q, $timeout) {
 
-     var howler, muted = false;
+     var howler, muted = false, that = this;
 
      /**
       * Load a song. Initialize howler.js.
       * @param song Song to load
       * @returns {*} current HowlService
       */
-     this.loadSong = function loadSong(song) {
-       var url = 'https://api.soundcloud.com/tracks/'+ song.soundCloudId +
-         '/stream?client_id=' + soundCloudKey;
-       this.duration = song.duration / 1000;
+     this.loadSong = function loadSong(url) {
        if(!howler) {
-         howler = new Howl(angular.extend({
+         howler = window.howler=  new Howl(angular.extend({
            urls: [url]
          }, HowlDefaults));
        }
        else {
+         howler.unload();
          howler.urls([url]);
        }
+       angular.element(document.body)
+         .one('touchstart', function() {
+           howler.unload();
+           howler.urls([url]);
+           that.play();
+         });
        return this;
      };
 
@@ -37,6 +41,11 @@
        return howler.unload();
      };
 
+     function howlerOne(eventType, fn) {
+       howler.on(eventType, fn);
+       howler.on(eventType, howler.off.bind(howler, eventType, fn));
+     }
+
      /**
       * Start playing.
       * @returns {*} A promise that resolves when playing the song.
@@ -44,8 +53,8 @@
      this.play = function play() {
        var dfd = $q.defer();
        howler.play();
-       howler.on('play', dfd.resolve.bind(dfd, this));
-       howler.on('loaderror', dfd.reject.bind(dfd, this));
+       howlerOne('play', dfd.resolve.bind(dfd, that));
+       howlerOne('loaderror', dfd.reject.bind(dfd, that));
        return dfd.promise;
      };
 
@@ -76,7 +85,11 @@
       * Duration for the song.
       * @type {number}
       */
-     this.duration = 0;
+     Object.defineProperty(this, 'duration', {
+       get: function() {
+         return howler._duration;
+       }
+     });
 
      /**
       * Boolean that checks if we are muting audio
@@ -148,7 +161,6 @@
       */
      this.stop = function stop() {
          $rootScope.sound.stop();
-         $rootScope.sound.unbind();
          $rootScope.sound = null;
      };
 
@@ -158,19 +170,17 @@
       * @param time - the timestamp to set the song to initially.
       * @returns {*} Promise
       */
-     this.loadSong = function loadSong(song, time) {
+     this.loadSong = function loadSong(soundCloudId, time) {
        time = time || 0;
-       $log.info('Loading track id %s', song);
+       $log.info('Loading track id %s', soundCloudId);
 
-       if(angular.isObject($rootScope.sound)) {
-         this.stop();
-       }
-
-       $rootScope.sound = HowlService.loadSong(song);
+       $rootScope.sound = HowlService.loadSong('https://api.soundcloud.com/tracks/'+ soundCloudId +
+         '/stream?client_id=' + soundCloudKey);
        return $rootScope.sound.play().then(function playing(sound) {
          sound.currentTime = time;
+         sound.muting = sound.muting;
          $rootScope.$broadcast('next-song');
-       }, $log.warn.bind($log, "Failed to load song %o", song));
+       }, $log.warn.bind($log, "Failed to load song %d", soundCloudId));
 
      };
 
