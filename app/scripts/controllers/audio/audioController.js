@@ -50,7 +50,7 @@
           params: {
             token : soundCloudService.getToken()
           }
-        });
+        }).then($rootScope.$broadcast.bind($rootScope, 'fetch-points'));
         $log.info('%s send to song %d', orientation, $scope.song.id);
       }
     };

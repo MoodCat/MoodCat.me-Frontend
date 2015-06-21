@@ -1,7 +1,7 @@
 'use strict';
 
  angular.module('moodCatAudio')
-   .service('ClassificationService', ['moodcatBackend', '$log', 'soundCloudService', function ClassificationService(moodcatBackend, $log, soundCloudService) {
+   .service('ClassificationService', ['moodcatBackend', '$log', 'soundCloudService', '$rootScope', function ClassificationService(moodcatBackend, $log, soundCloudService, $rootScope) {
 
      /**
       * Send a classification to the backend.
@@ -18,6 +18,7 @@
          }
        }).then(function() {
          $log.info('Thank you for your feedback!');
+         $rootScope.$broadcast('fetch-points');
        });
      };
 
