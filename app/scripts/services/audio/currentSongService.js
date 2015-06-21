@@ -16,15 +16,14 @@
       * @returns {*} current HowlService
       */
      this.loadSong = function loadSong(url) {
-       if(!howler) {
-         howler = window.howler=  new Howl(angular.extend({
-           urls: [url]
-         }, HowlDefaults));
-       }
-       else {
+       if(howler) {
          howler.unload();
-         howler.urls([url]);
        }
+
+       howler = window.howler=  new Howl(angular.extend({
+         urls: [url]
+       }, HowlDefaults));
+
        angular.element(document.body)
          .one('touchstart', function() {
            howler.unload();
