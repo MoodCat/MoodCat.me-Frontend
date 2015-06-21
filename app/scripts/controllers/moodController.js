@@ -15,6 +15,10 @@ angular.module('moodCatApp')
          mood.enabled = false;
     });
 
+    Object.defineProperty(moods, 'selected', {
+      get: Array.prototype.some.bind(moods, function(e) { return e.enabled; })
+    });
+
     /**
      * Retrieves the moods the user chose, and return their names.
      */
