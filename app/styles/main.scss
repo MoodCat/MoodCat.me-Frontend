@@ -76,12 +76,10 @@ p {
   margin-right: 10px;
 }
 
-.ng-enter {
+.ng-enter.enter {
   animation: slideInRight .8s both ease;
 }
-// .ng-leave {
-//   animation: slideInLeft .5s both ease;
-// }
+
 @keyframes slideOutLeft {
     to { opacity: 0; transform: translateX(-200%);}
 }
