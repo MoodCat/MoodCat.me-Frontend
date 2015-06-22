@@ -74,7 +74,7 @@ angular.module('moodCatApp')
               var currentTime = Math.round($rootScope.sound.currentTime * 1000);
               var timeDiff = nowPlaying.time - currentTime;
 
-              if(Math.abs(timeDiff) > 1000) {
+              if(Math.abs(timeDiff) > 2000) {
                 $rootScope.sound.setCurrentTime(nowPlaying.time);
                 if(timeDiff < 0) {
                   $rootScope.$broadcast('next-song');
