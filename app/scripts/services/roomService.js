@@ -78,6 +78,7 @@ angular.module('moodCatApp')
                 $rootScope.sound.setCurrentTime(nowPlaying.time / 1000);
                 if(timeDiff < 0) {
                   $rootScope.$broadcast('next-song');
+                  $rootScope.sound.play();
                 }
               }
             }
