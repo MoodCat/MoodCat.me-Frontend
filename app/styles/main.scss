@@ -608,10 +608,10 @@ btn-mood label::before {
 
 .song-artist {
 	font-size: 15px;
-    display: inline-block;
+  display: inline-block;
 	color: rgba(255, 255, 255, 0.6);
 	font-weight: bold;
-    width: 75%;
+  margin-top: 0;
 }
 
 .purchase-container {
@@ -621,7 +621,8 @@ btn-mood label::before {
 .progress-bar {
 	height: 5px;
 	margin-bottom: 20px;
-    background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.6);
+  width: 100%;
 }
 
 .progress-bar-progress {
@@ -630,10 +631,11 @@ btn-mood label::before {
 }
 
 .song-timestamp {
-    display: inline-block;
+  display: inline-block;
 	text-align: right;
 	font-size: 12px;
-    width: 24%;
+  float: right;
+  margin-top: 0;
 }
 
 .song-purchase, .song-purchase:visited, .song-purchase:focus {
