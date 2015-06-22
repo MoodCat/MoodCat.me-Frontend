@@ -38,11 +38,23 @@
 
           <div class="collapse navbar-collapse" id="js-navbar-collapse">
             <ul class="nav navbar-nav navbar-left">
-              <li><a ui-sref="moods">Home</a></li> <!-- .active for current page TODO -->
-              <li><a ui-sref="classify">Rating game</a></li>
-              <li><a ui-sref="about">About</a></li>
+              <li><a ui-sref="moods" ui-sref-active="active">Home</a></li>
+              <li><a ui-sref="classify" ui-sref-active="active">Rating game</a></li>
+              <li><a ui-sref="about" ui-sref-active="active">About</a></li>
             </ul>
-            <ul class="nav navbar-nav hide-collapsed">
+
+            <ul class="nav navbar-nav navbar-right player-controls">
+              <li><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteUp()"><i class="glyphicon glyphicon-thumbs-up"></i></button></li>
+              <li><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteDown()"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
+              <li><button ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></button></li>
+              <li>
+                <button ui-sref="leaderboard" ng-if="loggedIn">
+                  <div class="points" ng-bind="ptsCtrl.points" ng-controller="PointsCtrl as ptsCtrl"></div></button>
+              </li>
+              <li sound-cloud-login></li>
+            </ul>
+            
+            <ul class="nav navbar-nav hide-collapsed visible-lg">
               <li>
                 <div class="song-container">
                   <div class="song-title">
@@ -53,16 +65,7 @@
                 </div>
               </li>
             </ul>
-            <ul class="nav navbar-nav navbar-right player-controls">
-              <li><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteUp()"><i class="glyphicon glyphicon-thumbs-up"></i></button></li>
-              <li><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteDown()"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
-              <li><button ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></button></li>
-              <li>
-               <button ui-sref="leaderboard" ng-if="loggedIn">
-               <div class="points" ng-bind="ptsCtrl.points" ng-controller="PointsCtrl as ptsCtrl"></div></button>
-              </li>
-              <li sound-cloud-login></li>
-            </ul>
+
           </div>
         </div>
       </div>
@@ -70,7 +73,7 @@
 
     <div class="container mainView">
         <!-- The actual content -->
-        <div ui-view class="col-md-12"></div>
+        <div ui-view class="row"></div>
     </div>
 
     <div class="footer">

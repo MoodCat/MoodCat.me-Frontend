@@ -16,6 +16,13 @@ angular.module('moodCatApp')
     });
 
     /**
+     * Checks if one or more moods are selected and enables next accordingly.
+     */
+    $scope.hasSelectedMoods = function hasSelectedMoods() {
+      return $scope.moods.some(function(e) {return e.enabled; });
+    };
+
+    /**
      * Retrieves the moods the user chose, and return their names.
      */
     $scope.getSelectedMoods = function getSelectedMoods() {
@@ -36,7 +43,7 @@ angular.module('moodCatApp')
       if(moods.length) {
         var mood = moods[0].toLowerCase();
         angular.element('body').css('background-image', 'url(http://moodcat.me/mood-bg/' + mood + ')');
-        $state.go('moods.rooms', { mood: moods });
+        $state.go('rooms', { mood: moods });
       }
     };
 

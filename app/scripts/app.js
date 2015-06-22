@@ -35,7 +35,7 @@ angular.module('moodCatApp', [
         },
         controller : 'roomController'
       })
-      .state('moods.rooms', {
+      .state('rooms', {
         url : '/room/select?mood',
         templateUrl : 'views/selectRoom.html',
         resolve : {

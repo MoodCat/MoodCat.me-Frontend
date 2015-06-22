@@ -1,13 +1,14 @@
 <div class="col-md-offset-3 col-md-6">
-    <div ui-view class="row marketing">
         <div class="block">
         </div>
         <div>
           <h4>In the mood?</h4>
           <div class="spaceBetween">
-              <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods">{{mood.name}}</btn-mood>
-              <button ng-click="submitMoods()" class="btn-default next-button artworkThumb">Next <span class="glyphicon glyphicon-menu-right"></span></button>
+              <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods" class="enter">{{mood.name}}</btn-mood>
+              <button ng-click="submitMoods()" ng-show="hasSelectedMoods()"
+                    class="btn-default next-button artworkThumb">
+                Next <span class="glyphicon glyphicon-menu-right"></span>
+              </button>
           </div>
         </div>
-  </div>
 </div>
