@@ -329,7 +329,13 @@ btn-mood label::before {
   color: #EEE;
 }
 .next-button {
-    @extend .back-button;
+  @extend .back-button;
+  transition: 0.1s linear all;
+  opacity: 1;
+
+  &.ng-hide {
+    opacity: 0;
+  }
 }
 
 .list-rooms, .messages-container {
