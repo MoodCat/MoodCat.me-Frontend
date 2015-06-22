@@ -642,3 +642,7 @@ btn-mood label::before {
   right: 20px;
   top: 12px;
 }
+
+.navbar-default .navbar-nav > li > a.active {
+  background: rgba(120, 120, 120, .4);
+}
