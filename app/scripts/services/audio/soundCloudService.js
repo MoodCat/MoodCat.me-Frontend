@@ -2,10 +2,8 @@
 
  angular.module('moodCatAudio')
    .service('soundCloudService', ['$cookieStore', '$rootScope',
-     'ngAudioGlobals', 'SoundCloudLogin', 'SoundCloudAPI', 'SoundCloudSessionManager',
-     function($cookieStore, $rootScope, ngAudioGlobals, SoundCloudLogin, SoundCloudAPI, SoundCloudSessionManager) {
-
-     ngAudioGlobals.unlock = false;
+     'SoundCloudLogin', 'SoundCloudAPI', 'SoundCloudSessionManager',
+     function($cookieStore, $rootScope, SoundCloudLogin, SoundCloudAPI, SoundCloudSessionManager) {
 
      /**
       * Fetch the metadata for a song
