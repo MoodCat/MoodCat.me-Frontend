@@ -10,7 +10,11 @@ angular.module('moodCatUtil')
    * @returns {*} Promise for the result
    */
   this.get = function(path, options) {
-    return $http.get.apply($http, arguments)
+    options = options || {};
+    options.params = options.params || {};
+    options.params._t = (new Date()).valueOf();
+
+    return $http.get(path, options)
       .then(
       function(res) { return res.data; },
       $log.warn.bind($log, 'Failed to fetch response')
