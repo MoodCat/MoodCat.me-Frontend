@@ -3,6 +3,8 @@
 angular.module('moodCatApp')
   .controller('roomController', function($rootScope, $scope, $timeout, $interval, chatService, messages) {
 
+    var that = this;
+
       /**
        * The messages in the current chatroom.
        */
@@ -28,7 +30,7 @@ angular.module('moodCatApp')
 
         //Send the mesage to the server
         chatService.sendChatMessage($scope.chatMessage, $scope.room.id)
-          .then(this.fetchMessages.bind(this));
+          .then(this.fetchMessagesInSync);
 
         //Clear the chat input field
         $scope.chatMessage.message = '';
@@ -44,7 +46,17 @@ angular.module('moodCatApp')
       this.scrollDown = function scrollDown() {
         $timeout(function() {
           var list = angular.element('#chat-messages-list')[0];
-          list.scrollTop = list.scrollHeight;
+
+          /*
+            The clientHeight is the total length of the currently visible part of the element.
+            The scrollTop is the value of how far the element has been scrolled.
+            The scrollHeight is the value of how far the element can scroll.
+            Therefore the scrollTop can be maximally clientHeight + scrollTop,
+            as an element without a scrollbar can't scroll, which requires the clientHeight.
+           */
+          if ((list.clientHeight + list.scrollTop) / list.scrollHeight > 0.9) {
+            list.scrollTop = list.scrollHeight;
+          }
         });
       };
 
@@ -60,17 +72,33 @@ angular.module('moodCatApp')
           }));
         }
 
-        chatService.fetchMessagesFromMessage($scope.room.id, lastMessageId).then((function(response){
+        return chatService.fetchMessagesFromMessage($scope.room.id, lastMessageId).then(function(response){
             $scope.messages = $scope.messages.concat(response);
-            this.scrollDown();
-          }).bind(this));
+            that.scrollDown();
+          });
+      };
 
+      var lastPromise;
+
+    /**
+     * Fetch messages synchronously. This means we will wait for the latest response before
+     * a new request to synchronize is started.
+     * @returns {*} a Promise
+     */
+      this.fetchMessagesInSync = function fetchMessagesInSync() {
+        if(lastPromise) {
+          lastPromise = lastPromise.then(that.fetchMessages);
+        }
+        else {
+          lastPromise = that.fetchMessages();
+        }
+        return lastPromise;
       };
 
       this.scrollDown();
 
       // Query the API for new messages every second
-      var intervalMessages = $interval(this.fetchMessages.bind(this), 1000);
+      var intervalMessages = $interval(this.fetchMessagesInSync, 1000);
 
       // If the controller is destroyed, cancel the message checking interval.
       $scope.$on('$destroy', $interval.cancel.bind($interval, intervalMessages));
