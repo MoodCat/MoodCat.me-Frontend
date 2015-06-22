@@ -15,9 +15,12 @@ angular.module('moodCatApp')
          mood.enabled = false;
     });
 
-    Object.defineProperty(moods, 'selected', {
-      get: Array.prototype.some.bind(moods, function(e) { return e.enabled; })
-    });
+    /**
+     * Checks if one or more moods are selected and enables next accordingly.
+     */
+    $scope.hasSelectedMoods = function hasSelectedMoods() {
+      return $scope.moods.some(function(e) {return e.enabled; });
+    };
 
     /**
      * Retrieves the moods the user chose, and return their names.
