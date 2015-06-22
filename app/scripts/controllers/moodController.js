@@ -15,6 +15,10 @@ angular.module('moodCatApp')
          mood.enabled = false;
     });
 
+    Object.defineProperty(moods, 'selected', {
+      get: Array.prototype.some.bind(moods, function(e) { return e.enabled; })
+    });
+
     /**
      * Retrieves the moods the user chose, and return their names.
      */
@@ -36,7 +40,7 @@ angular.module('moodCatApp')
       if(moods.length) {
         var mood = moods[0].toLowerCase();
         angular.element('body').css('background-image', 'url(http://moodcat.me/mood-bg/' + mood + ')');
-        $state.go('moods.rooms', { mood: moods });
+        $state.go('rooms', { mood: moods });
       }
     };
 
