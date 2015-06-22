@@ -76,12 +76,10 @@ p {
   margin-right: 10px;
 }
 
-.ng-enter {
+.ng-enter.enter {
   animation: slideInRight .8s both ease;
 }
-// .ng-leave {
-//   animation: slideInLeft .5s both ease;
-// }
+
 @keyframes slideOutLeft {
     to { opacity: 0; transform: translateX(-200%);}
 }
@@ -244,6 +242,7 @@ p {
 
 .navbar li {
   display: inline-block;
+  height: 50px;
 }
 
 .navbar-left {
@@ -586,6 +585,19 @@ btn-mood label::before {
 	width: 100%;
 }
 
+@media screen and (max-width: 600px) {
+    .song-info {
+        text-align: center;
+    }
+
+    /* We need to override the text-align: right so the text doesn't look
+    awkward compared to the rest. */
+    .song-timestamp {
+        text-align: center;
+        width: 100%;
+    }
+}
+
 .song-info {
 	margin-top: 75px;
 }
@@ -596,8 +608,10 @@ btn-mood label::before {
 
 .song-artist {
 	font-size: 15px;
+  display: inline-block;
 	color: rgba(255, 255, 255, 0.6);
 	font-weight: bold;
+  margin-top: 0;
 }
 
 .purchase-container {
@@ -605,27 +619,23 @@ btn-mood label::before {
 }
 
 .progress-bar {
-	width: 100%;
-	margin-bottom: 20px;
-	margin-left: -15px;
-}
-
-.progress-bar-background {
-	position: absolute;
-	background-color: rgba(0,0,0,0.6);
-	width: 100%;
 	height: 5px;
+	margin-bottom: 20px;
+  background-color: rgba(0,0,0,0.6);
+  width: 100%;
 }
 
 .progress-bar-progress {
-	position: absolute;
 	height: 5px;
 	background-color: #EEE;
 }
 
 .song-timestamp {
+  display: inline-block;
 	text-align: right;
 	font-size: 12px;
+  float: right;
+  margin-top: 0;
 }
 
 .song-purchase, .song-purchase:visited, .song-purchase:focus {

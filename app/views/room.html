@@ -5,7 +5,7 @@
     <h4 ng-bind="room.name"></h4>
     <div class="messages-container">
         <ul class="list-unstyled list-messages" id="chat-messages-list">
-            <li ng-repeat="message in messages">
+            <li ng-repeat="message in messages" class="enter">
                 <strong ng-bind="message.time | date:'HH:mm'"></strong>
                 <strong ng-bind="message.author"></strong>
                 <span ng-bind="message.message"></span>
@@ -30,7 +30,6 @@
         <span ng-bind="durationTimecode"></span>
     </h4>
     <div class="progress-bar">
-        <div class="progress-bar-background"></div>
         <div ng-style="{width: sound.progress * 100 + '%'}" class="progress-bar-progress"></div>
     </div>
     <div class="purchase-container">
