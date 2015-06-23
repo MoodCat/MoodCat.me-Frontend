@@ -12,10 +12,11 @@
             </li>
         </ul>
         <div class="form-holder">
-            <form ng-submit="addMessage()">
+            <form ng-submit="addMessage()" ng-show="loggedIn">
                 <input type="text" ng-model="chatMessage.message" placeholder="Type a message" maxlength="255" />
                 <input type="submit" value="Send" class="highlight" />
             </form>
+            <div ng-hide="loggedIn">  In order to chat you need to be logged in.</div>
         </div>
     </div>
 </div>
