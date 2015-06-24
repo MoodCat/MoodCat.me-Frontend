@@ -22,7 +22,7 @@
 </div>
 
 <div class="song-info col-md-4">
-    <img src="{{song.artworkUrl | highres}}" class="full-width">
+    <img ng-src="{{song.artworkUrl | highres}}" class="full-width">
     <h2 class="song-name" ng-bind="song.name">Song name</h2>
     <h3 class="song-artist" ng-bind="song.artist.name">Song artist</h3>
     <h4 class="song-timestamp">
