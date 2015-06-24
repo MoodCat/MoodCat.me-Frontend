@@ -13,6 +13,12 @@
      this.voted = false;
 
      /**
+      * A string that shows the oriantation of the vote.
+      * @type {String}
+      */
+     this.voteOriantation = '';
+
+     /**
       * Resets the voted flag when a new song starts playing, so a user can vote on the new song.
       */
      $scope.$on('next-song', (function() {
@@ -23,6 +29,7 @@
      * Send a vote to the backend indicating the current song fits the room.
      */
     this.voteUp = function voteUp() {
+      this.voteOriantation = 'upvote';
       this.vote('LIKE');
     };
 
@@ -31,6 +38,7 @@
      * After sending, it shows the feedbackSAM dialog to the user.
      */
     this.voteDown = function voteDown() {
+      this.voteOriantation = 'downvote';
       this.vote('DISLIKE');
 
       var elem = angular.element('<feedback-sam/>');
