@@ -38,6 +38,8 @@ angular.module('moodCatApp')
         return moodcatBackend.get('/api/rooms/' + roomId + '/now-playing');
       };
 
+      var currentSongLoadingPromise = null;
+
       /**
        * Switch current room to the given room.
        * This resets state and loads the song of the new room.
@@ -46,14 +48,23 @@ angular.module('moodCatApp')
       this.switchRoom = function switchRoom(room) {
         if(!room) {return;}
         if(!$rootScope.room || $rootScope.room.id !== room.id) {
+          $log.info("Joining room %s", room.name);
+
           $rootScope.room = room;
 		      $rootScope.song = room.nowPlaying.song;
-          currentSongService.loadSong(room.nowPlaying.song.soundCloudId, room.nowPlaying.time);
-          $log.info("Joining room %s", room.name);
+
+          currentSongLoadingPromise = currentSongService
+            .loadSong(room.nowPlaying.song.soundCloudId, room.nowPlaying.time);
+
           $rootScope.feedbackSAM = false;
         }
         return room;
     };
+
+
+      function logSuperFatalError() {
+        $log.error('Something bad happened. Please contact support.');
+      }
 
       /**
        * Syncs song to the data provided by the server.
@@ -61,28 +72,40 @@ angular.module('moodCatApp')
       this.startInterval = function startInterval() {
         if(this.interval) return;
         this.interval = $interval((function() {
-          if(!$rootScope.room) {
+          if(!$rootScope.room || !currentSongLoadingPromise) {
             return;
           }
-          this.fetchNowPlaying($rootScope.room.id).then(function(nowPlaying) {
-            if(!$rootScope.song || $rootScope.song.id !== nowPlaying.song.id) {
-              $rootScope.song = nowPlaying.song;
-              currentSongService.loadSong(nowPlaying.song.soundCloudId, nowPlaying.time);
-              $rootScope.song = nowPlaying.song;
-            }
-            else if ($rootScope.sound) {
-              var currentTime = Math.round($rootScope.sound.currentTime * 1000);
+
+          currentSongLoadingPromise
+            .then(this.fetchNowPlaying.bind(this, $rootScope.room.id), logSuperFatalError)
+            .then(function(nowPlaying) {
+              if(
+                // No current song,   or different song
+                !$rootScope.song ||  $rootScope.song.id !== nowPlaying.song.id
+              ) {
+                currentSongLoadingPromise = currentSongService
+                  .loadSong(nowPlaying.song.soundCloudId, nowPlaying.time)
+                  .then(function() {
+                    $rootScope.song = nowPlaying.song;
+                  }, logSuperFatalError);
+              }
+
+              var currentTime = Math.round($rootScope.sound.currentTime);
               var timeDiff = nowPlaying.time - currentTime;
 
-              if(Math.abs(timeDiff) > 2000) {
-                $rootScope.sound.setCurrentTime(nowPlaying.time);
-                if(timeDiff < 0) {
-                  $rootScope.$broadcast('next-song');
-                  $rootScope.sound.play();
-                }
+              if(timeDiff > 2000) {
+                $rootScope.sound.currentTime = nowPlaying.time;
               }
-            }
-          });
+              else  if(timeDiff < 0) {
+                currentSongLoadingPromise =
+                  $rootScope.sound.stop()
+                    .then($rootScope.sound.play.bind($rootScope.sound), logSuperFatalError)
+                    .then(function() {
+                      $rootScope.sound.currentTime = nowPlaying.time;
+                    }, logSuperFatalError);
+              }
+
+          }, logSuperFatalError);
         }).bind(this), 1000);
       };
 
