@@ -156,6 +156,10 @@ li.downvote > button:disabled > i.glyphicon-thumbs-down
   }
 }
 
+.mainView {
+  z-index: 1;
+}
+
 // Custom page footer
 .footer {
   padding-top: 19px;
