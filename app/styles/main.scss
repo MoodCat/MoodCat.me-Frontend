@@ -11,6 +11,7 @@ body {
   width: 100%;
   min-height: 100%;
   position: absolute;
+  background-color: black;
   background-repeat: no-repeat;
   background-position: center center;
   background-attachment: fixed;
@@ -112,6 +113,10 @@ li.downvote > button:disabled > i.glyphicon-thumbs-down
   color: red;
 }
 
+.navbar-default {
+  background: $dark-grey;
+}
+
 .navbar-default,
 .navbar-default .player-controls > li > a,
 .navbar-default .player-controls > li > a:focus,
@@ -121,9 +126,16 @@ li.downvote > button:disabled > i.glyphicon-thumbs-down
 .navbar-default .player-controls > li > button:focus,
 .navbar-default .navbar-nav > li > button,
 .navbar-default .navbar-nav > li > button:focus {
-  background: $dark-grey;
+  //background: $dark-grey;
   color: $light-grey;
   font-size: $font-medium;
+}
+
+.navbar-default .player-controlers {
+  background: none;
+}
+.navbar-default .player-controls > li > button {
+  background: none;
 }
 
 .navbar-default .player-controls > li > a:hover,
@@ -686,6 +698,9 @@ btn-mood label::before {
 
 // Responsive: Portrait tablets and up
 @media screen and (max-width: 768px) {
+  body {
+    background-size: auto auto;
+  } 
   .container {
     max-width: 730px;
     width: 100%;
