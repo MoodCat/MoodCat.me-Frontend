@@ -3,6 +3,7 @@
         </div>
         <div>
           <h4>In the mood?</h4>
+          <div ng-controller="FirstVisitController as firstVisitController" ng-hide="firstVisitController.hasVisited">
           <p>
             Hi there!
             Welcome to MoodCat.me.
@@ -17,6 +18,7 @@
             Do you have a SoundCloud account? Log in with the button on the top right.
             Once logged in, you can chat in rooms, or help us out and earn points in the <a ui-sref="classify">Rating game</a>
           </p>
+          </div>
           <div class="spaceBetween">
               <btn-mood ng-model="mood.enabled" ng-repeat="mood in moods" class="enter">{{mood.name}}</btn-mood>
               <button ng-click="submitMoods()" ng-show="hasSelectedMoods()"
