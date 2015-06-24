@@ -253,35 +253,6 @@ p {
   margin: 5px;
 }
 
-
-// Responsive: Portrait tablets and up
-@media screen and (max-width: 768px) {
-  .container {
-    max-width: 730px;
-    width: 100%;
-  }
-
-  // Remove the padding we set earlier
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  // Space out the masthead
-  .header {
-    margin-bottom: 30px;
-  }
-  // Remove the bottom border on the jumbotron for visual effect
-  .jumbotron {
-    border-bottom: 0;
-  }
-
-  .navbar .navbar-nav, .navbar .player-controls {
-    display: block;
-  }
-}
-
 btn-mood input {
   display: none;
 }
@@ -692,4 +663,38 @@ btn-mood label::before {
 
 .navbar-default .navbar-nav > li > a.active {
   background: rgba(120, 120, 120, .4);
+}
+
+// Responsive: Portrait tablets and up
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 730px;
+    width: 100%;
+  }
+
+  .messages-container,
+  .list-messages {
+    height: $mobilechatheight;
+    min-height: $mobilechatheight;
+  }
+
+  // Remove the padding we set earlier
+  .header,
+  .marketing,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  // Space out the masthead
+  .header {
+    margin-bottom: 30px;
+  }
+  // Remove the bottom border on the jumbotron for visual effect
+  .jumbotron {
+    border-bottom: 0;
+  }
+
+  .navbar .navbar-nav, .navbar .player-controls {
+    display: block;
+  }
 }
