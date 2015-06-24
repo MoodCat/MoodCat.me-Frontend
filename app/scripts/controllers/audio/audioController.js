@@ -13,10 +13,10 @@
      this.voted = false;
 
      /**
-      * A boolean that shows if the vote of a user was an upvote.
-      * @type {Boolean}
+      * A string that shows the oriantation of the vote.
+      * @type {String}
       */
-     this.upvote = true;
+     this.voteOriantation = '';
 
      /**
       * Resets the voted flag when a new song starts playing, so a user can vote on the new song.
@@ -29,7 +29,7 @@
      * Send a vote to the backend indicating the current song fits the room.
      */
     this.voteUp = function voteUp() {
-      this.upvote = true;
+      this.voteOriantation = 'upvote';
       this.vote('LIKE');
     };
 
@@ -38,7 +38,7 @@
      * After sending, it shows the feedbackSAM dialog to the user.
      */
     this.voteDown = function voteDown() {
-      this.upvote = false;
+      this.voteOriantation = 'downvote';
       this.vote('DISLIKE');
 
       var elem = angular.element('<feedback-sam/>');

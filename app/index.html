@@ -44,13 +44,8 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right player-controls">
-              <li ng-hide="audioCtrl.voted && audioCtrl.upvote" ><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteUp()"><i class="glyphicon glyphicon-thumbs-up"></i></button>
-              </li>
-              <li ng-show="audioCtrl.voted && audioCtrl.upvote" class="upvote">
-              <button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteUp()"><i class="glyphicon glyphicon-thumbs-up"></i></button>
-              </li>
-              <li ng-hide="audioCtrl.voted && !audioCtrl.upvote"><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteDown()"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
-              <li ng-show="audioCtrl.voted && !audioCtrl.upvote" class="downvote"><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteDown()"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
+              <li ng-class="audioCtrl.voteOriantation"><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteUp()"><i class="glyphicon glyphicon-thumbs-up"></i></button></li>
+              <li ng-class="audioCtrl.voteOriantation"><button ng-if="sound" ng-disabled="audioCtrl.voted" ng-click="audioCtrl.voteDown()"><i class="glyphicon glyphicon-thumbs-down"></i></button></li>
               <li><button ng-click='sound.muting = !sound.muting'><span ng-class="sound.muting ? 'glyphicon glyphicon-volume-off' : 'glyphicon glyphicon-volume-up'"></span></button></li>
               <li>
                 <button ui-sref="leaderboard" ng-if="loggedIn">

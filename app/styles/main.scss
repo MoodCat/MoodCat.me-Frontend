@@ -102,14 +102,12 @@ p {
   color: grey;
 }
 
-.navbar-default .navbar-nav > li.upvote > button:disabled,
-.navbar-default .player-controls > li.upvote > button:disabled
+li.upvote > button:disabled > i.glyphicon-thumbs-up
 {
   color: #00d600;
 }
 
-.navbar-default .navbar-nav > li.downvote > button:disabled,
-.navbar-default .player-controls > li.downvote > button:disabled
+li.downvote > button:disabled > i.glyphicon-thumbs-down
 {
   color: red;
 }
