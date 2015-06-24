@@ -434,8 +434,8 @@ btn-mood label::before {
   font-size: .9em;
   padding: 4px 10px 0px 10px;
   margin: 0;
-  min-height: 500px;
-  height: 500px;
+  min-height: 675px;
+  height: 675px;
 }
 
 .messages-container {
@@ -446,15 +446,34 @@ btn-mood label::before {
   width: 100%;
 }
 
-.messages-container .form-holder input {
+.form-holder form{
+  display: flex;
   width: 100%;
-  color: #FFF;
+}
+
+.messages-container .form-holder input {
+  color: #fff;
   background: rgba(255, 255, 255, 0.09);
   border: none;
   padding: 10px;
-  height: 35px;
   outline: none;
+  flex: 1;
+  flex-grow: 4;
 }
+
+.messages-container .form-holder input[type='submit'] {
+  background: rgba(0, 60, 0, .5);
+  flex: 1;
+  flex-grow: 1;
+  text-transform: uppercase;
+}
+
+.notloggedIn {
+  color: rgb(169, 169, 169);
+  width: 100%;
+}
+
+
 
 .no-padding {
   padding: 0;
