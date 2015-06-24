@@ -93,7 +93,7 @@ p {
 {
   outline: none;
   border: none;
-  padding: 15px;
+  padding: 14px;
 }
 
 .navbar-default .navbar-nav > li > button:disabled,
@@ -178,30 +178,6 @@ p {
     margin-top: 28px;
   }
 }
-
-// Responsive: Portrait tablets and up
-@media screen and (max-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
-
-  // Remove the padding we set earlier
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  // Space out the masthead
-  .header {
-    margin-bottom: 30px;
-  }
-  // Remove the bottom border on the jumbotron for visual effect
-  .jumbotron {
-    border-bottom: 0;
-  }
-}
-
 .song-container {
   margin: 7px 0;
   font-size: 0.8em;
@@ -275,6 +251,35 @@ p {
   width: 40px;
   border-radius: 20px;
   margin: 5px;
+}
+
+
+// Responsive: Portrait tablets and up
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 730px;
+    width: 100%;
+  }
+
+  // Remove the padding we set earlier
+  .header,
+  .marketing,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  // Space out the masthead
+  .header {
+    margin-bottom: 30px;
+  }
+  // Remove the bottom border on the jumbotron for visual effect
+  .jumbotron {
+    border-bottom: 0;
+  }
+
+  .navbar .navbar-nav, .navbar .player-controls {
+    display: block;
+  }
 }
 
 btn-mood input {
