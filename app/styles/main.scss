@@ -263,35 +263,6 @@ li.downvote > button:disabled > i.glyphicon-thumbs-down
   margin: 5px;
 }
 
-
-// Responsive: Portrait tablets and up
-@media screen and (max-width: 768px) {
-  .container {
-    max-width: 730px;
-    width: 100%;
-  }
-
-  // Remove the padding we set earlier
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  // Space out the masthead
-  .header {
-    margin-bottom: 30px;
-  }
-  // Remove the bottom border on the jumbotron for visual effect
-  .jumbotron {
-    border-bottom: 0;
-  }
-
-  .navbar .navbar-nav, .navbar .player-controls {
-    display: block;
-  }
-}
-
 btn-mood input {
   display: none;
 }
@@ -360,7 +331,7 @@ btn-mood label::before {
 
 .list-rooms, .messages-container {
   display: block;
-  height: 500px;
+  height: $chatheight;
 }
 
 .list-rooms, .list-messages {
@@ -444,8 +415,8 @@ btn-mood label::before {
   font-size: .9em;
   padding: 4px 10px 0px 10px;
   margin: 0;
-  min-height: 500px;
-  height: 500px;
+  min-height: $chatheight;
+  height: $chatheight;
 }
 
 .messages-container {
@@ -456,15 +427,34 @@ btn-mood label::before {
   width: 100%;
 }
 
-.messages-container .form-holder input {
+.form-holder form{
+  display: flex;
   width: 100%;
-  color: #FFF;
+}
+
+.messages-container .form-holder input {
+  color: #fff;
   background: rgba(255, 255, 255, 0.09);
   border: none;
   padding: 10px;
-  height: 35px;
   outline: none;
+  flex: 1;
+  flex-grow: 4;
 }
+
+.messages-container .form-holder input[type='submit'] {
+  background: rgba(0, 60, 0, .5);
+  flex: 1;
+  flex-grow: 1;
+  text-transform: uppercase;
+}
+
+.notloggedIn {
+  color: rgb(169, 169, 169);
+  width: 100%;
+}
+
+
 
 .no-padding {
   padding: 0;
@@ -683,4 +673,47 @@ btn-mood label::before {
 
 .navbar-default .navbar-nav > li > a.active {
   background: rgba(120, 120, 120, .4);
+}
+
+
+@media screen and (max-width: 1800px) {
+  .messages-container,
+  .list-messages {
+    height: $mediumchatheight;
+    min-height: $mediumchatheight;
+  }
+}
+
+// Responsive: Portrait tablets and up
+@media screen and (max-width: 768px) {
+  .container {
+    max-width: 730px;
+    width: 100%;
+  }
+
+  .messages-container,
+  .list-messages {
+    height: $mobilechatheight;
+    min-height: $mobilechatheight;
+  }
+
+  // Remove the padding we set earlier
+  .header,
+  .marketing,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  // Space out the masthead
+  .header {
+    margin-bottom: 30px;
+  }
+  // Remove the bottom border on the jumbotron for visual effect
+  .jumbotron {
+    border-bottom: 0;
+  }
+
+  .navbar .navbar-nav, .navbar .player-controls {
+    display: block;
+  }
 }
