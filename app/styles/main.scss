@@ -665,6 +665,15 @@ btn-mood label::before {
   background: rgba(120, 120, 120, .4);
 }
 
+
+@media screen and (max-width: 1800px) {
+  .messages-container,
+  .list-messages {
+    height: $mediumchatheight;
+    min-height: $mediumchatheight;
+  }
+}
+
 // Responsive: Portrait tablets and up
 @media screen and (max-width: 768px) {
   .container {
