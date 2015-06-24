@@ -102,6 +102,18 @@ p {
   color: grey;
 }
 
+.navbar-default .navbar-nav > li.upvote > button:disabled,
+.navbar-default .player-controls > li.upvote > button:disabled
+{
+  color: #00d600;
+}
+
+.navbar-default .navbar-nav > li.downvote > button:disabled,
+.navbar-default .player-controls > li.downvote > button:disabled
+{
+  color: red;
+}
+
 .navbar-default,
 .navbar-default .player-controls > li > a,
 .navbar-default .player-controls > li > a:focus,

@@ -13,6 +13,12 @@
      this.voted = false;
 
      /**
+      * A boolean that shows if the vote of a user was an upvote.
+      * @type {Boolean}
+      */
+     this.upvote = true;
+
+     /**
       * Resets the voted flag when a new song starts playing, so a user can vote on the new song.
       */
      $scope.$on('next-song', (function() {
@@ -23,6 +29,7 @@
      * Send a vote to the backend indicating the current song fits the room.
      */
     this.voteUp = function voteUp() {
+      this.upvote = true;
       this.vote('LIKE');
     };
 
@@ -31,6 +38,7 @@
      * After sending, it shows the feedbackSAM dialog to the user.
      */
     this.voteDown = function voteDown() {
+      this.upvote = false;
       this.vote('DISLIKE');
 
       var elem = angular.element('<feedback-sam/>');
