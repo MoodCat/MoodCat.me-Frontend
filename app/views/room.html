@@ -7,7 +7,7 @@
         <ul class="list-unstyled list-messages" id="chat-messages-list">
             <li ng-repeat="message in messages" class="enter">
                 <strong ng-bind="message.time | date:'HH:mm'"></strong>
-                <strong ng-bind="message.author"></strong>
+                <strong><span ng-bind="message.author"></span>: </strong>
                 <span ng-bind="message.message"></span>
             </li>
         </ul>
