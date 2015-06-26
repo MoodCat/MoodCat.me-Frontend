@@ -691,6 +691,11 @@ btn-mood label::before {
   background: rgba(120, 120, 120, .4);
 }
 
+.loginarrow {
+  width: 200px;
+  position:fixed;
+  right:50px;
+}
 
 @media screen and (max-width: 1800px) {
   .messages-container,

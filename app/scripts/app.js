@@ -98,4 +98,10 @@ angular.module('moodCatApp', [
       // Used to retrieve a higher resolution artwork image from the SoundCloud API.
       return input ? input.replace('-large', '-t500x500') : input;
     };
-  });
+  })
+  .controller('FirstVisitController', ['$cookieStore', function($cookieStore) {
+
+    this.hasVisited = $cookieStore.get('hasVisited');
+    $cookieStore.put('hasVisited', true);
+
+  }]);

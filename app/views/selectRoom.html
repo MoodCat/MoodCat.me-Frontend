@@ -1,6 +1,13 @@
 <div class="col-md-offset-3 col-md-6">
   <button ui-sref="moods" class="glyphicon glyphicon-menu-left btn-default back-button">Back</button>
   <h4>Get a room</h4>
+  <p>
+    Here are the most suitable rooms for you to join.
+    The first one should suit you best, but maybe you would like to explore a few other rooms as well.
+  </p>
+  <p>
+    Click one of the rooms to join it.
+  </p>
   <ul class="list-unstyled list-rooms">
     <li ng-repeat="room in rooms" class="enter">
       <a ng-click="switchRoom(room)" ng-class="{ 'roomActive' : activeRoom == room }">
