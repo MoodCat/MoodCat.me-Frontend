@@ -32,7 +32,7 @@ angular.module('moodCatApp')
               $rootScope.song = song;
               $scope.feedbackSAM = true;
 
-              $rootScope.classifyUpdater = $interval($rootScope.$applyAsync(), 1000);
+              $rootScope.classifyUpdater = $interval($rootScope.$applyAsync.bind($rootScope), 1000);
 
               timeout = $timeout(function() {
                   if($rootScope.sound) {
