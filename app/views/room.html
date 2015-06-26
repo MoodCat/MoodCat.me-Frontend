@@ -7,7 +7,7 @@
         <ul class="list-unstyled list-messages" id="chat-messages-list">
             <li ng-repeat="message in messages" class="enter">
                 <strong ng-bind="message.time | date:'HH:mm'"></strong>
-                <strong ng-bind="message.author"></strong>
+                <strong><span ng-bind="message.author"></span>: </strong>
                 <span ng-bind="message.message"></span>
             </li>
         </ul>
@@ -16,13 +16,13 @@
                 <input type="text" ng-model="chatMessage.message" placeholder="Type a message" maxlength="255" />
                 <input type="submit" value="Send" class="highlight" />
             </form>
-            <div ng-hide="loggedIn">  In order to chat you need to be logged in.</div>
+            <div ng-hide="loggedIn" class="notloggedIn">You must be logged in to chat! You can log in with your SounCloud account in the top right.</div>
         </div>
     </div>
 </div>
 
 <div class="song-info col-md-4">
-    <img src="{{song.artworkUrl | highres}}" class="full-width">
+    <img ng-src="{{song.artworkUrl | highres}}" class="full-width">
     <h2 class="song-name" ng-bind="song.name">Song name</h2>
     <h3 class="song-artist" ng-bind="song.artist.name">Song artist</h3>
     <h4 class="song-timestamp">

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('moodCatApp')
-  .controller('ClassifyCtrl', ['$scope', '$element', '$compile', 'classifySongService', 'songs', 'currentSongService', '$timeout', '$rootScope',
-        function ($scope, $element, $compile, classifySongService, songs, currentSongService, $timeout, $rootScope) {
+  .controller('ClassifyCtrl', ['$scope', '$element', '$compile', 'classifySongService', 'songs', 'currentSongService', '$timeout', '$interval','$rootScope',
+        function ($scope, $element, $compile, classifySongService, songs, currentSongService, $timeout, $interval, $rootScope) {
 
             $scope.songs = songs;
 
@@ -32,9 +32,12 @@ angular.module('moodCatApp')
               $rootScope.song = song;
               $scope.feedbackSAM = true;
 
+              $rootScope.classifyUpdater = $interval($rootScope.$applyAsync.bind($rootScope), 1000);
+
               timeout = $timeout(function() {
                   if($rootScope.sound) {
                       $rootScope.sound.stop();
+                      $interval.cancel($rootScope.classifyUpdater);
                   }
               }, duration);
 

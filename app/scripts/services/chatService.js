@@ -21,7 +21,6 @@ angular.module('moodCatApp')
      * @param {int} roomId The roomID to fetch messages for.
      */
     this.fetchMessages = function(roomId) {
-      $log.info('Fetched messages for chat %s', roomId);
       return moodcatBackend.get('/api/rooms/' + roomId + '/messages');
     };
 
