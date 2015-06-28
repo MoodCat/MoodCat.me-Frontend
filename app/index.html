@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>MoodCat.me</title>
     <meta name="description" content="Welcome to MoodCat.me, the music platform of the future, available today. Join us in the adventure of finding and enjoying music geared to you!">
+    <meta property="og:url" content="http://moodcat.me"/>
     <meta property="og:image" content="http://moodcat.me/images/fbimage.png"/>
     <meta property="og:title" content="MoodcatMe" />
     <meta property="og:description" content="Welcome to MoodCat.me, the music platform of the future, available today. Join us in the adventure of finding and enjoying music geared to you!" />
@@ -81,11 +82,7 @@
         <div ui-view class="row"></div>
     </div>
 
-    <div class="footer">
-      <div class="container">
-          <div ng-include src="'views/footer.html'"></div>
-      </div>
-    </div>
+    <div class="footer container" ng-include src="'views/footer.html'"></div>
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->

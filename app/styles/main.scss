@@ -179,6 +179,11 @@ li.downvote > button:disabled > i.glyphicon-thumbs-down
   position: absolute;
   bottom: 0;
   z-index:0;
+
+  img {
+    float:right;
+    margin-top:-30px
+  }
 }
 
 .container-narrow > hr {
