@@ -9,8 +9,8 @@ cp -r bower_components/ui-router-extras dist/bower_components/
 cp -r app/images/arousal/* dist/images/arousal/
 cp -r app/images/valence/* dist/images/valence/
 echo "Removing /usr/share/nginx/html/dist"
-ssh moodcat@188.166.92.29 'rm -r /usr/share/nginx/html/dist' || { echo "Connecting to server failed, exiting"; exit 1; }
+ssh moodcat@moodcat.me 'rm -r /usr/share/nginx/html/dist' || { echo "Connecting to server failed, exiting"; exit 1; }
 echo "Deploying new dist/"
-scp -r dist moodcat@188.166.92.29:/usr/share/nginx/html/dist/ > /dev/null
+scp -r dist moodcat@moodcat.me:/usr/share/nginx/html/dist/ > /dev/null
 echo "Done."
 exit 0
