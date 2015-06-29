@@ -30,7 +30,6 @@ angular.module('moodCatApp')
      * @param {int} latestId The latest message ID we did receive.
      */
     this.fetchMessagesFromMessage = function(roomId,latestId) {
-      $log.info('Fetched messages for chat %s', roomId);
       return moodcatBackend.get('/api/rooms/' + roomId + '/messages/' + latestId);
   };
 
