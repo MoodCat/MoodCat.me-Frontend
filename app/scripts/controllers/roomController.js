@@ -43,7 +43,9 @@ angular.module('moodCatApp')
       /**
        * If a new message is received, scroll the chatbox down so it will become visible.
        */
-      this.scrollDown = function scrollDown() {
+      this.scrollDown = function scrollDown(force) {
+        force = force || false;
+
         $timeout(function() {
           var list = angular.element('#chat-messages-list')[0];
 
@@ -53,8 +55,11 @@ angular.module('moodCatApp')
             The scrollHeight is the value of how far the element can scroll.
             Therefore the scrollTop can be maximally clientHeight + scrollTop,
             as an element without a scrollbar can't scroll, which requires the clientHeight.
+
+            18 = The height of 1 chat message. It only scrolls down if you are reading
+            the last 10 messages.
            */
-          if ((list.clientHeight + list.scrollTop) / list.scrollHeight > 0.9) {
+          if (force || (list.scrollHeight - (list.clientHeight + list.scrollTop) < 10 * 18)) {
             list.scrollTop = list.scrollHeight;
           }
         });
@@ -95,7 +100,7 @@ angular.module('moodCatApp')
         return lastPromise;
       };
 
-      this.scrollDown();
+      this.scrollDown(true);
 
       // Query the API for new messages every second
       var intervalMessages = $interval(this.fetchMessagesInSync, 1000);
