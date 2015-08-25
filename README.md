@@ -1,3 +1,5 @@
+**This project is discontinued (for now).**
+
 # vagrant
 
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
